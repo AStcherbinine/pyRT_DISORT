@@ -4,8 +4,6 @@ import setuptools
 from numpy import f2py
 
 
-# TODO: see if there's a way to check if the .so file is up to date. If so,
-#  don't bother reinstalling it. Otherwise, do install it.
 class SetupDISORT:
     def __init__(self) -> None:
         self.__project_path = self.__get_project_path()

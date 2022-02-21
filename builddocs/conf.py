@@ -32,7 +32,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'matplotlib.sphinxext.mathmpl',
-    'matplotlib.sphinxext.plot_directive'
+    'matplotlib.sphinxext.plot_directive',
+    'sphinx_gallery.gen_gallery'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -67,4 +68,10 @@ autodoc_typehints = 'description'  # Only show typehints in the description,
 # This displays "ArrayLike" instead of "numpy.typing.ArrayLike"
 autodoc_type_aliases = {
     'ArrayLike': 'ArrayLike'
+}
+
+# sphinx-gallery stuff
+sphinx_gallery_conf = {
+     'examples_dirs': '../examples',   # path to your example scripts
+     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
 }

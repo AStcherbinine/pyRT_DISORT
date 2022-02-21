@@ -858,3 +858,7 @@ class _WavelengthBundle:
             message = 'Some values in long_wavelength are not larger ' \
                       'than the corresponding values in short_wavelength.'
             raise ValueError(message)
+
+
+if __name__ == '__main__':
+    make_azimuth([1], [2, 3], [4])
