@@ -23,12 +23,14 @@ class SetupDISORT:
         module_name = 'disort'
 
         disort_source_dir = os.path.join(self.__project_path, folder_name)
+        print(disort_source_dir)
         mods = ['BDREF.f', 'DISOBRDF.f', 'ERRPACK.f', 'LAPACK.f',
                 'LINPAK.f', 'RDI1MACH.f']
         paths = [os.path.join(disort_source_dir, m) for m in mods]
         # I'm disgusted to say I'm adding a comment. I want to compile DISORT.f
         #  as a module, and I can do that by adding the other modules it needs
         #  in extra_args (this wasn't clear in f2py documentation).
+        print('pre compilation step')
         with open(os.path.join(disort_source_dir, 'DISORT.f')) as mod:
             f2py.compile(mod.read(), modulename=module_name, extra_args=paths)
 

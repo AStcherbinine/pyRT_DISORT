@@ -73,5 +73,5 @@ autodoc_type_aliases = {
 # sphinx-gallery stuff
 sphinx_gallery_conf = {
      'examples_dirs': '../examples',   # path to your example scripts
-     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+     'gallery_dirs': '../builddocs/examples',  # path to where to save gallery generated output
 }
