@@ -23,12 +23,16 @@ Code:
 
 * Make a PhaseFunction class for more flexible handling of the phase function.
   It now has methods for resampling, normalizing, and decomposing.
+* Add a LegendreCoefficients class for handing Legendre coefficient. It now
+  has methods for setting negative coefficients to 0 and reconstructing the
+  phase function.
 
 Documentation:
 
 * Remove the "for contributors" section.
 * Add an "examples" section using notebook formats instead of code blocks.
 * Switch to "numpy-style" pages for each function.
+* Add a phase function decomposition example.
 
 v0.0.4
 ------

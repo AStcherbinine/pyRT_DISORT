@@ -21,19 +21,20 @@
 Phase Function Decomposition
 ============================
 
-Decompose a phase function.
+Decompose a phase function into Legendre coefficients.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-11
 
-Import everything that we'll need
+First import everything needed for this example.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-15
+.. GENERATED FROM PYTHON SOURCE LINES 11-16
 
 .. code-block:: default
 
 
     import matplotlib.pyplot as plt
     import numpy as np
+    import pyrt
 
 
 
@@ -42,37 +43,217 @@ Import everything that we'll need
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-19
+.. GENERATED FROM PYTHON SOURCE LINES 17-21
 
 Let's grab a phase function and the angles over which it's defined. The phase
-function has shape (181, M, N) so I'll just pick the first particle size and
-wavelength.
+function has shape (181, 24, 317), where it's defined over 181 scattering
+angles, 24 particle sizes, and 317 wavelengths. For this example, let's just
+pick the first one so we have an array to work with.
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-23
+.. GENERATED FROM PYTHON SOURCE LINES 21-25
 
 .. code-block:: default
-
 
     phase_function = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')[:, 0, 0]
     scattering_angles = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+    print(scattering_angles)
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    [  0.   1.   2.   3.   4.   5.   6.   7.   8.   9.  10.  11.  12.  13.
+      14.  15.  16.  17.  18.  19.  20.  21.  22.  23.  24.  25.  26.  27.
+      28.  29.  30.  31.  32.  33.  34.  35.  36.  37.  38.  39.  40.  41.
+      42.  43.  44.  45.  46.  47.  48.  49.  50.  51.  52.  53.  54.  55.
+      56.  57.  58.  59.  60.  61.  62.  63.  64.  65.  66.  67.  68.  69.
+      70.  71.  72.  73.  74.  75.  76.  77.  78.  79.  80.  81.  82.  83.
+      84.  85.  86.  87.  88.  89.  90.  91.  92.  93.  94.  95.  96.  97.
+      98.  99. 100. 101. 102. 103. 104. 105. 106. 107. 108. 109. 110. 111.
+     112. 113. 114. 115. 116. 117. 118. 119. 120. 121. 122. 123. 124. 125.
+     126. 127. 128. 129. 130. 131. 132. 133. 134. 135. 136. 137. 138. 139.
+     140. 141. 142. 143. 144. 145. 146. 147. 148. 149. 150. 151. 152. 153.
+     154. 155. 156. 157. 158. 159. 160. 161. 162. 163. 164. 165. 166. 167.
+     168. 169. 170. 171. 172. 173. 174. 175. 176. 177. 178. 179. 180.]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
 
-For now, just plot the phase function
+.. GENERATED FROM PYTHON SOURCE LINES 26-29
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-28
+Let's put these into a :class:`~pyrt.PhaseFunction` object. This object
+ensures the phase function and scattering angles look plausible and provides
+methods to manipulate these arrays.
+
+.. GENERATED FROM PYTHON SOURCE LINES 29-31
 
 .. code-block:: default
 
+    pf = pyrt.PhaseFunction(phase_function, np.radians(scattering_angles))
 
-    plt.semilogy(scattering_angles, phase_function)
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 32-34
+
+The scattering angles are defined each degree. Let's double the resolution
+of the arrays by resampling them.
+
+.. GENERATED FROM PYTHON SOURCE LINES 34-37
+
+.. code-block:: default
+
+    pf.resample(362)
+    print(pf.phase_function.shape, pf.scattering_angles.shape)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    (362,) (362,)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 38-42
+
+We can now decompose the phase function. This method normalizes the phase
+function and creates a :class:`~pyrt.LegendreCoefficients` object that acts
+just like a np.ndarray but with some methods. Let's decompose this phase
+function into 129 moments and look at the moments.
+
+.. GENERATED FROM PYTHON SOURCE LINES 42-45
+
+.. code-block:: default
+
+    lc = pf.decompose(129)
+    print(lc)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    [ 1.00000000e+00  1.77780560e-01  5.09379074e-01  3.51948667e-02
+      1.63148820e-03  6.33471181e-05  9.59385130e-06 -4.17178320e-07
+     -4.31734959e-06 -1.33567241e-06  9.14882303e-06 -1.19773336e-06
+     -7.55346525e-06 -3.40208012e-06  6.20014133e-07 -3.47397846e-06
+     -2.26997022e-06  9.72283455e-06 -2.81171209e-06  9.51115066e-06
+     -5.30142045e-06  4.12572601e-06  8.95027810e-06 -1.03008617e-05
+     -4.14079649e-06 -1.57536590e-05  4.14623798e-06  9.35727549e-06
+     -3.71986230e-06 -6.90625381e-06 -1.26568836e-05  1.31620811e-05
+      6.06196991e-06 -1.78781400e-05  6.52610603e-06  2.00393380e-05
+     -9.01673845e-06  1.04337873e-06  2.45524132e-06  3.26450093e-07
+     -1.22928374e-06 -5.08698046e-06  1.12076973e-05 -6.20889579e-06
+     -2.75012126e-06  1.16208650e-05 -2.30687159e-06  3.80888366e-06
+      5.45502560e-06 -1.19988794e-05  1.07323264e-06  2.90130015e-05
+      3.63780207e-06 -1.46662261e-05 -4.13227752e-06 -3.32404491e-06
+      2.94339548e-07  9.33272245e-06 -7.73619928e-06 -2.68457910e-05
+     -3.14101248e-05 -9.42595444e-06  1.93955857e-05 -2.63963718e-05
+      3.52623084e-06  1.62233591e-05 -2.48424274e-06  2.17126608e-05
+     -1.61521137e-05 -7.57838442e-06  3.48196067e-05 -1.52278102e-05
+      5.77196060e-06  1.55285604e-05 -2.53608492e-05 -4.70610484e-06
+      7.18916471e-06 -2.10982316e-05  1.15398265e-05  4.61182590e-05
+     -1.75915142e-05 -3.75527556e-05 -1.03725685e-05  1.09568610e-05
+      6.50520294e-06  1.45546287e-06 -4.01844927e-06 -7.46851887e-06
+      2.49933865e-05 -3.62378805e-06  1.59108604e-05  1.06115227e-07
+      4.04613052e-06 -1.02914061e-05  1.84651367e-05  1.62228442e-05
+     -5.16825521e-06 -3.34015693e-06  8.55406828e-07 -8.97175914e-07
+     -6.88768463e-06  6.92004348e-07  6.69191475e-06  4.61304661e-06
+     -1.88927190e-05 -5.31764163e-06 -3.60283226e-07  9.63816746e-06
+      3.05446769e-06  1.00705508e-05 -2.51602132e-05 -3.88374105e-06
+      2.43063299e-05 -6.61112832e-07 -1.37224149e-05 -7.76443946e-06
+     -3.39314749e-06 -1.40779736e-06  7.45641373e-06 -1.16803071e-06
+     -1.42696763e-05  2.09432088e-06 -1.31361852e-05 -2.24336867e-05
+     -4.04125732e-06  9.08374425e-06  3.70497830e-05  3.00103619e-05
+      1.15262564e-05]
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 46-48
+
+At index 7 the coefficient is negative, and it appears the coefficients
+oscillate around 0 after this. Let's set these to 0.
+
+.. GENERATED FROM PYTHON SOURCE LINES 48-50
+
+.. code-block:: default
+
+    lc.set_negative_coefficients_to_0()
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 51-53
+
+This object can also convert back into a phase function. Let's do that and
+plot how the fit performed.
+
+.. GENERATED FROM PYTHON SOURCE LINES 53-89
+
+.. code-block:: default
+
+    reconstructed_pf = lc.reconstruct_phase_function()
+
+    plt.rc('mathtext', fontset='stix')
+    plt.rc('font', **{'family': 'STIXGeneral'})
+    plt.rc('font', size=8)
+    plt.rc('axes', titlesize=12)
+    plt.rc('axes', labelsize=12)
+    plt.rc('xtick', labelsize=12)
+    plt.rc('ytick', labelsize=12)
+    plt.rc('legend', fontsize=12)
+    plt.rc('figure', titlesize=12)
+    plt.rc('pdf', fonttype=42)
+    plt.rc('ps', fonttype=42)
+    plt.rc('lines', linewidth=0.5)
+    plt.rc('axes', linewidth=0.5)
+    plt.rc('xtick.major', width=0.5)
+    plt.rc('xtick.minor', width=0.5)
+    plt.rc('ytick.major', width=0.5)
+    plt.rc('ytick.minor', width=0.5)
+    dpi = 150
+
+    fig, ax = plt.subplots()
+    ax.plot(np.degrees(pf.scattering_angles), pf.phase_function,
+            color='k',
+            label='Original phase function')
+    ax.plot(np.degrees(reconstructed_pf.scattering_angles), reconstructed_pf.phase_function,
+            color='r',
+            label='Reconstructed phase function',
+            linestyle='dotted')
+    plt.legend()
+    ax.set_xlim(0, 180)
+    ax.set_xlabel('Scattering Angle [degrees]')
+    ax.set_ylabel('Phase Function')
+    ax.set_xticks(np.linspace(0, 180, num=180//30+1))
+    ax.set_xticks(np.linspace(0, 180, num=180//10+1), minor=True)
     plt.show()
 
 
@@ -89,7 +270,7 @@ For now, just plot the phase function
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.261 seconds)
+   **Total running time of the script:** ( 0 minutes  0.603 seconds)
 
 
 .. _sphx_glr_download_examples_plot_phase_function_decomposition.py:

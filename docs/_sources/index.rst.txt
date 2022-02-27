@@ -11,12 +11,12 @@ you're here... and lucky for you pyRT_DISORT is here to help you out.
    rst/installation
    rst/api-reference
    examples/index
+   rst/release-notes
 
 .. toctree::
    :maxdepth: 1
    :caption: About this project
 
-   rst/release-notes
    rst/about-pyRT_DISORT
    rst/about-DISORT
 

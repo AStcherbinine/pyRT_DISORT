@@ -62,8 +62,9 @@ html_theme_options = {
 html_static_path = []
 
 autoclass_content = 'both'   # add class + __init__ docstrings
-autodoc_typehints = 'description'  # Only show typehints in the description,
+autodoc_typehints = 'both'  # Only show typehints in the description,
 # not the signature
+autodoc_member_order = 'bysource'  # Document properties in order
 
 # This displays "ArrayLike" instead of "numpy.typing.ArrayLike"
 autodoc_type_aliases = {

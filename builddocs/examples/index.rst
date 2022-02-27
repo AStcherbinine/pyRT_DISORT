@@ -13,7 +13,7 @@ You can find examples of cool things to do with pyrt here.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Decompose a phase function.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Decompose a phase function into Legendre coefficients.">
 
 .. only:: html
 

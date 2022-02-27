@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyrt.phase_function &#8212; pyRT_DISORT  documentation</title>
+    
+    <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  
+    
+    <link rel="stylesheet"
+      href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin
+      href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+    
+      
+  
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/pydata-sphinx-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    
+    <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">pyRT_DISORT</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../rst/installation.html">
+  Installation
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../rst/api-reference.html">
+  API Reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../rst/release-notes.html">
+  Release Notes
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../rst/about-pyRT_DISORT.html">
+  About pyRT_DISORT
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../rst/about-DISORT.html">
+  About DISORT
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/kconnour/pyRT_DISORT" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for pyrt.phase_function</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">integrate</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">class _PhaseFunction(_ScatteringArray)</span>
+<span class="sd">   def normalize</span>
+
+<span class="sd">class PhaseFunction</span>
+<span class="sd">   def resample</span>
+<span class="sd">   def normalize</span>
+<span class="sd">   def decompose -&gt; LC</span>
+
+<span class="sd">   getter can return ndarray</span>
+<span class="sd">   setter can set with _PhaseFunction</span>
+
+<span class="sd">class LegendreCoefficients</span>
+<span class="sd">   def zero()</span>
+<span class="sd">   </span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<span class="k">class</span> <span class="nc">_NSamples</span><span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Designate that a number represents the number of samples.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value</span>
+<span class="sd">        The number of samples to use.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Raised if the input cannot be converted into an int.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the number of samples is not positive.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raise_value_error_if_moments_is_not_positive</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_moments_is_not_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;The number of samples must be positive.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_NMoments</span><span class="p">(</span><span class="nb">int</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Designate that a number represents the number of moments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value</span>
+<span class="sd">        The number of moments to use.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Raised if the input cannot be converted into an int.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the number of moments is not positive.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raise_value_error_if_moments_is_not_positive</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_moments_is_not_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;The number of moments must be positive.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">_ScatteringArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;scattering_array&#39;</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_raise_value_error_if_array_is_not_positive_finite</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_raise_value_error_if_array_is_not_1d</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_array_is_not_positive_finite</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">obj</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be non-negative and finite.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_array_is_not_1d</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be 1-dimensional.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">_NSamples</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="n">old</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">old</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">num</span><span class="o">=</span><span class="n">samples</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">old</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">_PhaseFunction</span><span class="p">(</span><span class="n">_ScatteringArray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Designate an array as representing a phase function.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array</span>
+<span class="sd">        Any phase function.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the input array is not 1-dimensional or if it contains values</span>
+<span class="sd">        that are negative or not finite.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="s1">&#39;phase_function&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+
+<span class="k">class</span> <span class="nc">_ScatteringAngles</span><span class="p">(</span><span class="n">_ScatteringArray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create an array that represents the angles where the phase function is</span>
+<span class="sd">    defined.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array</span>
+<span class="sd">        The scattering angles where the phase function is defined.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the input array is not 1-dimensional, if it contains values</span>
+<span class="sd">        that are not between 0 and pi, or if it is not monotonically</span>
+<span class="sd">        increasing.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="s1">&#39;scattering_angles&#39;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_raise_value_error_if_array_is_not_between_0_and_pi</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_raise_value_error_if_array_is_not_monotonically_inc</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_array_is_not_between_0_and_pi</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="c1"># Add some leeway for interpolation failures</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">obj</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">obj</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">))</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be between 0 and pi.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_array_is_not_monotonically_inc</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be monotonically increasing.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="c1"># TODO: fit HG g method</span>
+<div class="viewcode-block" id="PhaseFunction"><a class="viewcode-back" href="../../rst/api/phase-function/PhaseFunction.html#pyrt.PhaseFunction">[docs]</a><span class="k">class</span> <span class="nc">PhaseFunction</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create an object representing a phase function and its scattering</span>
+<span class="sd">    angles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    phase_function</span>
+<span class="sd">        The phase function.</span>
+<span class="sd">    scattering_angles</span>
+<span class="sd">        The scattering angles of the phase function.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if :code:`phase_function` is not 1-dimensional or if it contains</span>
+<span class="sd">        values that are negative or not finite; if :code:`scattering_angles` is</span>
+<span class="sd">        not 1-dimensional, if it contains values that are not between 0 and pi,</span>
+<span class="sd">        or if it is not monotonically increasing; or if either</span>
+<span class="sd">        :code:`phase_function` or :code:`angles` do not have the same shape.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                 <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">=</span> <span class="n">_PhaseFunction</span><span class="p">(</span><span class="n">phase_function</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scattering_angles</span> <span class="o">=</span> <span class="n">_ScatteringAngles</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_raise_value_error_if_inputs_are_not_same_shape</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_inputs_are_not_same_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_function</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scattering_angles</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The phase function and the scattering angles must &#39;</span> \
+                      <span class="sa">f</span><span class="s1">&#39;have the same shape.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">phase_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the current state of the phase function</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            The phase function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span><span class="p">)</span>
+
+    <span class="nd">@phase_function</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">phase_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">=</span> <span class="n">_PhaseFunction</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">scattering_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Get the current state of the scattering angles.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        np.ndarray</span>
+<span class="sd">            The scattering angles.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scattering_angles</span><span class="p">)</span>
+
+    <span class="nd">@scattering_angles</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">scattering_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scattering_angles</span> <span class="o">=</span> <span class="n">_ScatteringAngles</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PhaseFunction.resample"><a class="viewcode-back" href="../../rst/api/phase-function/PhaseFunction.html#pyrt.PhaseFunction.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Resample the phase function to a set number of samples.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        samples: int</span>
+<span class="sd">            The number of samples to resample the phase function (and angles).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Due to a bug with np.interp() there&#39;s a little jitter in the values</span>
+<span class="sd">        at the endpoints at the 5th decimal point.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Resample the phase function.</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import pyrt</span>
+<span class="sd">        &gt;&gt;&gt; phsfn = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;)[:, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; ang = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; f&#39;The input phase function has shape: {phsfn.shape}.&#39;</span>
+<span class="sd">        &#39;The input phase function has shape: (181,).&#39;</span>
+<span class="sd">        &gt;&gt;&gt; pf = pyrt.PhaseFunction(phsfn, np.radians(ang))</span>
+<span class="sd">        &gt;&gt;&gt; pf.resample(360)</span>
+<span class="sd">        &gt;&gt;&gt; f&#39;The resampled phase function has shape: {pf.phase_function.shape}.&#39;</span>
+<span class="sd">        &#39;The resampled phase function has shape: (360,).&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="n">_NSamples</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_scattering_angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scattering_angles</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhaseFunction.normalize"><a class="viewcode-back" href="../../rst/api/phase-function/PhaseFunction.html#pyrt.PhaseFunction.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Normalize the phase function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This algorithm uses Simpson&#39;s rule for the integration and normalizes</span>
+<span class="sd">        the phase function such that</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">           \int p(\mu) d \mu = 2</span>
+
+<span class="sd">        where :math:`p` is the phase function and :math:`\mu` is the cosine of</span>
+<span class="sd">        the scattering angles.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Normalize a phase function and verify it integrates to 2.</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import pyrt</span>
+<span class="sd">        &gt;&gt;&gt; phsfn = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;)[:, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; ang = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pf = pyrt.PhaseFunction(phsfn, np.radians(ang))</span>
+<span class="sd">        &gt;&gt;&gt; pf.normalize()</span>
+<span class="sd">        &gt;&gt;&gt; mean_phase_function = (pf.phase_function[:-1] + pf.phase_function[1:]) / 2</span>
+<span class="sd">        &gt;&gt;&gt; np.sum(mean_phase_function * np.abs(np.diff(np.cos(pf.scattering_angles))))</span>
+<span class="sd">        2.0000522</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">integrate</span><span class="o">.</span><span class="n">simps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span><span class="p">,</span>
+                                      <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scattering_angles</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">/</span> <span class="n">norm</span></div>
+
+<div class="viewcode-block" id="PhaseFunction.decompose"><a class="viewcode-back" href="../../rst/api/phase-function/PhaseFunction.html#pyrt.PhaseFunction.decompose">[docs]</a>    <span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">moments</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LegendreCoefficients</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Decompose the phase function into its Legendre coefficients.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        moments: int</span>
+<span class="sd">            The number of moments to decompose the phase function into. This</span>
+<span class="sd">            value should be smaller than the number of points in the phase</span>
+<span class="sd">            function, but there are no checks that this is satisfied.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        LegendreCoefficients</span>
+<span class="sd">            The decomposed Legendre coefficients.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This method normalizes the phase function, as the moments only really</span>
+<span class="sd">        make sense if that&#39;s the case.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Decompose a phase function.</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import pyrt</span>
+<span class="sd">        &gt;&gt;&gt; phsfn = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;)[:, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; ang = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pf = pyrt.PhaseFunction(phsfn, np.radians(ang))</span>
+<span class="sd">        &gt;&gt;&gt; moments = pf.decompose(129)</span>
+<span class="sd">        &gt;&gt;&gt; print(moments[:5])</span>
+<span class="sd">        [1.         0.17778457 0.50944022 0.03520301 0.00162705]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+        <span class="c1"># Subtract 1 since I&#39;m forcing c0 = 1 in the equation</span>
+        <span class="c1"># P(x) = c0 + c1*L1(x) + ... for DISORT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">n_moments</span> <span class="o">=</span> <span class="n">_NMoments</span><span class="p">(</span><span class="n">moments</span><span class="p">)</span>
+        <span class="n">lpoly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_legendre_polynomials</span><span class="p">(</span><span class="n">n_moments</span><span class="p">)</span>
+        <span class="n">normal_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_normal_matrix</span><span class="p">(</span><span class="n">lpoly</span><span class="p">)</span>
+        <span class="n">normal_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_normal_vector</span><span class="p">(</span><span class="n">lpoly</span><span class="p">)</span>
+        <span class="n">cholesky</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">normal_matrix</span><span class="p">)</span>
+        <span class="n">first_solution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cholesky</span><span class="p">,</span> <span class="n">normal_vector</span><span class="p">)</span>
+        <span class="n">second_solution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cholesky</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">first_solution</span><span class="p">)</span>
+        <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span> <span class="n">second_solution</span><span class="p">))</span>
+        <span class="c1"># Re-add 1 for the reason listed above</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_phase_function</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">LegendreCoefficients</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_make_legendre_polynomials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n_moments</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Make an array of Legendre polynomials at the scattering angles.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This returns a 2D array. The 0th index is the i+1 polynomial and the</span>
+<span class="sd">        1st index is the angle. So index [2, 6] will be the 3rd Legendre</span>
+<span class="sd">        polynomial (L3) evaluated at the 6th angle</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">n_moments</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scattering_angles</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="c1"># This creates an MxN array with 1s on the diagonal and 0s elsewhere</span>
+        <span class="n">diag_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">ones</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">ones</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="c1"># Evaluate the polynomials at the input angles. I don&#39;t know why</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">legendre</span><span class="o">.</span><span class="n">legval</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scattering_angles</span><span class="p">),</span> <span class="n">diag_mask</span><span class="p">)[</span><span class="mi">1</span><span class="p">:</span><span class="n">n_moments</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="k">def</span> <span class="nf">_make_normal_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lpoly</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">lpoly</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">lpoly</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_function</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_make_normal_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lpoly</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lpoly</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_function</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LegendreCoefficients"><a class="viewcode-back" href="../../rst/api/phase-function/LegendreCoefficients.html#pyrt.LegendreCoefficients">[docs]</a><span class="k">class</span> <span class="nc">LegendreCoefficients</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create an array of Legendre coefficients of the phase function.</span>
+
+<span class="sd">    This class extends an ndarray and thus acts just like one, with additional</span>
+<span class="sd">    methods shown below.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    coefficients: np.ndarray</span>
+<span class="sd">        The Legendre coefficients.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the coefficients are not 1-dimensional.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_raise_value_error_if_array_is_not_1d</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_raise_value_error_if_array_is_not_1d</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be 1-dimensional.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LegendreCoefficients.set_negative_coefficients_to_0"><a class="viewcode-back" href="../../rst/api/phase-function/LegendreCoefficients.html#pyrt.LegendreCoefficients.set_negative_coefficients_to_0">[docs]</a>    <span class="k">def</span> <span class="nf">set_negative_coefficients_to_0</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Set all coefficients to 0 starting from the first negative</span>
+<span class="sd">        coefficient.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Set negative coefficients to 0.</span>
+
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; import pyrt</span>
+<span class="sd">        &gt;&gt;&gt; coeff = np.linspace(1, -2, num=5)</span>
+<span class="sd">        &gt;&gt;&gt; lc = pyrt.LegendreCoefficients(coeff)</span>
+<span class="sd">        &gt;&gt;&gt; f&#39;The original coefficients are: {lc}&#39;</span>
+<span class="sd">        &#39;The original coefficients are: [ 1.    0.25 -0.5  -1.25 -2.  ]&#39;</span>
+<span class="sd">        &gt;&gt;&gt; lc.set_negative_coefficients_to_0()</span>
+<span class="sd">        &gt;&gt;&gt; f&#39;The new coefficients are: {lc}&#39;</span>
+<span class="sd">        &#39;The new coefficients are: [1.   0.25 0.   0.   0.  ]&#39;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_first_negative_coefficient_index</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">first</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">first</span><span class="p">:]</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_first_negative_coefficient_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="bp">self</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LegendreCoefficients.reconstruct_phase_function"><a class="viewcode-back" href="../../rst/api/phase-function/LegendreCoefficients.html#pyrt.LegendreCoefficients.reconstruct_phase_function">[docs]</a>    <span class="k">def</span> <span class="nf">reconstruct_phase_function</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhaseFunction</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Reconstruct the phase function from the Legendre coefficients.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PhaseFunction</span>
+<span class="sd">            The phase function.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">180</span><span class="p">))</span>
+        <span class="n">pf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polynomial</span><span class="o">.</span><span class="n">legendre</span><span class="o">.</span><span class="n">legval</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PhaseFunction</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span> <span class="n">angles</span><span class="p">)</span></div></div>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+    <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021, kconnour.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
