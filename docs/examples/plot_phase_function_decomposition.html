@@ -199,7 +199,8 @@ to download the full example code</p>
 <span id="sphx-glr-examples-plot-phase-function-decomposition-py"></span><h1>Phase Function Decomposition<a class="headerlink" href="#phase-function-decomposition" title="Permalink to this headline">¶</a></h1>
 <p>Decompose a phase function into Legendre coefficients.</p>
 <p>First import everything needed for this example.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pyrt</span>
 </pre></div>
@@ -208,8 +209,9 @@ to download the full example code</p>
 function has shape (181, 24, 317), where it’s defined over 181 scattering
 angles, 24 particle sizes, and 317 wavelengths. For this example, let’s just
 pick the first one so we have an array to work with.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">phase_function</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
-<span class="n">scattering_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dust_dir</span> <span class="o">=</span> <span class="s1">&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/&#39;</span>
+<span class="n">phase_function</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">+</span> <span class="s1">&#39;phase_function.npy&#39;</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">scattering_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">+</span> <span class="s1">&#39;scattering_angles.npy&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -334,7 +336,7 @@ plot how the fit performed.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_phase_function_decomposition_001.png" srcset="../_images/sphx_glr_plot_phase_function_decomposition_001.png" alt="plot phase function decomposition" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.603 seconds)</p>
+<img src="../_images/sphx_glr_plot_phase_function_decomposition_001.png" srcset="../_images/sphx_glr_plot_phase_function_decomposition_001.png" alt="plot phase function decomposition" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.378 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plot-phase-function-decomposition-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7426acccd5a6e83d57430c66ef8985f9/plot_phase_function_decomposition.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_phase_function_decomposition.py</span></code></a></p>

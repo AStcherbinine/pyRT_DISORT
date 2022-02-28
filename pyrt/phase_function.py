@@ -255,10 +255,12 @@ class PhaseFunction:
         --------
         Resample the phase function.
 
+        >>> from pathlib import Path
         >>> import numpy as np
         >>> import pyrt
-        >>> phsfn = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')[:, 0, 0]
-        >>> ang = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+        >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+        >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
+        >>> ang = np.load(dust_dir / 'scattering_angles.npy')
         >>> f'The input phase function has shape: {phsfn.shape}.'
         'The input phase function has shape: (181,).'
         >>> pf = pyrt.PhaseFunction(phsfn, np.radians(ang))
@@ -293,10 +295,12 @@ class PhaseFunction:
         --------
         Normalize a phase function and verify it integrates to 2.
 
+        >>> from pathlib import Path
         >>> import numpy as np
         >>> import pyrt
-        >>> phsfn = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')[:, 0, 0]
-        >>> ang = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+        >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+        >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
+        >>> ang = np.load(dust_dir / 'scattering_angles.npy')
         >>> pf = pyrt.PhaseFunction(phsfn, np.radians(ang))
         >>> pf.normalize()
         >>> mean_phase_function = (pf.phase_function[:-1] + pf.phase_function[1:]) / 2
@@ -332,10 +336,12 @@ class PhaseFunction:
         --------
         Decompose a phase function.
 
+        >>> from pathlib import Path
         >>> import numpy as np
         >>> import pyrt
-        >>> phsfn = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')[:, 0, 0]
-        >>> ang = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+        >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+        >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
+        >>> ang = np.load(dust_dir / 'scattering_angles.npy')
         >>> pf = pyrt.PhaseFunction(phsfn, np.radians(ang))
         >>> moments = pf.decompose(129)
         >>> print(moments[:5])

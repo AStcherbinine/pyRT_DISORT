@@ -31,7 +31,7 @@ First import everything needed for this example.
 
 .. code-block:: default
 
-
+    from pathlib import Path
     import matplotlib.pyplot as plt
     import numpy as np
     import pyrt
@@ -50,12 +50,13 @@ function has shape (181, 24, 317), where it's defined over 181 scattering
 angles, 24 particle sizes, and 317 wavelengths. For this example, let's just
 pick the first one so we have an array to work with.
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-25
+.. GENERATED FROM PYTHON SOURCE LINES 21-26
 
 .. code-block:: default
 
-    phase_function = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')[:, 0, 0]
-    scattering_angles = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+    dust_dir = '/home/kyle/repos/pyRT_DISORT/anc/mars_dust/'
+    phase_function = np.load(dust_dir + 'phase_function.npy')[:, 0, 0]
+    scattering_angles = np.load(dust_dir + 'scattering_angles.npy')
     print(scattering_angles)
 
 
@@ -85,13 +86,13 @@ pick the first one so we have an array to work with.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-29
+.. GENERATED FROM PYTHON SOURCE LINES 27-30
 
 Let's put these into a :class:`~pyrt.PhaseFunction` object. This object
 ensures the phase function and scattering angles look plausible and provides
 methods to manipulate these arrays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-31
+.. GENERATED FROM PYTHON SOURCE LINES 30-32
 
 .. code-block:: default
 
@@ -104,12 +105,12 @@ methods to manipulate these arrays.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-34
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 The scattering angles are defined each degree. Let's double the resolution
 of the arrays by resampling them.
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-37
+.. GENERATED FROM PYTHON SOURCE LINES 35-38
 
 .. code-block:: default
 
@@ -131,14 +132,14 @@ of the arrays by resampling them.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-42
+.. GENERATED FROM PYTHON SOURCE LINES 39-43
 
 We can now decompose the phase function. This method normalizes the phase
 function and creates a :class:`~pyrt.LegendreCoefficients` object that acts
 just like a np.ndarray but with some methods. Let's decompose this phase
 function into 129 moments and look at the moments.
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-45
+.. GENERATED FROM PYTHON SOURCE LINES 43-46
 
 .. code-block:: default
 
@@ -192,12 +193,12 @@ function into 129 moments and look at the moments.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-48
+.. GENERATED FROM PYTHON SOURCE LINES 47-49
 
 At index 7 the coefficient is negative, and it appears the coefficients
 oscillate around 0 after this. Let's set these to 0.
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
+.. GENERATED FROM PYTHON SOURCE LINES 49-51
 
 .. code-block:: default
 
@@ -210,12 +211,12 @@ oscillate around 0 after this. Let's set these to 0.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-53
+.. GENERATED FROM PYTHON SOURCE LINES 52-54
 
 This object can also convert back into a phase function. Let's do that and
 plot how the fit performed.
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-89
+.. GENERATED FROM PYTHON SOURCE LINES 54-90
 
 .. code-block:: default
 
@@ -270,7 +271,7 @@ plot how the fit performed.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.603 seconds)
+   **Total running time of the script:** ( 0 minutes  0.378 seconds)
 
 
 .. _sphx_glr_download_examples_plot_phase_function_decomposition.py:

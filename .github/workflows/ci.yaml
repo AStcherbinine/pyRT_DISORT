@@ -26,22 +26,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install pyDISORT
+      - name: Install FORTRAN
         run: |
-          python -m pip install .
-      - name: Test the installation
+          sudo apt install gfortran
+      - name: Install pyRT_DISORT
         run: |
-          python
-          import disort
-          disort.disort.__doc__
-  #test-install-ubuntu-18-04:
-  #  name: "Test installation on Ubuntu 18.04"
-  #  runs-on: ubuntu-18.04
-
-  #test-fortran-big-sur-11:
-  #  name: "Test installation on macOS Big Sur 11"
-  #  runs-on: macos-10.15
-
-  #test-fortran-catalina-10-15:
-  #  name: "Test installation on macOS Catalina 10.15"
-  #  runs-on: macos-10.15
+          python -m pip install .[test]
+      - name: Test with pytest
+        run: |
+          python -m pytest ./pyrt

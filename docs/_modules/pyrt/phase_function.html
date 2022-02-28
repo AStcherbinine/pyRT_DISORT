@@ -424,10 +424,12 @@
 <span class="sd">        --------</span>
 <span class="sd">        Resample the phase function.</span>
 
+<span class="sd">        &gt;&gt;&gt; from pathlib import Path</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; import pyrt</span>
-<span class="sd">        &gt;&gt;&gt; phsfn = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;)[:, 0, 0]</span>
-<span class="sd">        &gt;&gt;&gt; ang = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; dust_dir = Path(__file__).parent.parent / &#39;anc&#39; / &#39;mars_dust&#39;</span>
+<span class="sd">        &gt;&gt;&gt; phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)[:, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; f&#39;The input phase function has shape: {phsfn.shape}.&#39;</span>
 <span class="sd">        &#39;The input phase function has shape: (181,).&#39;</span>
 <span class="sd">        &gt;&gt;&gt; pf = pyrt.PhaseFunction(phsfn, np.radians(ang))</span>
@@ -462,10 +464,12 @@
 <span class="sd">        --------</span>
 <span class="sd">        Normalize a phase function and verify it integrates to 2.</span>
 
+<span class="sd">        &gt;&gt;&gt; from pathlib import Path</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; import pyrt</span>
-<span class="sd">        &gt;&gt;&gt; phsfn = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;)[:, 0, 0]</span>
-<span class="sd">        &gt;&gt;&gt; ang = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; dust_dir = Path(__file__).parent.parent / &#39;anc&#39; / &#39;mars_dust&#39;</span>
+<span class="sd">        &gt;&gt;&gt; phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)[:, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; pf = pyrt.PhaseFunction(phsfn, np.radians(ang))</span>
 <span class="sd">        &gt;&gt;&gt; pf.normalize()</span>
 <span class="sd">        &gt;&gt;&gt; mean_phase_function = (pf.phase_function[:-1] + pf.phase_function[1:]) / 2</span>
@@ -501,10 +505,12 @@
 <span class="sd">        --------</span>
 <span class="sd">        Decompose a phase function.</span>
 
+<span class="sd">        &gt;&gt;&gt; from pathlib import Path</span>
 <span class="sd">        &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">        &gt;&gt;&gt; import pyrt</span>
-<span class="sd">        &gt;&gt;&gt; phsfn = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy&#39;)[:, 0, 0]</span>
-<span class="sd">        &gt;&gt;&gt; ang = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; dust_dir = Path(__file__).parent.parent / &#39;anc&#39; / &#39;mars_dust&#39;</span>
+<span class="sd">        &gt;&gt;&gt; phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)[:, 0, 0]</span>
+<span class="sd">        &gt;&gt;&gt; ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
 <span class="sd">        &gt;&gt;&gt; pf = pyrt.PhaseFunction(phsfn, np.radians(ang))</span>
 <span class="sd">        &gt;&gt;&gt; moments = pf.decompose(129)</span>
 <span class="sd">        &gt;&gt;&gt; print(moments[:5])</span>

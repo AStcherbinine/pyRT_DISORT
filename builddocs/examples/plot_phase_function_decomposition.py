@@ -8,7 +8,7 @@ Decompose a phase function into Legendre coefficients.
 
 # %%
 # First import everything needed for this example.
-
+from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pyrt
@@ -18,8 +18,9 @@ import pyrt
 # function has shape (181, 24, 317), where it's defined over 181 scattering
 # angles, 24 particle sizes, and 317 wavelengths. For this example, let's just
 # pick the first one so we have an array to work with.
-phase_function = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')[:, 0, 0]
-scattering_angles = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+dust_dir = '/home/kyle/repos/pyRT_DISORT/anc/mars_dust/'
+phase_function = np.load(dust_dir + 'phase_function.npy')[:, 0, 0]
+scattering_angles = np.load(dust_dir + 'scattering_angles.npy')
 print(scattering_angles)
 
 # %%
