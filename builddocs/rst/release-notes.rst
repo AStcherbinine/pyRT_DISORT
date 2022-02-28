@@ -26,11 +26,14 @@ Code:
 * Add a LegendreCoefficients class for handing Legendre coefficient. It now
   has methods for setting negative coefficients to 0 and reconstructing the
   phase function.
+* Remove Angles in favor of a single make_azimuth function.
+* Remove spectral in favor of a single to_wavenumber function.
 
 Documentation:
 
 * Remove the "for contributors" section.
 * Add an "examples" section using notebook formats instead of code blocks.
+* Add fully collapsible navigation
 * Switch to "numpy-style" pages for each function.
 * Add a phase function decomposition example.
 

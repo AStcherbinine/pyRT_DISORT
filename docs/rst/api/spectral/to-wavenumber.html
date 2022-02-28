@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>LegendreCoefficients &#8212; pyRT_DISORT  documentation</title>
+    <title>to_wavenumber &#8212; pyRT_DISORT  documentation</title>
     
     <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -39,8 +39,8 @@
     <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Spectral" href="../spectral.html" />
-    <link rel="prev" title="PhaseFunction" href="PhaseFunction.html" />
+    <link rel="next" title="Examples" href="../../../examples/index.html" />
+    <link rel="prev" title="Spectral" href="../spectral.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -168,40 +168,40 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../phase-function.html">
    Phase Function
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="PhaseFunction.html">
-     PhaseFunction
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     LegendreCoefficients
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../spectral.html">
-   Spectral
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../spectral/to-wavenumber.html">
+    <a class="reference internal" href="../phase-function/PhaseFunction.html">
+     PhaseFunction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../phase-function/LegendreCoefficients.html">
+     LegendreCoefficients
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../spectral.html">
+   Spectral
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      to_wavenumber
     </a>
    </li>
@@ -246,61 +246,36 @@
               
               <div>
                 
-  <section id="legendrecoefficients">
-<h1>LegendreCoefficients<a class="headerlink" href="#legendrecoefficients" title="Permalink to this headline">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="pyrt.LegendreCoefficients">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">LegendreCoefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrt/phase_function.html#LegendreCoefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.LegendreCoefficients" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create an array of Legendre coefficients of the phase function.</p>
-<p>This class extends an ndarray and thus acts just like one, with additional
-methods shown below.</p>
+  <section id="to-wavenumber">
+<h1>to_wavenumber<a class="headerlink" href="#to-wavenumber" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyrt.to_wavenumber">
+<span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">to_wavenumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._array_like._SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.typing._nested_sequence._NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._array_like._SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">complex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.typing._nested_sequence._NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">complex</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../../_modules/pyrt/spectral.html#to_wavenumber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.to_wavenumber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert wavelengths [microns] to wavenumber [1 / cm].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>coefficients</strong> (<em>np.ndarray</em>) – The Legendre coefficients.</p>
+<dd class="field-odd"><p><strong>wavelength</strong> (<em>ArrayLike</em>) – Wavelengths.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The wavenumbers of each wavelength.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – Raised if the coefficients are not 1-dimensional.</p>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyrt.LegendreCoefficients.set_negative_coefficients_to_0">
-<span class="sig-name descname"><span class="pre">set_negative_coefficients_to_0</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/pyrt/phase_function.html#LegendreCoefficients.set_negative_coefficients_to_0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.LegendreCoefficients.set_negative_coefficients_to_0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set all coefficients to 0 starting from the first negative
-coefficient.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>None</p>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised if any values of the input wavelengths are not between 0.1 and
+    50 (I assume this is the range of wavelengths where you can do
+    radiative transfer).</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Set negative coefficients to 0.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyrt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lc</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">LegendreCoefficients</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="sa">f</span><span class="s1">&#39;The original coefficients are: </span><span class="si">{</span><span class="n">lc</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="go">&#39;The original coefficients are: [ 1.    0.25 -0.5  -1.25 -2.  ]&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lc</span><span class="o">.</span><span class="n">set_negative_coefficients_to_0</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="sa">f</span><span class="s1">&#39;The new coefficients are: </span><span class="si">{</span><span class="n">lc</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="go">&#39;The new coefficients are: [1.   0.25 0.   0.   0.  ]&#39;</span>
+<p>Convert wavelengths to wavenumbers.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyrt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wavs</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">to_wavenumber</span><span class="p">(</span><span class="n">wavs</span><span class="p">)</span>
+<span class="go">array([10000.        ,  5000.        ,  3333.33333333])</span>
 </pre></div>
 </div>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyrt.LegendreCoefficients.reconstruct_phase_function">
-<span class="sig-name descname"><span class="pre">reconstruct_phase_function</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="PhaseFunction.html#pyrt.PhaseFunction" title="pyrt.phase_function.PhaseFunction"><span class="pre">pyrt.phase_function.PhaseFunction</span></a></span></span><a class="reference internal" href="../../../_modules/pyrt/phase_function.html#LegendreCoefficients.reconstruct_phase_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.LegendreCoefficients.reconstruct_phase_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reconstruct the phase function from the Legendre coefficients.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The phase function.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><a class="reference internal" href="PhaseFunction.html#pyrt.PhaseFunction" title="pyrt.PhaseFunction">PhaseFunction</a></p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -311,17 +286,17 @@ coefficient.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="PhaseFunction.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../spectral.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">PhaseFunction</p>
+            <p class="prev-next-title">Spectral</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../spectral.html" title="next page">
+    <a class='right-next' id="next-link" href="../../../examples/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Spectral</p>
+        <p class="prev-next-title">Examples</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

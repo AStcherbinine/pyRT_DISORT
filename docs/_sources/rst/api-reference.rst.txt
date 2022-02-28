@@ -8,4 +8,6 @@ pyRT_DISORT.
    :maxdepth: 2
    :caption: API
 
+   api/angles
    api/phase-function
+   api/spectral

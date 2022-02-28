@@ -3,24 +3,6 @@ import numpy as np
 from numpy.typing import ArrayLike
 from scipy import integrate
 
-'''
-
-class _PhaseFunction(_ScatteringArray)
-   def normalize
-
-class PhaseFunction
-   def resample
-   def normalize
-   def decompose -> LC
-
-   getter can return ndarray
-   setter can set with _PhaseFunction
-
-class LegendreCoefficients
-   def zero()
-   
-'''
-
 
 class _NSamples(int):
     """Designate that a number represents the number of samples.
@@ -409,7 +391,7 @@ class LegendreCoefficients(np.ndarray):
         Raised if the coefficients are not 1-dimensional.
 
     """
-    def __new__(cls, coefficients: np.ndarray):
+    def __new__(cls, coefficients: ArrayLike):
         obj = np.asarray(coefficients).view(cls)
         cls._raise_value_error_if_array_is_not_1d(obj)
         return obj

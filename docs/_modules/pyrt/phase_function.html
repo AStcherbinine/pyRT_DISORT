@@ -172,24 +172,6 @@
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 <span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">integrate</span>
 
-<span class="sd">&#39;&#39;&#39;</span>
-
-<span class="sd">class _PhaseFunction(_ScatteringArray)</span>
-<span class="sd">   def normalize</span>
-
-<span class="sd">class PhaseFunction</span>
-<span class="sd">   def resample</span>
-<span class="sd">   def normalize</span>
-<span class="sd">   def decompose -&gt; LC</span>
-
-<span class="sd">   getter can return ndarray</span>
-<span class="sd">   setter can set with _PhaseFunction</span>
-
-<span class="sd">class LegendreCoefficients</span>
-<span class="sd">   def zero()</span>
-<span class="sd">   </span>
-<span class="sd">&#39;&#39;&#39;</span>
-
 
 <span class="k">class</span> <span class="nc">_NSamples</span><span class="p">(</span><span class="nb">int</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Designate that a number represents the number of samples.</span>
@@ -578,7 +560,7 @@
 <span class="sd">        Raised if the coefficients are not 1-dimensional.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">_raise_value_error_if_array_is_not_1d</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span>
