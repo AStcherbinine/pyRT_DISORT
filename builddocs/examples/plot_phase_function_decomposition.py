@@ -8,7 +8,6 @@ Decompose a phase function into Legendre coefficients.
 
 # %%
 # First import everything needed for this example.
-from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 import pyrt

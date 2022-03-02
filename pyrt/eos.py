@@ -6,9 +6,7 @@ from scipy.constants import Boltzmann
 from scipy.integrate import quadrature as quad
 
 
-# TODO: the RTD theme puts the equation number *above* the equation, which is
-#  awful. There's nothing I can really do to change this but wait until they fix
-#  it (and a pull request is in the works...). This is just a reminder.
+
 # TODO: Fix the Raises docstring formatting
 class Hydrostatic:
     """A data structure that computes a hydrostatic equation of state.
@@ -473,3 +471,34 @@ class _ScaleHeightVar:
 
         """
         return self.__var
+
+
+def hydrostatic_profile(altitude: np.ndarray, surface: float, scale_height: np.ndarray):
+    return surface * np.exp(-altitude / scale_height)
+
+
+
+
+
+if __name__ == '__main__':
+
+
+
+    t = np.linspace(150, 200, num=15)
+    z = np.linspace(80, 0, num=15)
+    p = hydrostatic_profile(z, 610, 10)
+    n = p / t / Boltzmann
+    foo = np.array([quad(hydrostatic_profile, z[i+1], z[i], args=(n[-1], 10))[0] for i in range(len(z)-1)]) * 1000
+
+    print(np.sum(foo))
+    print(n[-1] * 10000 * (1-np.exp(-8)))
+
+    print('~'*30)
+    g = np.load('/home/kyle/Downloads/correction.npy')
+    w = np.linspace(205, 305, num=19)
+    import matplotlib.pyplot as plt
+
+    plt.plot(w, g)
+    plt.xlabel('Wavelength')
+    plt.ylabel('Deviation from the mean')
+    plt.savefig('/home/kyle/radiance-correction.png', dpi=200)

@@ -13,6 +13,27 @@ You can find examples of cool things to do with pyrt here.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Simulate an image of the sky taken by the Mastcam-Z instrument on Mars2020.">
+
+.. only:: html
+
+ .. figure:: /examples/images/thumb/sphx_glr_plot_sky_image_thumb.png
+     :alt: Sky Image
+
+     :ref:`sphx_glr_examples_plot_sky_image.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plot_sky_image
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Decompose a phase function into Legendre coefficients.">
 
 .. only:: html

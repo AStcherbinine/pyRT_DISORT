@@ -3,7 +3,7 @@ scattering.
 """
 import numpy as np
 from pyrt.eos import _EoSVar
-from pyrt.observation import _Wavelength
+from pyrt.spectral import _Wavelength, to_wavenumber
 
 
 class _Rayleigh:
@@ -145,7 +145,7 @@ class RayleighCO2(_Rayleigh):
 
         """
         self.__wavelength = _Wavelength(wavelength, 'wavelength')
-        self.__wavenumber = self.__wavelength.to_wavenumber()
+        self.__wavenumber = to_wavenumber(wavelength)
         self.__column_density = _EoSVar(column_density, 'cd')
 
         self.__raise_error_if_inputs_have_incompatible_shapes()
@@ -198,3 +198,26 @@ class RayleighCO2(_Rayleigh):
 
         """
         return self.__scattering_od
+
+
+if __name__ == '__main__':
+    from scipy.constants import Boltzmann
+    from scipy.integrate import quadrature as quad
+
+
+    def hydrostatic_profile(altitude: np.ndarray, surface: float, scale_height: np.ndarray):
+        return surface * np.exp(-altitude / scale_height)
+
+
+    t = np.linspace(150, 200, num=15)
+    z = np.linspace(100, 0, num=15)
+    p = hydrostatic_profile(z, 670, 10)
+    n = p / t / Boltzmann
+    foo = np.array([quad(hydrostatic_profile, z[i+1], z[i], args=(n[-1], 10))[0] for i in range(len(z)-1)])
+    for f in foo:
+        print(f)
+
+    w = np.linspace(0.2, 1, num=5)
+
+    r = RayleighCO2(w, foo*1000)
+    print(np.sum(r.optical_depth, axis=0))
