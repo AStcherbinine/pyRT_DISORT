@@ -9,5 +9,5 @@ pyRT_DISORT.
    :caption: API
 
    api/angles
-   api/phase-function
    api/spectral
+   api/phase-function

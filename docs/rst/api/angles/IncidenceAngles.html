@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>azimuth &#8212; pyRT_DISORT  documentation</title>
+    <title>IncidenceAngles &#8212; pyRT_DISORT  documentation</title>
     
     <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -39,6 +39,8 @@
     <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="EmissionAngles" href="EmissionAngles.html" />
+    <link rel="prev" title="Angles" href="../angles.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -79,7 +81,7 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
+<li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../../api-reference.html">
   API Reference
  </a>
@@ -143,7 +145,90 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  API
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../angles.html">
+   Angles
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     IncidenceAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="EmissionAngles.html">
+     EmissionAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PhaseAngles.html">
+     PhaseAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="AzimuthAngles.html">
+     AzimuthAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="azimuth.html">
+     azimuth
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../spectral.html">
+   Spectral
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../spectral/to-wavenumber.html">
+     to_wavenumber
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../phase-function.html">
+   Phase Function
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../phase-function/PhaseFunction.html">
+     PhaseFunction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../phase-function/LegendreCoefficients.html">
+     LegendreCoefficients
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
   </div>
 </nav>
               </div>
@@ -181,37 +266,42 @@
               
               <div>
                 
-  <section id="azimuth">
-<h1>azimuth<a class="headerlink" href="#azimuth" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyrt.azimuth">
-<span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">azimuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="IncidenceAngles.html#pyrt.IncidenceAngles" title="pyrt.angles.IncidenceAngles"><span class="pre">pyrt.angles.IncidenceAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">emission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="EmissionAngles.html#pyrt.EmissionAngles" title="pyrt.angles.EmissionAngles"><span class="pre">pyrt.angles.EmissionAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PhaseAngles.html#pyrt.PhaseAngles" title="pyrt.angles.PhaseAngles"><span class="pre">pyrt.angles.PhaseAngles</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="AzimuthAngles.html#pyrt.AzimuthAngles" title="pyrt.angles.AzimuthAngles"><span class="pre">pyrt.angles.AzimuthAngles</span></a></span></span><a class="reference internal" href="../../../_modules/pyrt/angles.html#azimuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.azimuth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct azimuth angles from a set of incidence, emission, and phase
-angles.</p>
+  <section id="incidenceangles">
+<h1>IncidenceAngles<a class="headerlink" href="#incidenceangles" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyrt.IncidenceAngles">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">IncidenceAngles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyrt/angles.html#IncidenceAngles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.IncidenceAngles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyrt.angles._Angles</span></code></p>
+<p>Designate that an array represents incidence (solar zenith) angles.</p>
+<p>This object otherwise acts like an ndarray.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>incidence</strong> (<a class="reference internal" href="IncidenceAngles.html#pyrt.IncidenceAngles" title="pyrt.IncidenceAngles"><em>IncidenceAngles</em></a>) – Incidence (solar zenith) angles [degrees].</p></li>
-<li><p><strong>emission</strong> (<a class="reference internal" href="EmissionAngles.html#pyrt.EmissionAngles" title="pyrt.EmissionAngles"><em>EmissionAngles</em></a>) – Emission (emergence) angles [degrees].</p></li>
-<li><p><strong>phase</strong> (<a class="reference internal" href="PhaseAngles.html#pyrt.PhaseAngles" title="pyrt.PhaseAngles"><em>PhaseAngles</em></a>) – Phase angles [degrees].</p></li>
-</ul>
+<dd class="field-odd"><p><strong>array</strong> (<em>ArrayLike</em>) – Any array of incidence angles [degrees]. Must be between 0 and 90.</p>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – Raised if the input arrays do not have compatible shapes.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="AzimuthAngles.html#pyrt.AzimuthAngles" title="pyrt.angles.AzimuthAngles">pyrt.angles.AzimuthAngles</a></p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – Raised if any values in the input array are nonnumerical.</p></li>
+<li><p><strong>ValueError</strong> – Raised if any values in the input array are not between 0 and 90.</p></li>
+</ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Create the azimuth angles from an assortment of angles.</p>
+<p>Designate an array-like object as representing incidence angles.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyrt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">incidence_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">IncidenceAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">emission_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">EmissionAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">phase_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">PhaseAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">35</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">incidence_angles</span><span class="p">,</span> <span class="n">emission_angles</span><span class="p">,</span> <span class="n">phase_angles</span><span class="p">)</span>
-<span class="go">AzimuthAngles([122.74921226, 129.08074256, 131.57329276])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">IncidenceAngles</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+<span class="go">IncidenceAngles([ 0, 10, 20])</span>
+</pre></div>
+</div>
+<p>This array can have any shape.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inc</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">IncidenceAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">inc</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(2, 3)</span>
+</pre></div>
+</div>
+<p>Compute MU0 for a slice of this array.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">inc</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="go">IncidenceAngles([8.66025404e-01, 5.00000000e-01, 6.12323400e-17])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -224,6 +314,20 @@ angles.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../angles.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Angles</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="EmissionAngles.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">EmissionAngles</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
               
           </main>

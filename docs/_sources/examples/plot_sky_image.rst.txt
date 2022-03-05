@@ -43,12 +43,13 @@ First import everything needed for this example.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-19
+.. GENERATED FROM PYTHON SOURCE LINES 17-20
 
 Before we simulate the sky, it's useful to take a look at what variables we
-need.
+need. Many variables must be either floats, ints, or booleans, but some
+need to be arrays that have a specific shape.
 
-.. GENERATED FROM PYTHON SOURCE LINES 19-20
+.. GENERATED FROM PYTHON SOURCE LINES 20-21
 
 .. code-block:: default
 
@@ -146,7 +147,7 @@ need.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.119 seconds)
+   **Total running time of the script:** ( 0 minutes  0.111 seconds)
 
 
 .. _sphx_glr_download_examples_plot_sky_image.py:

@@ -39,6 +39,8 @@
     <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Spectral" href="../spectral.html" />
+    <link rel="prev" title="AzimuthAngles" href="AzimuthAngles.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -79,7 +81,7 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
+<li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../../api-reference.html">
   API Reference
  </a>
@@ -143,7 +145,90 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    
+    <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  API
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../angles.html">
+   Angles
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="IncidenceAngles.html">
+     IncidenceAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="EmissionAngles.html">
+     EmissionAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="PhaseAngles.html">
+     PhaseAngles
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="AzimuthAngles.html">
+     AzimuthAngles
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     azimuth
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../spectral.html">
+   Spectral
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../spectral/to-wavenumber.html">
+     to_wavenumber
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../phase-function.html">
+   Phase Function
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../phase-function/PhaseFunction.html">
+     PhaseFunction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../phase-function/LegendreCoefficients.html">
+     LegendreCoefficients
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
   </div>
 </nav>
               </div>
@@ -203,6 +288,10 @@ angles.</p>
 <dd class="field-odd"><p><a class="reference internal" href="AzimuthAngles.html#pyrt.AzimuthAngles" title="pyrt.angles.AzimuthAngles">pyrt.angles.AzimuthAngles</a></p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The inputs can be ndarrays but then there’s no angle validation.
+Consequently, the results may not accurate in this scenario. I recommend
+using the correctly typed inputs.</p>
 <p class="rubric">Examples</p>
 <p>Create the azimuth angles from an assortment of angles.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -224,6 +313,20 @@ angles.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="AzimuthAngles.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">AzimuthAngles</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../spectral.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Spectral</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
               
           </main>

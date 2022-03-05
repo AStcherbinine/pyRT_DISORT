@@ -1,10 +1,19 @@
 Angles
 ======
 
-These utilities help to construct angles.
+These utilities help to construct and validate angles.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Angles
+   :caption: Data Types:
 
-   angles/make-azimuth
+   angles/IncidenceAngles
+   angles/EmissionAngles
+   angles/PhaseAngles
+   angles/AzimuthAngles
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Routines:
+
+   angles/azimuth
