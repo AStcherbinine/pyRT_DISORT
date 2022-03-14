@@ -1,79 +1,47 @@
 """
+angles.py
+azimuth()
 
-class _PhaseFunction(ABC)
-    def resample()
-    def normalize()
+spectral.py
+wavenumber()
 
-    @abstractmathod
-    def decompose(moments)
-        pass
+phase_function.py
+def resample() done
+def normalize() done
+def decompose() done
+later - def fit_hg() from scipy.optimize.minimize
+def set_coeff0() done
+def reconstruct() done
+def decompose_hg()
+def construct_hg()
 
-class PhaseFunction(_PhaseFunction)
-    def decompose(moments) -> LegendreCoefficients
+grid.py
+nn_regrid()
 
-class PhaseFunctionGrid(_PhaseFunction, grid._ParticleSizeWavelengthGriddedArray)
-    def regrid() -> PhaseFunctionGradient
-    def decompose() -> LegendreCoefficientsGrid
+vertical_profile.py
+def conrath()
+def uniform()
 
-class PhaseFunctionGradient(_PhaseFunction, grid._ParticleSizeWavelengthGriddedArray)
-    def decompose() -> LegendreCoefficientsGradient
+fsp.py
+def make_extinction()
 
-class HenyeyGreenstein(_PhaseFunction)
-    def construct() -> PhaseFunction
-    def decompose()
+column.py
+class Column
 
-class HGGrid(HenyeyGreenstein, grid._ParticleSizeWavelengthGriddedArray)
-    def construct() -> PhaseFunctionGrid
-    def decompose()
+rayleigh.py
+def rayleigh_ssa(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
+def rayleigh_pmom(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
+def rayleigh_co2(colden, wavs) -> Column
 
-class _LegendreCoefficients
-    def set_negative_coeff_to_0()
-    def reconstruct(coeff, scattering_angles)
+eos.py
+make_column_density()
+exp_profile()
+# These need work
 
-class LegendreCoefficients(_LC)
-    def reconstruct() -> PhaseFunction
-
-class LegendreCoefficientsGrid(_LC)
-    def reconstruct() -> PhaseFunctionGrid
-
-class LegendreCoefficientsGradient(_LC)
-    def reconstruct() -> PhaseFunctionGradient
-
-
-
-
-# check nsa > nmom
-class HenyeyGreenstein(PhaseFunction)
-    nsa = NumberScatteringAngles()
-    nmom = NumberMoments()
-    g = AsymmetryParameter()
-    def __init__(asymmetry_parameter, reff_grid, wavs_grid, reff, wavs, nsa=181, nmom: int)
-        self.nsa = nsa
-        self.nmom = nmom
-        sa = self._make_scattering_angles()
-        pf = self._construct()
-        super().__init__(pf, sa, reff_grid, wav_grid, reff, wavs)
-
-    @properties
-    all of PhaseFunction
-    asymmetry_parameter
-
-    def _make_scattering_angles() -> np.ndarray
-        np.linspace(0, 180, num=self.nsa)
-
-    def _construct() -> np.ndarray
-
-    def decompose() -> LegendreCoefficients
-
-class LegendreCoefficients()
-    coeff = _Coefficients()
-    sa = _ScatteringAngles()
-    def __init__(coeff, scattering_angles)
-        self.coeff = coeff
-        self.sa = sa
-
-    def set_negative_coeff_to_0() -> None
-    def reconstruct() -> np.ndarray
+Examples
+- plot_phase_function_decomposition.py
+- plot_fit_hg_phase_function.py
+- plot_rayleigh.py
 
 
 class ForwardScatteringProperties:
@@ -146,11 +114,6 @@ class VerticalProfile:
 
 consider an Atmosphere class that holds eos variables, and then requiring Atmosphere instead of colden
 
-def conrath() -> VerticalProfile
-def uniform() -> VerticalProfile
-
-def wavenumber(wavelengths) -> np.ndarray
-def azimuth(ia, ea, pa) -> np.ndarray
 
 ~~~~~~~~~~~~~~Structure~~~~~~~~~~~~~~~~~~~~~~
 grid.py
@@ -182,12 +145,6 @@ vertical_profile.py
 class VerticalProfile
 def conrath()
 def uniform()
-
-spectral.py
-def wavenumber()
-
-angles.py
-def azimuth()
 
 
 """

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>azimuth &#8212; pyRT_DISORT  documentation</title>
+    <title>resample_pf &#8212; pyRT_DISORT  documentation</title>
     
     <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -39,8 +39,8 @@
     <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Spectral" href="../spectral.html" />
-    <link rel="prev" title="AzimuthAngles" href="AzimuthAngles.html" />
+    <link rel="next" title="normalize_pf" href="normalize_pf.html" />
+    <link rel="prev" title="Phase Function" href="../phase-function.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -151,38 +151,38 @@
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="../angles.html">
    Angles
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="current">
+  <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="IncidenceAngles.html">
+    <a class="reference internal" href="../angles/IncidenceAngles.html">
      IncidenceAngles
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="EmissionAngles.html">
+    <a class="reference internal" href="../angles/EmissionAngles.html">
      EmissionAngles
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="PhaseAngles.html">
+    <a class="reference internal" href="../angles/PhaseAngles.html">
      PhaseAngles
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="AzimuthAngles.html">
+    <a class="reference internal" href="../angles/AzimuthAngles.html">
      AzimuthAngles
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../angles/azimuth.html">
      azimuth
     </a>
    </li>
@@ -205,38 +205,38 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
+ <li class="toctree-l1 current active has-children">
   <a class="reference internal" href="../phase-function.html">
    Phase Function
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
   <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../phase-function/resample_pf.html">
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      resample_pf
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../phase-function/normalize_pf.html">
+    <a class="reference internal" href="normalize_pf.html">
      normalize_pf
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../phase-function/decompose.html">
+    <a class="reference internal" href="decompose.html">
      decompose
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../phase-function/set_negative_coefficients_to_0.html">
+    <a class="reference internal" href="set_negative_coefficients_to_0.html">
      set_negative_coefficients_to_0
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../phase-function/reconstruct_phase_function.html">
+    <a class="reference internal" href="reconstruct_phase_function.html">
      reconstruct_phase_function
     </a>
    </li>
@@ -281,41 +281,44 @@
               
               <div>
                 
-  <section id="azimuth">
-<h1>azimuth<a class="headerlink" href="#azimuth" title="Permalink to this headline">¶</a></h1>
+  <section id="resample-pf">
+<h1>resample_pf<a class="headerlink" href="#resample-pf" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="pyrt.azimuth">
-<span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">azimuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="IncidenceAngles.html#pyrt.IncidenceAngles" title="pyrt.angles.IncidenceAngles"><span class="pre">pyrt.angles.IncidenceAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">emission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="EmissionAngles.html#pyrt.EmissionAngles" title="pyrt.angles.EmissionAngles"><span class="pre">pyrt.angles.EmissionAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="PhaseAngles.html#pyrt.PhaseAngles" title="pyrt.angles.PhaseAngles"><span class="pre">pyrt.angles.PhaseAngles</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="AzimuthAngles.html#pyrt.AzimuthAngles" title="pyrt.angles.AzimuthAngles"><span class="pre">pyrt.angles.AzimuthAngles</span></a></span></span><a class="reference internal" href="../../../_modules/pyrt/angles.html#azimuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.azimuth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct azimuth angles from a set of incidence, emission, and phase
-angles.</p>
+<dt class="sig sig-object py" id="pyrt.resample_pf">
+<span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">resample_pf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scattering_angles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/pyrt/phase_function.html#resample_pf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.resample_pf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample a phase function to an input a number of points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>incidence</strong> (<a class="reference internal" href="IncidenceAngles.html#pyrt.IncidenceAngles" title="pyrt.IncidenceAngles"><em>IncidenceAngles</em></a>) – Incidence (solar zenith) angles [degrees].</p></li>
-<li><p><strong>emission</strong> (<a class="reference internal" href="EmissionAngles.html#pyrt.EmissionAngles" title="pyrt.EmissionAngles"><em>EmissionAngles</em></a>) – Emission (emergence) angles [degrees].</p></li>
-<li><p><strong>phase</strong> (<a class="reference internal" href="PhaseAngles.html#pyrt.PhaseAngles" title="pyrt.PhaseAngles"><em>PhaseAngles</em></a>) – Phase angles [degrees].</p></li>
+<li><p><strong>phase_function</strong> (<em>ArrayLike</em>) – The phase function array. Can be N-dimensional but axis 0 must be the
+same shape as <code class="code docutils literal notranslate"><span class="pre">scattering_angles</span></code>.</p></li>
+<li><p><strong>scattering_angles</strong> (<em>ArrayLike</em>) – The scattering angles [degrees] of the phase function. Must be
+1-dimensional.</p></li>
+<li><p><strong>samples</strong> (<em>int</em>) – The number of samples to regrid the phase function onto.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – Raised if the input arrays do not have compatible shapes.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The regridded phase function and scattering angles.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="AzimuthAngles.html#pyrt.AzimuthAngles" title="pyrt.angles.AzimuthAngles">pyrt.angles.AzimuthAngles</a></p>
+<dd class="field-odd"><p>tuple[np.ndarray, np.ndarray]</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The inputs can be ndarrays but then there’s no angle validation.
-Consequently, the results may not accurate in this scenario. I recommend
-using the correctly typed inputs.</p>
 <p class="rubric">Examples</p>
-<p>Create the azimuth angles from an assortment of angles.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<p>Resample a 3D phase function to have 361 points (every 0.5 degrees).</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyrt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">incidence_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">IncidenceAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">emission_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">EmissionAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">phase_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">PhaseAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">35</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">incidence_angles</span><span class="p">,</span> <span class="n">emission_angles</span><span class="p">,</span> <span class="n">phase_angles</span><span class="p">)</span>
-<span class="go">AzimuthAngles([122.74921226, 129.08074256, 131.57329276])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dust_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;anc&#39;</span> <span class="o">/</span> <span class="s1">&#39;mars_dust&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phsfn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">/</span> <span class="s1">&#39;phase_function.npy&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">/</span> <span class="s1">&#39;scattering_angles.npy&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phsfn</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(181, 24, 317)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phsfn</span><span class="p">,</span> <span class="n">sa</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">resample_pf</span><span class="p">(</span><span class="n">phsfn</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="mi">361</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phsfn</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(361, 24, 317)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sa</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(361,)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -328,17 +331,17 @@ using the correctly typed inputs.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="AzimuthAngles.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../phase-function.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">AzimuthAngles</p>
+            <p class="prev-next-title">Phase Function</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../spectral.html" title="next page">
+    <a class='right-next' id="next-link" href="normalize_pf.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Spectral</p>
+        <p class="prev-next-title">normalize_pf</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

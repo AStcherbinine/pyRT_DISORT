@@ -85,17 +85,16 @@ pick the first one so we have an array to work with.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-29
+.. GENERATED FROM PYTHON SOURCE LINES 26-27
 
-Let's put these into a :class:`~pyrt.PhaseFunction` object. This object
-ensures the phase function and scattering angles look plausible and provides
-methods to manipulate these arrays.
+Let's resample the phase function to increase its resolution to 361 points.
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-31
+.. GENERATED FROM PYTHON SOURCE LINES 27-30
 
 .. code-block:: default
 
-    pf = pyrt.PhaseFunction(phase_function, np.radians(scattering_angles))
+    phase_function, scattering_angles = \
+            pyrt.resample_pf(phase_function, scattering_angles, 361)
 
 
 
@@ -104,45 +103,18 @@ methods to manipulate these arrays.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-34
+.. GENERATED FROM PYTHON SOURCE LINES 31-35
 
-The scattering angles are defined each degree. Let's double the resolution
-of the arrays by resampling them.
+We can now decompose the phase function. This method automatically normalizes
+the phase function so we don't need to explicitly do that. Let's decompose it
+into 129 moments (128 moments in addition to the zeroth moment, which is
+always 1).
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-37
-
-.. code-block:: default
-
-    pf.resample(362)
-    print(pf.phase_function.shape, pf.scattering_angles.shape)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    (362,) (362,)
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 38-42
-
-We can now decompose the phase function. This method normalizes the phase
-function and creates a :class:`~pyrt.LegendreCoefficients` object that acts
-just like a np.ndarray but with some methods. Let's decompose this phase
-function into 129 moments and look at the moments.
-
-.. GENERATED FROM PYTHON SOURCE LINES 42-45
+.. GENERATED FROM PYTHON SOURCE LINES 35-38
 
 .. code-block:: default
 
-    lc = pf.decompose(129)
+    lc = pyrt.decompose(phase_function, scattering_angles, 129)
     print(lc)
 
 
@@ -155,53 +127,53 @@ function into 129 moments and look at the moments.
 
  .. code-block:: none
 
-    [ 1.00000000e+00  1.77780560e-01  5.09379074e-01  3.51948667e-02
-      1.63148820e-03  6.33471181e-05  9.59385130e-06 -4.17178320e-07
-     -4.31734959e-06 -1.33567241e-06  9.14882303e-06 -1.19773336e-06
-     -7.55346525e-06 -3.40208012e-06  6.20014133e-07 -3.47397846e-06
-     -2.26997022e-06  9.72283455e-06 -2.81171209e-06  9.51115066e-06
-     -5.30142045e-06  4.12572601e-06  8.95027810e-06 -1.03008617e-05
-     -4.14079649e-06 -1.57536590e-05  4.14623798e-06  9.35727549e-06
-     -3.71986230e-06 -6.90625381e-06 -1.26568836e-05  1.31620811e-05
-      6.06196991e-06 -1.78781400e-05  6.52610603e-06  2.00393380e-05
-     -9.01673845e-06  1.04337873e-06  2.45524132e-06  3.26450093e-07
-     -1.22928374e-06 -5.08698046e-06  1.12076973e-05 -6.20889579e-06
-     -2.75012126e-06  1.16208650e-05 -2.30687159e-06  3.80888366e-06
-      5.45502560e-06 -1.19988794e-05  1.07323264e-06  2.90130015e-05
-      3.63780207e-06 -1.46662261e-05 -4.13227752e-06 -3.32404491e-06
-      2.94339548e-07  9.33272245e-06 -7.73619928e-06 -2.68457910e-05
-     -3.14101248e-05 -9.42595444e-06  1.93955857e-05 -2.63963718e-05
-      3.52623084e-06  1.62233591e-05 -2.48424274e-06  2.17126608e-05
-     -1.61521137e-05 -7.57838442e-06  3.48196067e-05 -1.52278102e-05
-      5.77196060e-06  1.55285604e-05 -2.53608492e-05 -4.70610484e-06
-      7.18916471e-06 -2.10982316e-05  1.15398265e-05  4.61182590e-05
-     -1.75915142e-05 -3.75527556e-05 -1.03725685e-05  1.09568610e-05
-      6.50520294e-06  1.45546287e-06 -4.01844927e-06 -7.46851887e-06
-      2.49933865e-05 -3.62378805e-06  1.59108604e-05  1.06115227e-07
-      4.04613052e-06 -1.02914061e-05  1.84651367e-05  1.62228442e-05
-     -5.16825521e-06 -3.34015693e-06  8.55406828e-07 -8.97175914e-07
-     -6.88768463e-06  6.92004348e-07  6.69191475e-06  4.61304661e-06
-     -1.88927190e-05 -5.31764163e-06 -3.60283226e-07  9.63816746e-06
-      3.05446769e-06  1.00705508e-05 -2.51602132e-05 -3.88374105e-06
-      2.43063299e-05 -6.61112832e-07 -1.37224149e-05 -7.76443946e-06
-     -3.39314749e-06 -1.40779736e-06  7.45641373e-06 -1.16803071e-06
-     -1.42696763e-05  2.09432088e-06 -1.31361852e-05 -2.24336867e-05
-     -4.04125732e-06  9.08374425e-06  3.70497830e-05  3.00103619e-05
-      1.15262564e-05]
+    [ 1.00000000e+00  1.77783626e-01  5.09395621e-01  3.52003674e-02
+      1.63120771e-03  6.00358352e-05  4.15104944e-06 -2.03278222e-06
+     -6.24407927e-06 -2.06439479e-06  8.10554313e-06 -1.64261814e-06
+     -8.24641547e-06 -3.72750596e-06  1.34140765e-07 -3.71275525e-06
+     -2.63604165e-06  9.55363534e-06 -3.10990973e-06  9.36671422e-06
+     -5.55325056e-06  4.02497986e-06  8.79663306e-06 -1.04293581e-05
+     -4.34661768e-06 -1.59371166e-05  4.04454992e-06  9.33530239e-06
+     -3.83336158e-06 -7.05539097e-06 -1.28622842e-05  1.31878915e-05
+      6.01438533e-06 -1.81468401e-05  6.50566622e-06  2.01628414e-05
+     -9.20137141e-06  9.13027850e-07  2.42888436e-06  2.62764037e-07
+     -1.34933773e-06 -5.20038876e-06  1.12795720e-05 -6.40313690e-06
+     -2.87674700e-06  1.17273059e-05 -2.42520270e-06  3.77865765e-06
+      5.48374321e-06 -1.24177651e-05  1.01054947e-06  2.95698358e-05
+      3.67276515e-06 -1.51494370e-05 -4.25532790e-06 -3.43289346e-06
+      3.14118526e-07  9.68602417e-06 -7.77372141e-06 -2.75310772e-05
+     -3.22774076e-05 -9.49435456e-06  2.01124147e-05 -2.71877190e-05
+      3.48854656e-06  1.67258113e-05 -2.65097555e-06  2.22116061e-05
+     -1.69312353e-05 -8.06165709e-06  3.60812907e-05 -1.59368604e-05
+      5.72691640e-06  1.61729408e-05 -2.65463248e-05 -5.06636147e-06
+      7.64533808e-06 -2.24364424e-05  1.20637131e-05  4.85550564e-05
+     -1.85035331e-05 -4.01402007e-05 -1.07588557e-05  1.17761626e-05
+      6.86205137e-06  1.32878797e-06 -4.75162720e-06 -8.04370474e-06
+      2.60668152e-05 -3.95322202e-06  1.60948420e-05  1.87235201e-08
+      3.53112249e-06 -1.13580056e-05  1.93805439e-05  1.71737630e-05
+     -6.08727476e-06 -4.26020936e-06  9.36290573e-07 -1.36071223e-06
+     -7.53196975e-06  2.19204157e-07  7.48867946e-06  4.44108095e-06
+     -2.06149017e-05 -6.65725715e-06  2.83034953e-10  9.67988680e-06
+      3.52755897e-06  9.87034297e-06 -2.80182212e-05 -5.58017407e-06
+      2.71905947e-05 -1.80797481e-06 -1.61385611e-05 -1.01595327e-05
+     -4.07606647e-06 -3.65570105e-06  7.59269048e-06 -5.06873485e-06
+     -1.79371239e-05 -5.12678882e-06 -2.02863889e-05 -5.37502655e-05
+     -1.24761541e-05  7.01676405e-05  9.79816847e-05  3.06401258e-05
+     -2.48380546e-05]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-48
+.. GENERATED FROM PYTHON SOURCE LINES 39-41
 
 At index 7 the coefficient is negative, and it appears the coefficients
 oscillate around 0 after this. Let's set these to 0.
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
+.. GENERATED FROM PYTHON SOURCE LINES 41-43
 
 .. code-block:: default
 
-    lc.set_negative_coefficients_to_0()
+    lc = pyrt.set_negative_coefficients_to_0(lc)
 
 
 
@@ -210,16 +182,16 @@ oscillate around 0 after this. Let's set these to 0.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-53
+.. GENERATED FROM PYTHON SOURCE LINES 44-46
 
-This object can also convert back into a phase function. Let's do that and
-plot how the fit performed.
+We can test how well the fit did by converting back into a phase function.
+Let's do that and see how it performed.
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-89
+.. GENERATED FROM PYTHON SOURCE LINES 46-82
 
 .. code-block:: default
 
-    reconstructed_pf = lc.reconstruct_phase_function()
+    reconstructed_pf = pyrt.reconstruct_phase_function(lc, scattering_angles)
 
     plt.rc('mathtext', fontset='stix')
     plt.rc('font', **{'family': 'STIXGeneral'})
@@ -241,10 +213,10 @@ plot how the fit performed.
     dpi = 150
 
     fig, ax = plt.subplots()
-    ax.plot(np.degrees(pf.scattering_angles), pf.phase_function,
+    ax.plot(scattering_angles, phase_function,
             color='k',
             label='Original phase function')
-    ax.plot(np.degrees(reconstructed_pf.scattering_angles), reconstructed_pf.phase_function,
+    ax.plot(scattering_angles, reconstructed_pf,
             color='r',
             label='Reconstructed phase function',
             linestyle='dotted')
@@ -270,7 +242,7 @@ plot how the fit performed.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.274 seconds)
+   **Total running time of the script:** ( 0 minutes  0.448 seconds)
 
 
 .. _sphx_glr_download_examples_plot_phase_function_decomposition.py:

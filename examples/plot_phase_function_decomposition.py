@@ -23,34 +23,27 @@ scattering_angles = np.load(dust_dir + 'scattering_angles.npy')
 print(scattering_angles)
 
 # %%
-# Let's put these into a :class:`~pyrt.PhaseFunction` object. This object
-# ensures the phase function and scattering angles look plausible and provides
-# methods to manipulate these arrays.
-pf = pyrt.PhaseFunction(phase_function, np.radians(scattering_angles))
+# Let's resample the phase function to increase its resolution to 361 points.
+phase_function, scattering_angles = \
+        pyrt.resample_pf(phase_function, scattering_angles, 361)
 
 # %%
-# The scattering angles are defined each degree. Let's double the resolution
-# of the arrays by resampling them.
-pf.resample(362)
-print(pf.phase_function.shape, pf.scattering_angles.shape)
-
-# %%
-# We can now decompose the phase function. This method normalizes the phase
-# function and creates a :class:`~pyrt.LegendreCoefficients` object that acts
-# just like a np.ndarray but with some methods. Let's decompose this phase
-# function into 129 moments and look at the moments.
-lc = pf.decompose(129)
+# We can now decompose the phase function. This method automatically normalizes
+# the phase function so we don't need to explicitly do that. Let's decompose it
+# into 129 moments (128 moments in addition to the zeroth moment, which is
+# always 1).
+lc = pyrt.decompose(phase_function, scattering_angles, 129)
 print(lc)
 
 # %%
 # At index 7 the coefficient is negative, and it appears the coefficients
 # oscillate around 0 after this. Let's set these to 0.
-lc.set_negative_coefficients_to_0()
+lc = pyrt.set_negative_coefficients_to_0(lc)
 
 # %%
-# This object can also convert back into a phase function. Let's do that and
-# plot how the fit performed.
-reconstructed_pf = lc.reconstruct_phase_function()
+# We can test how well the fit did by converting back into a phase function.
+# Let's do that and see how it performed.
+reconstructed_pf = pyrt.reconstruct_phase_function(lc, scattering_angles)
 
 plt.rc('mathtext', fontset='stix')
 plt.rc('font', **{'family': 'STIXGeneral'})
@@ -72,10 +65,10 @@ plt.rc('ytick.minor', width=0.5)
 dpi = 150
 
 fig, ax = plt.subplots()
-ax.plot(np.degrees(pf.scattering_angles), pf.phase_function,
+ax.plot(scattering_angles, phase_function,
         color='k',
         label='Original phase function')
-ax.plot(np.degrees(reconstructed_pf.scattering_angles), reconstructed_pf.phase_function,
+ax.plot(scattering_angles, reconstructed_pf,
         color='r',
         label='Reconstructed phase function',
         linestyle='dotted')

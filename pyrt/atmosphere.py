@@ -3,6 +3,136 @@ atmospheric properties required by DISORT.
 """
 import numpy as np
 
+"""
+# Thought: PMOM is just some abstract number derived from the much more real phase function
+
+Descriptors:
+class _OpticalDepth (nlyr, nwavs)
+class _SingleScatteringAlbedo (nlyr, nwavs)
+class _PhaseFunctionDecomposition (nmom, nlyr, nwavs)
+class _NMoments
+class _PhaseFunction
+class _ScatteringAngles
+class _LegendreCoefficients
+
+def conrath() -> np.ndarray
+def uniform() -> np.ndarray
+
+
+class Column:
+    od = OpticalDepth()
+    ssa = SingleScatteringAlbedo()
+    pmom = PhaseFunctionDecomposition()
+    def __init__(od, ssa, pmom, name=NOne):
+        self.od = od
+        self.ssa = ssa
+        self.pmom = pmom
+    # These can get gotten + set but this obj. checks for array shapes
+    
+
+def rayleigh_ssa(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
+def rayleigh_pmom(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
+def rayleigh_co2(colden, wavs) -> Column
+
+class PhaseFunction
+    def decompose(nmoments: int) -> LegendreCoefficients
+    
+    def __str__():
+        return self.pf
+        
+class EmpiricalPhaseFunction(PhaseFunction)
+    pf = _PhaseFunction()
+    sa = _ScatteringAngles()
+    def __init__(phase_function, scattering_angles)
+        self.pf = pf
+        self.sa = sa
+    
+    def resample() -> None
+    def normalize() -> None
+    
+class HenyeyGreenstein(PhaseFunction)
+
+    def __init__(asymmetry_parameter)
+        self.g =g
+    def construct()
+    def decompose() -> LegendreCoefficients
+        
+class LegendreCoefficients()
+    coeff = _Coefficients()
+    sa = _ScatteringAngles()
+    def __init__(coeff, scattering_angles)
+        self.coeff = coeff
+        self.sa = sa
+    
+    def set_negative_coeff_to_0() -> None
+    def reconstruct() -> PhaseFunction
+    
+    def __str__():
+        return self.coeff
+
+class ForwardScatteringPropertiesGrid:
+    def __init__(scattering_cross_section, extinction_cross_section, particle_sizes, wavelengths)
+        self.scs
+        self.ecs
+        self.ps
+        self.wavs
+    
+    def make_extinction(wave_ref):
+    
+class PhaseFunctionGrid:
+    def __init__(pf, scattering_angles, particle_sizes, wavelengths)
+        self.pf = pf (nsa, nreff, nwavs)
+        self.sa = scattering_angles (nsa)
+        self.reff = ps (nreff)
+        self.wavs = wavs (nwavs)
+        
+    def make_pmom(nmom, reff, wavs) -> np.ndarray
+        
+
+#class Aerosol:
+#    def __init__(fspg, pfg)
+        
+    
+class AerosolColumn(Column):
+    def __init__(fspg, pfg, q_profile, reff_grad, colden, extinction, integrated od, wave_ref, nmom, wavs):
+        self.fspg = fspg
+        self.pfg = pfg
+        self.q_prof = q_profile
+        self. ... = ....
+        od = self.make_od()
+        ssa = 
+        pmom =
+        
+        super().__init__(od, ssa, pmom)
+    
+    def remake_properties():
+        self.od = self.make_od()
+        self.ssa = self.make_ssa()
+        self.pmom = self.make_pmom()
+    
+    @property
+    def q_prof():
+        return self.q_prof
+        
+    @remake_properties
+    @q_prof.setter
+    def q_prof(self, val):
+        self.q_prof = val
+
+class Atmosphere:
+    def __init__()
+        self.od = None
+        self.ssa = None
+        self.pmom = None
+    
+    def add_column(col: Column)
+        # recompute everything
+
+
+
+
+"""
+
 
 class Atmosphere:
     """A structure to compute the total atmospheric properties.

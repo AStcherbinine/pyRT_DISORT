@@ -1,447 +1,421 @@
 from __future__ import annotations
 import numpy as np
 from numpy.typing import ArrayLike
-from scipy import integrate
-from pyrt.grid import _ParticleSizeWavelengthGriddedArray
+from scipy.integrate import simps
+from scipy.interpolate import interp1d
 
 
-class _NSamples(int):
-    """Designate that a number represents the number of samples.
-
-    Parameters
-    ----------
-    value
-        The number of samples to use.
-
-    Raises
-    ------
-    TypeError
-        Raised if the input cannot be converted into an int.
-    ValueError
-        Raised if the number of samples is not positive.
-
-    """
-
-    def __new__(cls, value: int, *args, **kwargs):
-        return super().__new__(cls, value)
-
-    def __init__(self, value: int, *args, **kwargs):
-        self._raise_value_error_if_moments_is_not_positive()
-
-    def _raise_value_error_if_moments_is_not_positive(self):
-        if self <= 0:
-            message = 'The number of samples must be positive.'
-            raise ValueError(message)
-
-
-class _NMoments(int):
-    """Designate that a number represents the number of moments.
-
-    Parameters
-    ----------
-    value
-        The number of moments to use.
-
-    Raises
-    ------
-    TypeError
-        Raised if the input cannot be converted into an int.
-    ValueError
-        Raised if the number of moments is not positive.
-
-    """
-
-    def __new__(cls, value: int, *args, **kwargs):
-        return super().__new__(cls, value)
-
-    def __init__(self, value: int, *args, **kwargs):
-        self._raise_value_error_if_moments_is_not_positive()
-
-    def _raise_value_error_if_moments_is_not_positive(self):
-        if self <= 0:
-            message = 'The number of moments must be positive.'
-            raise ValueError(message)
-
-
-class _ScatteringArray(np.ndarray):
-    def __new__(cls, array: np.ndarray, name: str = 'scattering_array'):
-        obj = np.asarray(array).view(cls)
-        obj.name = name
-        cls._raise_value_error_if_array_is_not_positive_finite(obj)
-        cls._raise_value_error_if_array_is_not_1d(obj)
+class _ScatteringAngles(np.ndarray):
+    def __new__(cls, array: ArrayLike):
+        obj = cls._make_array(array).view(cls)
+        cls._validate(obj)
         return obj
 
     def __array_finalize__(self, obj: np.ndarray):
-        self.name = getattr(obj, 'name', None)
+        if obj is None:
+            return
 
     @staticmethod
-    def _raise_value_error_if_array_is_not_positive_finite(obj) -> None:
-        if ((obj < 0) | ~np.isfinite(obj)).any():
-            message = f'{obj.name} must be non-negative and finite.'
-            raise ValueError(message)
+    def _make_array(value):
+        try:
+            array = np.asarray(value)
+            array.astype(float)
+        except TypeError as te:
+            message = 'The scattering angles must be ArrayLike.'
+            raise TypeError(message) from te
+        except ValueError as ve:
+            message = 'The scattering angles must be numeric.'
+            raise ValueError(message) from ve
+        return array
 
     @staticmethod
-    def _raise_value_error_if_array_is_not_1d(obj) -> None:
-        if obj.ndim != 1:
-            message = f'{obj.name} must be 1-dimensional.'
+    def _validate(array):
+        if not np.all((0 <= array) & (array <= 180)):
+            message = 'The scattering angles must be between 0 and 180 degrees.'
+            raise ValueError(message)
+        if not np.ndim(array) == 1:
+            message = 'The scattering angles must be 1-dimensional.'
             raise ValueError(message)
 
-    def resample(self, samples: int):
-        samples = _NSamples(samples)
-        old = np.arange(len(self))
-        new = np.linspace(0, old[-1], num=samples)
-        return self.__new__(type(self), np.interp(new, old, self))
 
-
-class _PhaseFunction(_ScatteringArray):
-    """Designate an array as representing a phase function.
-
-    Parameters
-    ----------
-    array
-        Any phase function.
-
-    Raises
-    ------
-    ValueError
-        Raised if the input array is not 1-dimensional or if it contains values
-        that are negative or not finite.
-
-    """
-    def __new__(cls, array: np.ndarray):
-        obj = super().__new__(cls, array, 'phase_function')
+class _FiniteNumericArray(np.ndarray):
+    def __new__(cls, array: ArrayLike):
+        obj = cls._make_array(array).view(cls)
+        cls._validate(obj)
         return obj
 
-
-class _ScatteringAngles(_ScatteringArray):
-    """Create an array that represents the angles where the phase function is
-    defined.
-
-    Parameters
-    ----------
-    array
-        The scattering angles where the phase function is defined.
-
-    Raises
-    ------
-    ValueError
-        Raised if the input array is not 1-dimensional, if it contains values
-        that are not between 0 and pi, or if it is not monotonically
-        increasing.
-
-    """
-    def __new__(cls, array: np.ndarray):
-        obj = super().__new__(cls, array, 'scattering_angles')
-        cls._raise_value_error_if_array_is_not_between_0_and_pi(obj)
-        cls._raise_value_error_if_array_is_not_monotonically_inc(obj)
-        return obj
+    def __array_finalize__(self, obj: np.ndarray):
+        if obj is None:
+            return
 
     @staticmethod
-    def _raise_value_error_if_array_is_not_between_0_and_pi(obj):
-        # Add some leeway for interpolation failures
-        if ((obj < 0) | (obj > np.pi + 0.01)).any():
-            message = f'{obj.name} must be between 0 and pi.'
-            raise ValueError(message)
+    def _make_array(value):
+        try:
+            array = np.asarray(value)
+            array.astype(float)
+        except TypeError as te:
+            message = 'The array must be ArrayLike.'
+            raise TypeError(message) from te
+        except ValueError as ve:
+            message = 'The array must be numeric.'
+            raise ValueError(message) from ve
+        return array
 
     @staticmethod
-    def _raise_value_error_if_array_is_not_monotonically_inc(obj):
-        if ~np.all(np.diff(obj) > 0):
-            message = f'{obj.name} must be monotonically increasing.'
+    def _validate(array):
+        if not np.all(np.isfinite(array)):
+            message = 'The array must be finite.'
             raise ValueError(message)
 
 
-# TODO: fit HG g method
-class PhaseFunction:
-    """Create an object representing a phase function and its scattering
-    angles.
-
-    Parameters
-    ----------
-    phase_function
-        The phase function.
-    scattering_angles
-        The scattering angles of the phase function.
-
-    Raises
-    ------
-    ValueError
-        Raised if :code:`phase_function` is not 1-dimensional or if it contains
-        values that are negative or not finite; if :code:`scattering_angles` is
-        not 1-dimensional, if it contains values that are not between 0 and pi,
-        or if it is not monotonically increasing; or if either
-        :code:`phase_function` or :code:`angles` do not have the same shape.
-
-    """
-    def __init__(self, phase_function: ArrayLike,
-                 scattering_angles: ArrayLike):
-        self._phase_function = _PhaseFunction(phase_function)
-        self.scattering_angles = _ScatteringAngles(scattering_angles)
-
-        self._raise_value_error_if_inputs_are_not_same_shape()
-
-    def _raise_value_error_if_inputs_are_not_same_shape(self):
-        if self.phase_function.shape != self.scattering_angles.shape:
-            message = f'The phase function and the scattering angles must ' \
-                      f'have the same shape.'
-            raise ValueError(message)
-
-    @property
-    def phase_function(self) -> np.ndarray:
-        """Get the current state of the phase function
-
-        Returns
-        -------
-        np.ndarray
-            The phase function.
-
-        """
-        return np.array(self._phase_function)
-
-    @phase_function.setter
-    def phase_function(self, value):
-        self._phase_function = _PhaseFunction(value)
-
-    @property
-    def scattering_angles(self) -> np.ndarray:
-        """Get the current state of the scattering angles.
-
-        Returns
-        -------
-        np.ndarray
-            The scattering angles.
-
-        """
-        return np.array(self._scattering_angles)
-
-    @scattering_angles.setter
-    def scattering_angles(self, value):
-        self._scattering_angles = _ScatteringAngles(value)
-
-    def resample(self, samples: int) -> None:
-        """Resample the phase function to a set number of samples.
-
-        Parameters
-        ----------
-        samples: int
-            The number of samples to resample the phase function (and angles).
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        Due to a bug with np.interp() there's a little jitter in the values
-        at the endpoints at the 5th decimal point.
-
-        Examples
-        --------
-        Resample the phase function.
-
-        >>> from pathlib import Path
-        >>> import numpy as np
-        >>> import pyrt
-        >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
-        >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
-        >>> ang = np.load(dust_dir / 'scattering_angles.npy')
-        >>> f'The input phase function has shape: {phsfn.shape}.'
-        'The input phase function has shape: (181,).'
-        >>> pf = pyrt.PhaseFunction(phsfn, np.radians(ang))
-        >>> pf.resample(360)
-        >>> f'The resampled phase function has shape: {pf.phase_function.shape}.'
-        'The resampled phase function has shape: (360,).'
-
-        """
-        samples = _NSamples(samples)
-        self._phase_function = self._phase_function.resample(samples)
-        self._scattering_angles = self._scattering_angles.resample(samples)
-
-    def normalize(self) -> None:
-        """Normalize the phase function.
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        This algorithm uses Simpson's rule for the integration and normalizes
-        the phase function such that
-
-        .. math::
-           \int p(\mu) d \mu = 2
-
-        where :math:`p` is the phase function and :math:`\mu` is the cosine of
-        the scattering angles.
-
-        Examples
-        --------
-        Normalize a phase function and verify it integrates to 2.
-
-        >>> from pathlib import Path
-        >>> import numpy as np
-        >>> import pyrt
-        >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
-        >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
-        >>> ang = np.load(dust_dir / 'scattering_angles.npy')
-        >>> pf = pyrt.PhaseFunction(phsfn, np.radians(ang))
-        >>> pf.normalize()
-        >>> mean_phase_function = (pf.phase_function[:-1] + pf.phase_function[1:]) / 2
-        >>> np.sum(mean_phase_function * np.abs(np.diff(np.cos(pf.scattering_angles))))
-        2.0000522
-
-        """
-        norm = np.abs(integrate.simps(self._phase_function,
-                                      np.cos(self._scattering_angles)))
-        self._phase_function = 2 * self._phase_function / norm
-
-    def decompose(self, moments: int) -> LegendreCoefficients:
-        """Decompose the phase function into its Legendre coefficients.
-
-        Parameters
-        ----------
-        moments: int
-            The number of moments to decompose the phase function into. This
-            value should be smaller than the number of points in the phase
-            function, but there are no checks that this is satisfied.
-
-        Returns
-        -------
-        LegendreCoefficients
-            The decomposed Legendre coefficients.
-
-        Notes
-        -----
-        This method normalizes the phase function, as the moments only really
-        make sense if that's the case.
-
-        Examples
-        --------
-        Decompose a phase function.
-
-        >>> from pathlib import Path
-        >>> import numpy as np
-        >>> import pyrt
-        >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
-        >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
-        >>> ang = np.load(dust_dir / 'scattering_angles.npy')
-        >>> pf = pyrt.PhaseFunction(phsfn, np.radians(ang))
-        >>> moments = pf.decompose(129)
-        >>> print(moments[:5])
-        [1.         0.17778457 0.50944022 0.03520301 0.00162705]
-
-        """
-        self.normalize()
-        # Subtract 1 since I'm forcing c0 = 1 in the equation
-        # P(x) = c0 + c1*L1(x) + ... for DISORT
-        self._phase_function -= 1
-        n_moments = _NMoments(moments)
-        lpoly = self._make_legendre_polynomials(n_moments)
-        normal_matrix = self._make_normal_matrix(lpoly)
-        normal_vector = self._make_normal_vector(lpoly)
-        cholesky = np.linalg.cholesky(normal_matrix)
-        first_solution = np.linalg.solve(cholesky, normal_vector)
-        second_solution = np.linalg.solve(cholesky.T, first_solution)
-        coeff = np.concatenate((np.array([1]), second_solution))
-        # Re-add 1 for the reason listed above
-        self._phase_function += 1
-        return LegendreCoefficients(coeff)
-
-    def _make_legendre_polynomials(self, n_moments) -> np.ndarray:
-        """Make an array of Legendre polynomials at the scattering angles.
-
-        Notes
-        -----
-        This returns a 2D array. The 0th index is the i+1 polynomial and the
-        1st index is the angle. So index [2, 6] will be the 3rd Legendre
-        polynomial (L3) evaluated at the 6th angle
-
-        """
-        ones = np.ones((n_moments, self.scattering_angles.shape[0]))
-
-        # This creates an MxN array with 1s on the diagonal and 0s elsewhere
-        diag_mask = np.triu(ones) + np.tril(ones) - 1
-
-        # Evaluate the polynomials at the input angles. I don't know why
-        return np.polynomial.legendre.legval(
-            np.cos(self.scattering_angles), diag_mask)[1:n_moments, :]
-
-    def _make_normal_matrix(self, lpoly: np.ndarray) -> np.ndarray:
-        return np.sum(
-            lpoly[:, None, :] * lpoly[None, :, :] / self.phase_function ** 2,
-            axis=-1)
-
-    def _make_normal_vector(self, lpoly: np.ndarray) -> np.ndarray:
-        return np.sum(lpoly / self.phase_function, axis=-1)
-
-
-class LegendreCoefficients(np.ndarray):
-    """Create an array of Legendre coefficients of the phase function.
-
-    This class extends an ndarray and thus acts just like one, with additional
-    methods shown below.
-
-    Parameters
-    ----------
-    coefficients: np.ndarray
-        The Legendre coefficients.
-
-    Raises
-    ------
-    ValueError
-        Raised if the coefficients are not 1-dimensional.
-
-    """
-    def __new__(cls, coefficients: ArrayLike):
-        obj = np.asarray(coefficients).view(cls)
-        cls._raise_value_error_if_array_is_not_1d(obj)
+class _PhaseFunctionND(_FiniteNumericArray):
+    def __new__(cls, array: ArrayLike):
+        obj = super().__new__(cls, array)
+        cls._validate(obj)
         return obj
 
     @staticmethod
-    def _raise_value_error_if_array_is_not_1d(obj) -> None:
-        if obj.ndim != 1:
-            message = f'{obj.name} must be 1-dimensional.'
+    def _validate(array):
+        if not np.all(array >= 0):
+            message = 'The phase function must be non-negative'
             raise ValueError(message)
 
-    def set_negative_coefficients_to_0(self) -> None:
-        """Set all coefficients to 0 starting from the first negative
-        coefficient.
 
-        Returns
-        -------
-        None
+class _PhaseFunction1D(_PhaseFunctionND):
+    def __new__(cls, array: ArrayLike):
+        obj = super().__new__(cls, array)
+        cls._validate(obj)
+        return obj
 
-        Examples
-        --------
-        Set negative coefficients to 0.
+    @staticmethod
+    def _validate(array):
+        if not np.ndim(array) == 1:
+            message = 'The phase function must be 1-dimensional.'
+            raise ValueError(message)
 
-        >>> import numpy as np
-        >>> import pyrt
-        >>> coeff = np.linspace(1, -2, num=5)
-        >>> lc = pyrt.LegendreCoefficients(coeff)
-        >>> f'The original coefficients are: {lc}'
-        'The original coefficients are: [ 1.    0.25 -0.5  -1.25 -2.  ]'
-        >>> lc.set_negative_coefficients_to_0()
-        >>> f'The new coefficients are: {lc}'
-        'The new coefficients are: [1.   0.25 0.   0.   0.  ]'
 
-        """
-        first = self._get_first_negative_coefficient_index()
-        if first:
-            self[first:] = 0
+def _validate_samples(samples: int) -> int:
+    try:
+        return int(samples)
+    except TypeError as te:
+        message = 'samples must be an int.'
+        raise TypeError(message) from te
+    except ValueError as ve:
+        message = 'samples cannot be converted to an int.'
+        raise ValueError(message) from ve
 
-    def _get_first_negative_coefficient_index(self):
-        return np.argmax(self < 0)
 
-    def reconstruct_phase_function(self) -> PhaseFunction:
-        """Reconstruct the phase function from the Legendre coefficients.
+def _validate_moments(scattering_angles, moments: int):
+    samples = len(scattering_angles)
+    try:
+        moments = int(moments)
+    except TypeError as te:
+        message = 'moments must be an int.'
+        raise TypeError(message) from te
+    except ValueError as ve:
+        message = 'moments cannot be converted to an int.'
+        raise ValueError(message) from ve
+    if moments > samples:
+        message = 'moments cannot be larger than the number of samples.'
+        raise ValueError(message)
+    return moments
 
-        Returns
-        -------
-        PhaseFunction
-            The phase function.
 
-        """
-        angles = np.radians(np.arange(180))
-        pf = np.polynomial.legendre.legval(np.cos(angles), self)
-        return PhaseFunction(pf, angles)
+def _validate_scattering_angle_dimension(phase_function: np.ndarray, scattering_angles: np.ndarray) -> None:
+    if phase_function.shape[0] != scattering_angles.shape[0]:
+        message = f'Axis 0 of phase_function ({phase_function.shape[0]},) ' \
+                  f'must have the same length as ' \
+                  f'scattering_angles {scattering_angles.shape}.'
+        raise ValueError(message)
+
+
+def resample_pf(phase_function: ArrayLike,
+                scattering_angles: ArrayLike,
+                samples: int) \
+        -> tuple[np.ndarray, np.ndarray]:
+    """Resample a phase function to an input a number of points.
+
+    Parameters
+    ----------
+    phase_function: ArrayLike
+        The phase function array. Can be N-dimensional but axis 0 must be the
+        same shape as :code:`scattering_angles`.
+    scattering_angles: ArrayLike
+        The scattering angles [degrees] of the phase function. Must be
+        1-dimensional.
+    samples: int
+        The number of samples to regrid the phase function onto.
+
+    Returns
+    -------
+    tuple[np.ndarray, np.ndarray]
+        The regridded phase function and scattering angles.
+
+    Examples
+    --------
+    Resample a 3D phase function to have 361 points (every 0.5 degrees).
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> phsfn.shape
+    (181, 24, 317)
+    >>> phsfn, sa = pyrt.resample_pf(phsfn, ang, 361)
+    >>> phsfn.shape
+    (361, 24, 317)
+    >>> sa.shape
+    (361,)
+
+    """
+    pf = _PhaseFunctionND(phase_function)
+    sa = _ScatteringAngles(scattering_angles)
+    samples = _validate_samples(samples)
+    _validate_scattering_angle_dimension(pf, sa)
+    f = interp1d(sa, pf, axis=0)
+    angles = np.linspace(sa[0], sa[-1], num=samples)
+    return f(angles), angles
+
+
+def normalize_pf(phase_function: ArrayLike,
+                 scattering_angles: ArrayLike) \
+        -> np.ndarray:
+    """Normalize an input phase function.
+
+    Parameters
+    ----------
+    phase_function: ArrayLike
+        The phase function array. Can be N-dimensional but axis 0 must be the
+        same shape as :code:`scattering_angles`.
+    scattering_angles: ArrayLike
+        The scattering angles [degrees] of the phase function. Must be
+        1-dimensional.
+
+    Returns
+    -------
+    np.ndarray
+        The normalized phase function along the scattering angle axis.
+
+    Notes
+    -----
+    This algorithm uses Simpson's rule for the integration and normalizes
+    the phase function such that
+
+    .. math::
+        \int p(\mu) d \mu = 2
+
+    where :math:`p` is the phase function and :math:`\mu` is the cosine of
+    the scattering angles.
+
+    Examples
+    --------
+    Normalize a 3D phase function along the scattering angle axis and verify
+    the first element integrated to 2.
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> phsfn = pyrt.normalize_pf(phsfn, ang)
+    >>> mean_pf = (phsfn[:-1, 0, 0] + phsfn[1:, 0, 0]) / 2
+    >>> angle_diff = np.abs(np.diff(np.cos(np.radians(ang))))
+    >>> np.sum(mean_pf.T * angle_diff.T)
+    2.0000527
+
+    """
+    pf = _PhaseFunctionND(phase_function)
+    sa = _ScatteringAngles(scattering_angles)
+    norm = np.abs(simps(pf, np.cos(np.radians(sa)), axis=0))
+    return np.array(2 * pf / norm)
+
+
+def decompose(phase_function: ArrayLike,
+              scattering_angles: ArrayLike,
+              moments: int) -> np.ndarray:
+    """Decompose the phase function into its Legendre coefficients.
+
+    Parameters
+    ----------
+    phase_function: ArrayLike
+        The phase function array. Must be 1-dimensional.
+    scattering_angles: ArrayLike
+        The scattering angle array. Must be 1-dimensional and the same shape
+        as :code:`phase_function`.
+    moments: int
+        The number of moments to decompose the phase function into. This
+        value must be smaller than the number of points in the phase
+        function.
+
+    Returns
+    -------
+    np.ndarray
+        The phase function decomposed into its Legendre coefficients.
+
+    Notes
+    -----
+    This method normalizes the phase function, as the moments only really
+    make sense if that's the case.
+
+    Examples
+    --------
+    Get the first 5 moments Legendre moments from a phase function's
+    decomposition.
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> pyrt.decompose(phsfn, ang, 129)[:5]
+    array([1.        , 0.17778457, 0.50944022, 0.03520301, 0.00162705])
+
+    """
+    pf = _PhaseFunction1D(phase_function)
+    sa = _ScatteringAngles(scattering_angles)
+    pf = normalize_pf(pf, sa)
+    sa = np.radians(sa)
+    # Subtract 1 since I'm forcing c0 = 1 in the equation
+    # P(x) = c0 + c1*L1(x) + ... for DISORT
+    pf -= 1
+    n_moments = _validate_moments(sa, moments)
+    lpoly = _make_legendre_polynomials(sa, n_moments)
+    normal_matrix = _make_normal_matrix(pf, lpoly)
+    normal_vector = _make_normal_vector(pf, lpoly)
+    cholesky = np.linalg.cholesky(normal_matrix)
+    first_solution = np.linalg.solve(cholesky, normal_vector)
+    second_solution = np.linalg.solve(cholesky.T, first_solution)
+    coeff = np.concatenate((np.array([1]), second_solution))
+    return coeff
+
+
+def _make_legendre_polynomials(scattering_angles, n_moments) -> np.ndarray:
+    """Make an array of Legendre polynomials at the scattering angles.
+
+    Notes
+    -----
+    This returns a 2D array. The 0th index is the i+1 polynomial and the
+    1st index is the angle. So index [2, 6] will be the 3rd Legendre
+    polynomial (L3) evaluated at the 6th angle
+
+    """
+    ones = np.ones((n_moments, scattering_angles.shape[0]))
+
+    # This creates an MxN array with 1s on the diagonal and 0s elsewhere
+    diag_mask = np.triu(ones) + np.tril(ones) - 1
+
+    # Evaluate the polynomials at the input angles. I don't know why
+    return np.polynomial.legendre.legval(
+        np.cos(scattering_angles), diag_mask)[1:n_moments, :]
+
+
+def _make_normal_matrix(phase_function, lpoly: np.ndarray) -> np.ndarray:
+    return np.sum(
+        lpoly[:, None, :] * lpoly[None, :, :] / phase_function ** 2,
+        axis=-1)
+
+
+def _make_normal_vector(phase_function, lpoly: np.ndarray) -> np.ndarray:
+    return np.sum(lpoly / phase_function, axis=-1)
+
+
+def set_negative_coefficients_to_0(coefficients: ArrayLike) -> np.ndarray:
+    """Set the Legendre coefficients to 0 after the first coefficient is
+    negative.
+
+    Parameters
+    ----------
+    coefficients: ArrayLike
+        The Legendre coefficients. Can be N-dimensional but axis 0 is assumed
+        to be the coefficient dimension.
+
+    Returns
+    -------
+    np.ndarray
+        Array of the zeroed coefficients.
+
+    Examples
+    --------
+    Zero the coefficients of a 1-dimensional phase function.
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> coeff = pyrt.decompose(phsfn, ang, 129)[:10]
+    >>> coeff
+    array([ 1.00000000e+00,  1.77784574e-01,  5.09440222e-01,  3.52030055e-02,
+            1.62704765e-03,  6.26912942e-05,  8.40628501e-06, -6.12456095e-07,
+           -4.97888637e-06, -1.45066047e-06])
+    >>> pyrt.set_negative_coefficients_to_0(coeff)
+    array([1.00000000e+00, 1.77784574e-01, 5.09440222e-01, 3.52030055e-02,
+           1.62704765e-03, 6.26912942e-05, 8.40628501e-06, 0.00000000e+00,
+           0.00000000e+00, 0.00000000e+00])
+
+    """
+    coeff = _FiniteNumericArray(coefficients)
+    argmax = np.argmax(coeff < 0, axis=0)
+    c = np.indices(coeff.shape)[0, ...]
+    cond = c >= argmax
+    coeff[cond] = 0
+    return np.array(coeff)
+
+
+def reconstruct_phase_function(coefficients: ArrayLike, scattering_angles: ArrayLike) -> np.ndarray:
+    """Reconstruct a phase function from an array of Legendre coefficients.
+
+    Parameters
+    ----------
+    coefficients: ArrayLike
+        Array of Legendre coefficients. Can be N-dimensional but axis 0 is
+        assumed to be the phase function / Legendre coefficient dimension.
+    scattering_angles: ArrayLike
+        The scattering angles. Must be 1-dimensional.
+
+    Returns
+    -------
+    np.ndarray
+        Phase function(s) reconstructed from the input coefficients.
+
+    Examples
+    --------
+    Deconstruct and re-construct a phase function.
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')[:, 0, 0]
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> coeff = pyrt.decompose(phsfn, ang, 129)[:10]
+    >>> reconst_pf = pyrt.reconstruct_phase_function(coeff, ang)
+    >>> reconst_pf.shape
+    (181,)
+
+    """
+    coeff = _FiniteNumericArray(coefficients)
+    sa = _ScatteringAngles(scattering_angles)
+    pfs = np.moveaxis(np.polynomial.legendre.legval(np.cos(np.radians(sa)), coeff), -1, 0)
+    return np.array(pfs)
+
+
+if __name__ == '__main__':
+    g = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/asymmetry_parameter.npy')
+    #cext = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/extinction_cross_section.npy')
+    #csca = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_cross_section.npy')
+    reff = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/particle_sizes.npy')
+    wavs = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/wavelengths.npy')
+    #pmom = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/legendre_coefficients.npy')
+    phsfn = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')
+    #phsfnrexp = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy')
+    sa = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+
+    d = decompose(phsfn[:, 0, 0], sa, 129)
+    e = reconstruct_phase_function(d, sa)
+    print(type(e), e.shape)

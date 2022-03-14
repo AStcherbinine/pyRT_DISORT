@@ -382,7 +382,7 @@
 <span class="sd">    -----</span>
 <span class="sd">    The inputs can be ndarrays but then there&#39;s no angle validation.</span>
 <span class="sd">    Consequently, the results may not accurate in this scenario. I recommend</span>
-<span class="sd">    using the correctly typed inputs. </span>
+<span class="sd">    using the correctly typed inputs.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -407,7 +407,7 @@
             <span class="n">d_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">tmp_arg</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">AzimuthAngles</span><span class="p">(</span><span class="mi">180</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">d_phi</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The input arrays must have compatible shapes. &#39;</span> \
+        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The input arrays must have compatible shapes. They are&#39;</span> \
                   <span class="sa">f</span><span class="s1">&#39;incidence: </span><span class="si">{</span><span class="n">incidence</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, &#39;</span> \
                   <span class="sa">f</span><span class="s1">&#39;emission: </span><span class="si">{</span><span class="n">emission</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, and &#39;</span> \
                   <span class="sa">f</span><span class="s1">&#39;phase: </span><span class="si">{</span><span class="n">phase</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">.&#39;</span>
