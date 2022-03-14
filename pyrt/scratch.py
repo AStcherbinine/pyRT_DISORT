@@ -1,63 +1,68 @@
-
 """
-# Thought: PMOM is just some abstract number derived from the much more real phase function
 
-Descriptors:
-class _ParticleSize()
-class _Wavelengths()
-class _PositiveArray()
-class _ScatteringAngles()
+class _PhaseFunction(ABC)
+    def resample()
+    def normalize()
 
-# Idk about this, the array may not exist and for HG it can be less than 0
-class _ParticleSizeWavelengthGriddedArray:
-    reff_grid = _ParticleSize()
-    wav_grid = _Wavelengths()
-    reff = _ParticleSize()
-    wavs = _Wavelengths()
-    array = _PositiveArray()
-    def __init__(array, reff_grid, wav_grid, reff, wavs)
-        self.array = array
-        self.reff_grid = reff_grid
-        self.wav_grid = wav_grid
-        self.reff = reff
-        self.wavs = wavs
+    @abstractmathod
+    def decompose(moments)
+        pass
 
-    def nn_selector() -> np.ndarray
+class PhaseFunction(_PhaseFunction)
+    def decompose(moments) -> LegendreCoefficients
 
-class _PhaseFunction(_ParticleSizeWavelengthGriddedArray)
-    sa = _ScatteringAngles()
-    def __init__(scattering_angles, reff_grid, wav_grid, reff, wavs)
-        super().__init__(reff_grid, ...)
-        self.sa = scattering_angles
+class PhaseFunctionGrid(_PhaseFunction, grid._ParticleSizeWavelengthGriddedArray)
+    def regrid() -> PhaseFunctionGradient
+    def decompose() -> LegendreCoefficientsGrid
 
-    def _make_pf_col():
-        raise NotImplementedError('not implemented yet')
-
-    def decompose(nmoments: int)
-        raise NotImplementedError('not implemented yet')
-
-class Empirical(_PhaseFunction)
-    def __init__(phase_function, scattering_angles, reff_grid, wav_grid, reff, wavs)
-        self.pf = pf
-        super().__init__(sa, reff_grid, wav_grid, reff, wavs)
-        self.pf_col = _make_pf_col()
-
-    def _make_pf_col() -> np.ndarray
-        uses nn selector
-    def resample() -> None
-    def normalize() -> None
-    def decompose() -> LegendreCoefficients
+class PhaseFunctionGradient(_PhaseFunction, grid._ParticleSizeWavelengthGriddedArray)
+    def decompose() -> LegendreCoefficientsGradient
 
 class HenyeyGreenstein(_PhaseFunction)
-    def __init__(asymmetry_parameter, reff_grid, wavs_grid, reff, wavs, nsa=181, nmom: int)
-        sa = np.linspace(0, 180, num=nsa)
-        super().__init__(sa, reff_grid, wav_grid, reff, wavs)
-        self.g = asymmetry_parameter
-        self.pf_col = _make_pf_col
+    def construct() -> PhaseFunction
+    def decompose()
 
-    def _make_pf_col() -> np.ndarray
-        uses nn selector
-    def construct(nscattering_angles: int) -> Empirical
+class HGGrid(HenyeyGreenstein, grid._ParticleSizeWavelengthGriddedArray)
+    def construct() -> PhaseFunctionGrid
+    def decompose()
+
+class _LegendreCoefficients
+    def set_negative_coeff_to_0()
+    def reconstruct(coeff, scattering_angles)
+
+class LegendreCoefficients(_LC)
+    def reconstruct() -> PhaseFunction
+
+class LegendreCoefficientsGrid(_LC)
+    def reconstruct() -> PhaseFunctionGrid
+
+class LegendreCoefficientsGradient(_LC)
+    def reconstruct() -> PhaseFunctionGradient
+
+
+
+
+# check nsa > nmom
+class HenyeyGreenstein(PhaseFunction)
+    nsa = NumberScatteringAngles()
+    nmom = NumberMoments()
+    g = AsymmetryParameter()
+    def __init__(asymmetry_parameter, reff_grid, wavs_grid, reff, wavs, nsa=181, nmom: int)
+        self.nsa = nsa
+        self.nmom = nmom
+        sa = self._make_scattering_angles()
+        pf = self._construct()
+        super().__init__(pf, sa, reff_grid, wav_grid, reff, wavs)
+
+    @properties
+    all of PhaseFunction
+    asymmetry_parameter
+
+    def _make_scattering_angles() -> np.ndarray
+        np.linspace(0, 180, num=self.nsa)
+
+    def _construct() -> np.ndarray
+
     def decompose() -> LegendreCoefficients
 
 class LegendreCoefficients()
@@ -147,4 +152,58 @@ def uniform() -> VerticalProfile
 def wavenumber(wavelengths) -> np.ndarray
 def azimuth(ia, ea, pa) -> np.ndarray
 
+~~~~~~~~~~~~~~Structure~~~~~~~~~~~~~~~~~~~~~~
+grid.py
+class _ParticleSizeWavelengthGriddedArray
+2 descriptors
+
+phase_function.py
+class PhaseFunction
+class HenyeyGreenstein
+class LegendreCoefficients
+many descriptors
+
+fsp.py
+class ForwardScatteringProperties
+
+column.py
+class Column
+class AersolColumn
+
+aerosol.py
+class Aerosol
+
+rayleigh.py
+def rayleigh_ssa()
+def rayleigh_pmom()
+def rayleigh_co2()
+
+vertical_profile.py
+class VerticalProfile
+def conrath()
+def uniform()
+
+spectral.py
+def wavenumber()
+
+angles.py
+def azimuth()
+
+
 """
+import numpy as np
+from astropy.io import fits
+
+
+if __name__ == '__main__':
+    hdul = fits.open('/home/kyle/Downloads/mars045i_all_v01.fits')
+    g = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/asymmetry_parameter.npy')
+    #cext = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/extinction_cross_section.npy')
+    #csca = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_cross_section.npy')
+    reff = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/particle_sizes.npy')
+    wavs = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/wavelengths.npy')
+    #pmom = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/legendre_coefficients.npy')
+    #phsfn = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')
+    #phsfnrexp = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy')
+    sa = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
+
