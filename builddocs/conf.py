@@ -71,8 +71,13 @@ autodoc_type_aliases = {
     'ArrayLike': 'ArrayLike'
 }
 
+# TODO: sort within subsections
 # sphinx-gallery stuff
+from sphinx_gallery.sorting import ExplicitOrder
 sphinx_gallery_conf = {
-     'examples_dirs': '../examples',   # path to your example scripts
-     'gallery_dirs': '../builddocs/examples',  # path to where to save gallery generated output
+    'examples_dirs': '../examples',   # path to your example scripts
+    'gallery_dirs': '../builddocs/examples',  # path to where to save gallery generated output
+    # What follows will make multiple galleries on the same page in the order specified
+    'subsection_order': ExplicitOrder(['../examples/phase_function',
+                                       '../examples/retrieval'])
 }

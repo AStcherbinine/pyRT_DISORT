@@ -317,6 +317,59 @@ def decompose(phase_function: ArrayLike,
     return coeff
 
 
+def fit_asymmetry_parameter(phase_function: ArrayLike,
+                            scattering_angles: ArrayLike) \
+        -> np.ndarray:
+    """Fit asymmetry parameters to an array of phase functions.
+
+    .. warning::
+       This function assumes a uniformly spaced scattering angles.
+
+    Parameters
+    ----------
+    phase_function: ArrayLike
+        N-dimensional array of phase functions. Axis 0 is assumed to be the
+        scattering angle axis and must have the same shape has
+        ``scattering_angles``.
+    scattering_angles: ArrayLike
+        1-dimensional array of scattering angles [degrees] associated with axis
+        0 of ``phase_function``.
+
+    Returns
+    -------
+    N-dimensional array of asymmetry parameters. This array will have a shape
+    of ``phase_function.shape[1:]``.
+
+    Examples
+    --------
+    Fit asymmetry parameters to an array of phase functions.
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')
+    >>> phsfn.shape
+    (181, 24, 317)
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> g = pyrt.fit_asymmetry_parameter(phsfn, ang)
+    >>> g.shape
+    (24, 317)
+
+    """
+    pf = _PhaseFunctionND(phase_function)
+    sa = _ScatteringAngles(scattering_angles)
+    _validate_scattering_angle_dimension(pf, sa)
+    mean_pf = (pf[1:] + pf[:-1]) / 2
+    cos_sa = np.cos(np.radians(sa))
+    median_angle_difference = np.median(np.abs(np.diff(cos_sa)))
+    mean_sa = np.linspace(sa[0] + median_angle_difference, sa[-1] - median_angle_difference, num=len(sa)-1)
+    expectation_pf = mean_pf.T * np.cos(np.radians(mean_sa))
+    # Divide by 2 because g = 1/(4*pi) * integral but the azimuth angle
+    # integral = 2*pi so the factor becomes 1/2
+    return np.sum((expectation_pf * np.abs(np.diff(cos_sa))).T / 2, axis=0)
+
+
 def _make_legendre_polynomials(scattering_angles, n_moments) -> np.ndarray:
     """Make an array of Legendre polynomials at the scattering angles.
 
@@ -377,6 +430,17 @@ def construct_hg(asymmetry_parameter: ArrayLike,
 
     where :math:`p` is the phase function, :math:`\theta` is the scattering
     angle, and :math:`g` is the asymemtry parameter.
+
+    .. warning::
+       The normalization for the Henyey-Greenstein phase function is not the
+       same as for a regular phase function. For this phase function,
+
+       .. math::
+          \int_{4\pi} p(\theta) = 1
+
+       *not* 4 :math:`\pi`! To normalize it, either call
+       :py:func:`~pyrt.normalize` or simply multiply the output by
+       4 :math:`\pi`.
 
     Examples
     --------
@@ -590,32 +654,4 @@ if __name__ == '__main__':
     #phsfnrexp = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy')
     sa = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
 
-    from scipy.optimize import minimize, Bounds
-    import matplotlib.pyplot as plt
-
-    coeff = decompose(phsfn[:, 0, 0], sa, 129)
-    a = set_negative_coefficients_to_0(coeff)
-    print(coeff)
-
-    raise SystemExit(9)
-
-    def fit_hg(asym, pf, scat):
-        if not -1 <= asym <= 1:
-            return 9999999999999999999
-        hgpf = construct_hg(asym, scat)
-        return np.sum((pf - hgpf)**2)
-
-    npf = normalize(phsfn[:, 23, 0], sa)
-    f = minimize(fit_hg, np.array([0]), args=(npf, sa), method='Nelder-Mead', bounds=(-1, 1))
-    print(f)
-
-    plt.semilogy(sa, npf)
-    plt.semilogy(sa, construct_hg(0.93892822, sa), color='r')
-    plt.semilogy(sa, construct_hg(0.9076, sa), color='b')
-    plt.savefig('/home/kyle/hgfit.png')
-
-    khg = construct_hg(0.93892822, sa)
-    mhg = construct_hg(0.9076, sa)
-
-    print(np.sum((npf - khg)**2))
-    print(np.sum((npf - mhg) ** 2))
+    print(np.where(g == np.amax(g)))

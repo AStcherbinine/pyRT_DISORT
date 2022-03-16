@@ -5,10 +5,74 @@
 .. _sphx_glr_examples:
 
 Examples
-========
+--------
 
 You can find examples of cool things to do with pyrt here.
 
+
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr_examples_phase_function:
+
+Phase function
+==============
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Fit an asymmetry parameter to a phase function and plot the Henyey-Greenstein phase function.">
+
+.. only:: html
+
+ .. figure:: /examples/phase_function/images/thumb/sphx_glr_plot_fit_asymmetry_parameter_thumb.png
+     :alt: Fit Asymmetry Parameter
+
+     :ref:`sphx_glr_examples_phase_function_plot_fit_asymmetry_parameter.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/phase_function/plot_fit_asymmetry_parameter
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Decompose a phase function into Legendre coefficients.">
+
+.. only:: html
+
+ .. figure:: /examples/phase_function/images/thumb/sphx_glr_plot_phase_function_decomposition_thumb.png
+     :alt: Phase Function Decomposition
+
+     :ref:`sphx_glr_examples_phase_function_plot_phase_function_decomposition.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/phase_function/plot_phase_function_decomposition
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr_examples_retrieval:
+
+Retreival
+=========
 
 
 .. raw:: html
@@ -17,10 +81,10 @@ You can find examples of cool things to do with pyrt here.
 
 .. only:: html
 
- .. figure:: /examples/images/thumb/sphx_glr_plot_sky_image_thumb.png
+ .. figure:: /examples/retrieval/images/thumb/sphx_glr_plot_sky_image_thumb.png
      :alt: Sky Image
 
-     :ref:`sphx_glr_examples_plot_sky_image.py`
+     :ref:`sphx_glr_examples_retrieval_plot_sky_image.py`
 
 .. raw:: html
 
@@ -30,28 +94,7 @@ You can find examples of cool things to do with pyrt here.
 .. toctree::
    :hidden:
 
-   /examples/plot_sky_image
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Decompose a phase function into Legendre coefficients.">
-
-.. only:: html
-
- .. figure:: /examples/images/thumb/sphx_glr_plot_phase_function_decomposition_thumb.png
-     :alt: Phase Function Decomposition
-
-     :ref:`sphx_glr_examples_plot_phase_function_decomposition.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/plot_phase_function_decomposition
+   /examples/retrieval/plot_sky_image
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

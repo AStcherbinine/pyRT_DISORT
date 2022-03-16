@@ -21,19 +21,25 @@ Files:
 
 Code:
 
-* Make phase function utilities: resample, normalize, decompose, construct_hg,
-  decompose_hg, set_negative_coefficients_to_0, reconstruct.
+* Make phase function utilities: resample, normalize, decompose,
+  fit_asymmetry_parameter, construct_hg, decompose_hg,
+  set_negative_coefficients_to_0, and reconstruct.
 * Remove Angles in favor of a single make_azimuth function.
 * Remove spectral in favor of a single to_wavenumber function.
 
 Documentation:
 
 * Remove the "for contributors" section.
-* Add an "examples" section using notebook formats instead of code blocks.
 * Add fully collapsible navigation
 * Switch to "numpy-style" pages for each function.
-* Add a phase function decomposition example.
-* Add a Henyey-Greenstein fit example.
+
+Examples
+
+* Remove the spacecraft retrieval example.
+* Add an "examples" section using notebook formats instead of code blocks.
+* Add a phase function section. This includes a decomposition and H-G fit
+  example.
+* Add a retrievals section. This includes a sky image example.
 
 v0.0.4
 ------

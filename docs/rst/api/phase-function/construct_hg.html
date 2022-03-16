@@ -41,7 +41,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="decompose_hg" href="decompose_hg.html" />
-    <link rel="prev" title="decompose" href="decompose.html" />
+    <link rel="prev" title="fit_asymmetry_parameter" href="fit_asymmetry_parameter.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -231,6 +231,11 @@
      decompose
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="fit_asymmetry_parameter.html">
+     fit_asymmetry_parameter
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      construct_hg
@@ -321,6 +326,16 @@
              {[1 + g^2 - 2g \cos(\theta)]^\frac{3}{2}}\]</div>
 <p>where <span class="math notranslate nohighlight">\(p\)</span> is the phase function, <span class="math notranslate nohighlight">\(\theta\)</span> is the scattering
 angle, and <span class="math notranslate nohighlight">\(g\)</span> is the asymemtry parameter.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The normalization for the Henyey-Greenstein phase function is not the
+same as for a regular phase function. For this phase function,</p>
+<div class="math notranslate nohighlight">
+\[\int_{4\pi} p(\theta) = 1\]</div>
+<p><em>not</em> 4 <span class="math notranslate nohighlight">\(\pi\)</span>! To normalize it, either call
+<a class="reference internal" href="normalize.html#pyrt.normalize" title="pyrt.normalize"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalize()</span></code></a> or simply multiply the output by
+4 <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
+</div>
 <p class="rubric">Examples</p>
 <p>Construct phase functions having 181 scattering angles from an array of
 asymmetry parameters.</p>
@@ -348,11 +363,11 @@ asymmetry parameters.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="decompose.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="fit_asymmetry_parameter.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">decompose</p>
+            <p class="prev-next-title">fit_asymmetry_parameter</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="decompose_hg.html" title="next page">

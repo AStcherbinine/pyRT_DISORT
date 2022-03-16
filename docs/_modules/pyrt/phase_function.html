@@ -486,6 +486,59 @@
     <span class="k">return</span> <span class="n">coeff</span></div>
 
 
+<div class="viewcode-block" id="fit_asymmetry_parameter"><a class="viewcode-back" href="../../rst/api/phase-function/fit_asymmetry_parameter.html#pyrt.fit_asymmetry_parameter">[docs]</a><span class="k">def</span> <span class="nf">fit_asymmetry_parameter</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                            <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Fit asymmetry parameters to an array of phase functions.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">       This function assumes a uniformly spaced scattering angles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    phase_function: ArrayLike</span>
+<span class="sd">        N-dimensional array of phase functions. Axis 0 is assumed to be the</span>
+<span class="sd">        scattering angle axis and must have the same shape has</span>
+<span class="sd">        ``scattering_angles``.</span>
+<span class="sd">    scattering_angles: ArrayLike</span>
+<span class="sd">        1-dimensional array of scattering angles [degrees] associated with axis</span>
+<span class="sd">        0 of ``phase_function``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    N-dimensional array of asymmetry parameters. This array will have a shape</span>
+<span class="sd">    of ``phase_function.shape[1:]``.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Fit asymmetry parameters to an array of phase functions.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pyrt</span>
+<span class="sd">    &gt;&gt;&gt; dust_dir = Path(__file__).parent.parent / &#39;anc&#39; / &#39;mars_dust&#39;</span>
+<span class="sd">    &gt;&gt;&gt; phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; phsfn.shape</span>
+<span class="sd">    (181, 24, 317)</span>
+<span class="sd">    &gt;&gt;&gt; ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; g = pyrt.fit_asymmetry_parameter(phsfn, ang)</span>
+<span class="sd">    &gt;&gt;&gt; g.shape</span>
+<span class="sd">    (24, 317)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="n">_PhaseFunctionND</span><span class="p">(</span><span class="n">phase_function</span><span class="p">)</span>
+    <span class="n">sa</span> <span class="o">=</span> <span class="n">_ScatteringAngles</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">)</span>
+    <span class="n">_validate_scattering_angle_dimension</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span> <span class="n">sa</span><span class="p">)</span>
+    <span class="n">mean_pf</span> <span class="o">=</span> <span class="p">(</span><span class="n">pf</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">pf</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">cos_sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">sa</span><span class="p">))</span>
+    <span class="n">median_angle_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cos_sa</span><span class="p">)))</span>
+    <span class="n">mean_sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">sa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">median_angle_difference</span><span class="p">,</span> <span class="n">sa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">median_angle_difference</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">expectation_pf</span> <span class="o">=</span> <span class="n">mean_pf</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">mean_sa</span><span class="p">))</span>
+    <span class="c1"># Divide by 2 because g = 1/(4*pi) * integral but the azimuth angle</span>
+    <span class="c1"># integral = 2*pi so the factor becomes 1/2</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">expectation_pf</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cos_sa</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
 <span class="k">def</span> <span class="nf">_make_legendre_polynomials</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">,</span> <span class="n">n_moments</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Make an array of Legendre polynomials at the scattering angles.</span>
 
@@ -546,6 +599,17 @@
 
 <span class="sd">    where :math:`p` is the phase function, :math:`\theta` is the scattering</span>
 <span class="sd">    angle, and :math:`g` is the asymemtry parameter.</span>
+
+<span class="sd">    .. warning::</span>
+<span class="sd">       The normalization for the Henyey-Greenstein phase function is not the</span>
+<span class="sd">       same as for a regular phase function. For this phase function,</span>
+
+<span class="sd">       .. math::</span>
+<span class="sd">          \int_{4\pi} p(\theta) = 1</span>
+
+<span class="sd">       *not* 4 :math:`\pi`! To normalize it, either call</span>
+<span class="sd">       :py:func:`~pyrt.normalize` or simply multiply the output by</span>
+<span class="sd">       4 :math:`\pi`.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -759,35 +823,7 @@
     <span class="c1">#phsfnrexp = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy&#39;)</span>
     <span class="n">sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;</span><span class="p">)</span>
 
-    <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Bounds</span>
-    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-    <span class="n">coeff</span> <span class="o">=</span> <span class="n">decompose</span><span class="p">(</span><span class="n">phsfn</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sa</span><span class="p">,</span> <span class="mi">129</span><span class="p">)</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">set_negative_coefficients_to_0</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
-
-    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">fit_hg</span><span class="p">(</span><span class="n">asym</span><span class="p">,</span> <span class="n">pf</span><span class="p">,</span> <span class="n">scat</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">asym</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">9999999999999999999</span>
-        <span class="n">hgpf</span> <span class="o">=</span> <span class="n">construct_hg</span><span class="p">(</span><span class="n">asym</span><span class="p">,</span> <span class="n">scat</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">pf</span> <span class="o">-</span> <span class="n">hgpf</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-
-    <span class="n">npf</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">phsfn</span><span class="p">[:,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">sa</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">fit_hg</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">npf</span><span class="p">,</span> <span class="n">sa</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder-Mead&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">npf</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">construct_hg</span><span class="p">(</span><span class="mf">0.93892822</span><span class="p">,</span> <span class="n">sa</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">sa</span><span class="p">,</span> <span class="n">construct_hg</span><span class="p">(</span><span class="mf">0.9076</span><span class="p">,</span> <span class="n">sa</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;/home/kyle/hgfit.png&#39;</span><span class="p">)</span>
-
-    <span class="n">khg</span> <span class="o">=</span> <span class="n">construct_hg</span><span class="p">(</span><span class="mf">0.93892822</span><span class="p">,</span> <span class="n">sa</span><span class="p">)</span>
-    <span class="n">mhg</span> <span class="o">=</span> <span class="n">construct_hg</span><span class="p">(</span><span class="mf">0.9076</span><span class="p">,</span> <span class="n">sa</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">npf</span> <span class="o">-</span> <span class="n">khg</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">npf</span> <span class="o">-</span> <span class="n">mhg</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">g</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">g</span><span class="p">)))</span>
 </pre></div>
 
               </div>

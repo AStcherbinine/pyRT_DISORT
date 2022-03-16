@@ -1,7 +1,7 @@
 Phase Function
 ==============
 
-These utilities help to deal with phase functions.
+These routines help to deal with phase functions.
 
 .. toctree::
    :maxdepth: 2
@@ -10,6 +10,7 @@ These utilities help to deal with phase functions.
    phase-function/resample
    phase-function/normalize
    phase-function/decompose
+   phase-function/fit_asymmetry_parameter
 
 .. toctree::
    :maxdepth: 2
