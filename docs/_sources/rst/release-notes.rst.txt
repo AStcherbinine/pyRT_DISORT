@@ -21,11 +21,8 @@ Files:
 
 Code:
 
-* Make a PhaseFunction class for more flexible handling of the phase function.
-  It now has methods for resampling, normalizing, and decomposing.
-* Add a LegendreCoefficients class for handing Legendre coefficient. It now
-  has methods for setting negative coefficients to 0 and reconstructing the
-  phase function.
+* Make phase function utilities: resample, normalize, decompose, construct_hg,
+  decompose_hg, set_negative_coefficients_to_0, reconstruct.
 * Remove Angles in favor of a single make_azimuth function.
 * Remove spectral in favor of a single to_wavenumber function.
 
@@ -36,6 +33,7 @@ Documentation:
 * Add fully collapsible navigation
 * Switch to "numpy-style" pages for each function.
 * Add a phase function decomposition example.
+* Add a Henyey-Greenstein fit example.
 
 v0.0.4
 ------

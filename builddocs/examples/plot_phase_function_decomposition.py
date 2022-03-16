@@ -25,7 +25,7 @@ print(scattering_angles)
 # %%
 # Let's resample the phase function to increase its resolution to 361 points.
 phase_function, scattering_angles = \
-        pyrt.resample_pf(phase_function, scattering_angles, 361)
+        pyrt.resample(phase_function, scattering_angles, 361)
 
 # %%
 # We can now decompose the phase function. This method automatically normalizes
@@ -43,7 +43,7 @@ lc = pyrt.set_negative_coefficients_to_0(lc)
 # %%
 # We can test how well the fit did by converting back into a phase function.
 # Let's do that and see how it performed.
-reconstructed_pf = pyrt.reconstruct_phase_function(lc, scattering_angles)
+reconstructed_pf = pyrt.reconstruct(lc, scattering_angles)
 
 plt.rc('mathtext', fontset='stix')
 plt.rc('font', **{'family': 'STIXGeneral'})

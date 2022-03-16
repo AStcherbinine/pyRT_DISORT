@@ -1,22 +1,26 @@
 """
-angles.py
-azimuth()
-
-spectral.py
-wavenumber()
-
 phase_function.py
-def resample() done
-def normalize() done
-def decompose() done
-later - def fit_hg() from scipy.optimize.minimize
-def set_coeff0() done
-def reconstruct() done
-def decompose_hg()
-def construct_hg()
+resample()
+normalize()
+decompose()
+fit_hg()
+construct_hg()
+decompose_hg()
+set_negative_coefficients_to_0()
+reconstruct()
 
 grid.py
 nn_regrid()
+
+eos.py
+make_column_density()
+exp_profile()
+# These need work
+
+rayleigh.py
+def rayleigh_ssa(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
+def rayleigh_pmom(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
+def rayleigh_co2(colden, wavs) -> Column
 
 vertical_profile.py
 def conrath()
@@ -24,19 +28,17 @@ def uniform()
 
 fsp.py
 def make_extinction()
+def make_optical_depth()
 
 column.py
 class Column
 
-rayleigh.py
-def rayleigh_ssa(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
-def rayleigh_pmom(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
-def rayleigh_co2(colden, wavs) -> Column
+angles.py
+azimuth()
 
-eos.py
-make_column_density()
-exp_profile()
-# These need work
+spectral.py
+wavenumber()
+
 
 Examples
 - plot_phase_function_decomposition.py

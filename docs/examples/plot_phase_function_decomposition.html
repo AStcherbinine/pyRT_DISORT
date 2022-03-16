@@ -239,7 +239,7 @@ pick the first one so we have an array to work with.</p>
 </div>
 <p>Let’s resample the phase function to increase its resolution to 361 points.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">phase_function</span><span class="p">,</span> <span class="n">scattering_angles</span> <span class="o">=</span> \
-        <span class="n">pyrt</span><span class="o">.</span><span class="n">resample_pf</span><span class="p">(</span><span class="n">phase_function</span><span class="p">,</span> <span class="n">scattering_angles</span><span class="p">,</span> <span class="mi">361</span><span class="p">)</span>
+        <span class="n">pyrt</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">phase_function</span><span class="p">,</span> <span class="n">scattering_angles</span><span class="p">,</span> <span class="mi">361</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>We can now decompose the phase function. This method automatically normalizes
@@ -293,7 +293,7 @@ oscillate around 0 after this. Let’s set these to 0.</p>
 </div>
 <p>We can test how well the fit did by converting back into a phase function.
 Let’s do that and see how it performed.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reconstructed_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">reconstruct_phase_function</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span> <span class="n">scattering_angles</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reconstructed_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">(</span><span class="n">lc</span><span class="p">,</span> <span class="n">scattering_angles</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;mathtext&#39;</span><span class="p">,</span> <span class="n">fontset</span><span class="o">=</span><span class="s1">&#39;stix&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="s1">&#39;family&#39;</span><span class="p">:</span> <span class="s1">&#39;STIXGeneral&#39;</span><span class="p">})</span>
@@ -331,7 +331,7 @@ Let’s do that and see how it performed.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_plot_phase_function_decomposition_001.png" srcset="../_images/sphx_glr_plot_phase_function_decomposition_001.png" alt="plot phase function decomposition" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.448 seconds)</p>
+<img src="../_images/sphx_glr_plot_phase_function_decomposition_001.png" srcset="../_images/sphx_glr_plot_phase_function_decomposition_001.png" alt="plot phase function decomposition" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.578 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plot-phase-function-decomposition-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7426acccd5a6e83d57430c66ef8985f9/plot_phase_function_decomposition.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_phase_function_decomposition.py</span></code></a></p>

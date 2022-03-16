@@ -94,7 +94,7 @@ Let's resample the phase function to increase its resolution to 361 points.
 .. code-block:: default
 
     phase_function, scattering_angles = \
-            pyrt.resample_pf(phase_function, scattering_angles, 361)
+            pyrt.resample(phase_function, scattering_angles, 361)
 
 
 
@@ -191,7 +191,7 @@ Let's do that and see how it performed.
 
 .. code-block:: default
 
-    reconstructed_pf = pyrt.reconstruct_phase_function(lc, scattering_angles)
+    reconstructed_pf = pyrt.reconstruct(lc, scattering_angles)
 
     plt.rc('mathtext', fontset='stix')
     plt.rc('font', **{'family': 'STIXGeneral'})
@@ -242,7 +242,7 @@ Let's do that and see how it performed.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.448 seconds)
+   **Total running time of the script:** ( 0 minutes  0.578 seconds)
 
 
 .. _sphx_glr_download_examples_plot_phase_function_decomposition.py:

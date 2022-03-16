@@ -39,8 +39,8 @@
     <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="reconstruct_phase_function" href="reconstruct_phase_function.html" />
-    <link rel="prev" title="decompose" href="decompose.html" />
+    <link rel="next" title="reconstruct" href="reconstruct.html" />
+    <link rel="prev" title="decompose_hg" href="decompose_hg.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -216,18 +216,28 @@
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="resample_pf.html">
-     resample_pf
+    <a class="reference internal" href="resample.html">
+     resample
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="normalize_pf.html">
-     normalize_pf
+    <a class="reference internal" href="normalize.html">
+     normalize
     </a>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="decompose.html">
      decompose
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="construct_hg.html">
+     construct_hg
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="decompose_hg.html">
+     decompose_hg
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -236,8 +246,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="reconstruct_phase_function.html">
-     reconstruct_phase_function
+    <a class="reference internal" href="reconstruct.html">
+     reconstruct
     </a>
    </li>
   </ul>
@@ -286,37 +296,54 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrt.set_negative_coefficients_to_0">
 <span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">set_negative_coefficients_to_0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coefficients</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../../_modules/pyrt/phase_function.html#set_negative_coefficients_to_0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.set_negative_coefficients_to_0" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the Legendre coefficients to 0 after the first coefficient is
-negative.</p>
+<dd><p>Set an array of Legendre coefficients to 0 after the first coefficient
+is negative.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>coefficients</strong> (<em>ArrayLike</em>) – The Legendre coefficients. Can be N-dimensional but axis 0 is assumed
-to be the coefficient dimension.</p>
+<dd class="field-odd"><p><strong>coefficients</strong> (<em>ArrayLike</em>) – N-dimensional array of Legendre coefficients. Axis 0 is assumed to be
+the phase function decomposition dimension.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Array of the zeroed coefficients.</p>
+<dd class="field-even"><p>N-dimensional array of the zeroed coefficients. This array has a shape
+of <code class="docutils literal notranslate"><span class="pre">coefficients.shape</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>np.ndarray</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Zero the coefficients of a 1-dimensional phase function.</p>
+<p>Decompose a 1-dimensional phase function.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyrt</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dust_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;anc&#39;</span> <span class="o">/</span> <span class="s1">&#39;mars_dust&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">phsfn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">/</span> <span class="s1">&#39;phase_function.npy&#39;</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">/</span> <span class="s1">&#39;scattering_angles.npy&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">coeff</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">phsfn</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="mi">129</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">coeff</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">phsfn</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="mi">129</span><span class="p">)[:</span><span class="mi">12</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">coeff</span>
 <span class="go">array([ 1.00000000e+00,  1.77784574e-01,  5.09440222e-01,  3.52030055e-02,</span>
 <span class="go">        1.62704765e-03,  6.26912942e-05,  8.40628501e-06, -6.12456095e-07,</span>
-<span class="go">       -4.97888637e-06, -1.45066047e-06])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">set_negative_coefficients_to_0</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
+<span class="go">       -4.97888637e-06, -1.45066047e-06,  8.79039649e-06, -1.34314968e-06])</span>
+</pre></div>
+</div>
+<p>The eighth coefficient is negative. Set all coefficients after this value
+—both positive and negative—to 0.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trimmed_coeff</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">set_negative_coefficients_to_0</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trimmed_coeff</span>
 <span class="go">array([1.00000000e+00, 1.77784574e-01, 5.09440222e-01, 3.52030055e-02,</span>
 <span class="go">       1.62704765e-03, 6.26912942e-05, 8.40628501e-06, 0.00000000e+00,</span>
-<span class="go">       0.00000000e+00, 0.00000000e+00])</span>
+<span class="go">       0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00])</span>
+</pre></div>
+</div>
+<p>This function will usually (always?) result in a worse fit, but it
+ensures you are not fitting physically meaningless aspects of the phase
+function.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">reconst_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">(</span><span class="n">pyrt</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">phsfn</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="mi">129</span><span class="p">),</span> <span class="n">ang</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">phsfn</span> <span class="o">-</span> <span class="n">reconst_pf</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">1.5541640584143724e-08</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reconst_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">(</span><span class="n">trimmed_coeff</span><span class="p">,</span> <span class="n">ang</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">phsfn</span> <span class="o">-</span> <span class="n">reconst_pf</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">5.211496292356077e-08</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -329,17 +356,17 @@ to be the coefficient dimension.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="decompose.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="decompose_hg.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">decompose</p>
+            <p class="prev-next-title">decompose_hg</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="reconstruct_phase_function.html" title="next page">
+    <a class='right-next' id="next-link" href="reconstruct.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">reconstruct_phase_function</p>
+        <p class="prev-next-title">reconstruct</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

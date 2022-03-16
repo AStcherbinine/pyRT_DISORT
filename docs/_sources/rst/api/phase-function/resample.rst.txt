@@ -1,0 +1,4 @@
+resample
+========
+
+.. autofunction:: pyrt.resample
