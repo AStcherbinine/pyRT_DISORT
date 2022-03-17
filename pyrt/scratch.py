@@ -1,12 +1,15 @@
 """
+angles.py
+azimuth()
 
-grid.py
-nn_regrid()
+spectral.py
+wavenumber()
 
+# These need work
 eos.py
 make_column_density()
+scale_height()
 exp_profile()
-# These need work
 
 rayleigh.py
 def rayleigh_ssa(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
@@ -21,14 +24,25 @@ fsp.py
 def make_extinction()
 def make_optical_depth()
 
+phase_function.py
+~~~generic phase function
+resample()
+normalize()
+decompose()
+fit_asymmetry_parameter()
+~~~H-G
+construct_hg()
+decompose_hg()
+~~~Legendre coeff
+set_negative_coefficients_to_0()
+reconstruct()
+
 column.py
 class Column
 
-angles.py
-azimuth()
+grid.py
+nn_regrid()
 
-spectral.py
-wavenumber()
 
 
 Examples

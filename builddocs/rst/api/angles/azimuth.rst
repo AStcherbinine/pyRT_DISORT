@@ -1,4 +1,0 @@
-azimuth
-=======
-
-.. autofunction:: pyrt.azimuth

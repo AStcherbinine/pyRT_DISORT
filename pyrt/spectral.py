@@ -38,7 +38,7 @@ class _Wavelength(np.ndarray):
             raise ValueError(message)
 
 
-def to_wavenumber(wavelength: ArrayLike) -> np.ndarray:
+def wavenumber(wavelength: ArrayLike) -> np.ndarray:
     """Convert wavelengths [microns] to wavenumber [1 / cm].
 
     Parameters
@@ -64,7 +64,7 @@ def to_wavenumber(wavelength: ArrayLike) -> np.ndarray:
 
     >>> import pyrt
     >>> wavs = [1, 2, 3]
-    >>> pyrt.to_wavenumber(wavs)
+    >>> pyrt.wavenumber(wavs)
     array([10000.        ,  5000.        ,  3333.33333333])
 
     """

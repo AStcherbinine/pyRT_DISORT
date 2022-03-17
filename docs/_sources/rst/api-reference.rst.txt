@@ -1,13 +1,44 @@
 API Reference
 =============
 
-Here you can find documentation on the functions and classes included with
-pyRT_DISORT.
+.. currentmodule:: pyrt
 
-.. toctree::
-   :maxdepth: 2
-   :caption: API
+Angles
+------
+.. autosummary::
+   :toctree: generated/
 
-   api/angles
-   api/spectral
-   api/phase-function
+   azimuth
+
+Spectral
+--------
+.. autosummary::
+   :toctree: generated/
+
+   wavenumber
+
+Generic phase function
+----------------------
+.. autosummary::
+   :toctree: generated/
+
+   resample
+   normalize
+   decompose
+   fit_asymmetry_parameter
+
+Henyey-Greenstein
+-----------------
+.. autosummary::
+   :toctree: generated/
+
+   construct_hg
+   decompose_hg
+
+Legendre coefficients
+---------------------
+.. autosummary::
+   :toctree: generated/
+
+   set_negative_coefficients_to_0
+   reconstruct

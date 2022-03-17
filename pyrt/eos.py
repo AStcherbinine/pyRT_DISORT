@@ -4,7 +4,7 @@ of state variables used throughout pyRT_DISORT.
 import numpy as np
 from scipy.constants import Boltzmann
 from scipy.integrate import quadrature as quad
-
+from numpy.typing import ArrayLike
 
 
 # TODO: Fix the Raises docstring formatting
@@ -473,32 +473,44 @@ class _ScaleHeightVar:
         return self.__var
 
 
-def hydrostatic_profile(altitude: np.ndarray, surface: float, scale_height: np.ndarray):
+def exponential_profile(altitude: ArrayLike, surface: float, scale_height: ArrayLike):
     return surface * np.exp(-altitude / scale_height)
 
 
+def constant_profile(altitude: ArrayLike, value: float):
+    return np.zeros(len(altitude)) + value
 
+
+def linear_profile(altitude: ArrayLike, top: float, bottom: float):
+    return np.linspace(top, bottom, num=len(altitude))
+
+
+def scale_height(mass: float, gravity: float, temperature: ArrayLike) -> np.ndarray:
+    return Boltzmann * temperature / mass / gravity
+
+
+def column_density(pressure_profile, temperature_profile, altitude: ArrayLike, profargs, tempargs):
+    def hydrostatic_profile(alts):
+        return pressure_profile(alts, *profargs) / temperature_profile(alts, *tempargs) / Boltzmann
+
+    n = [quad(hydrostatic_profile, altitude[i + 1], altitude[i])[0] for i in range(len(altitude) - 1)]
+    return np.array(n) * 1000
 
 
 if __name__ == '__main__':
-
-
-
-    t = np.linspace(150, 200, num=15)
     z = np.linspace(80, 0, num=15)
-    p = hydrostatic_profile(z, 610, 10)
-    n = p / t / Boltzmann
-    foo = np.array([quad(hydrostatic_profile, z[i+1], z[i], args=(n[-1], 10))[0] for i in range(len(z)-1)]) * 1000
+    #print(z)
+    #p = hydrostatic_profile(z, 610, 10)
 
-    print(np.sum(foo))
-    print(n[-1] * 10000 * (1-np.exp(-8)))
+    a = column_density(exponential_profile, linear_profile, z, (610, 10), (150, 200))
+    print(a)
+    a = column_density(exponential_profile, linear_profile, z, (610, 10), (150, 150))
+    print(a)
+    b = column_density(exponential_profile, constant_profile, z, (610, 10), (150,))
+    print(b)
 
-    print('~'*30)
-    g = np.load('/home/kyle/Downloads/correction.npy')
-    w = np.linspace(205, 305, num=19)
-    import matplotlib.pyplot as plt
+    #n = p / t / Boltzmann
+    #foo = np.array([quad(hydrostatic_profile, z[i+1], z[i], args=(n[-1], 10))[0] for i in range(len(z)-1)]) * 1000
 
-    plt.plot(w, g)
-    plt.xlabel('Wavelength')
-    plt.ylabel('Deviation from the mean')
-    plt.savefig('/home/kyle/radiance-correction.png', dpi=200)
+    #print(np.sum(foo))
+    #print(n[-1] * 10000 * (1-np.exp(-8)))

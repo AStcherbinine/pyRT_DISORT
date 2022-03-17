@@ -569,7 +569,7 @@ def decompose_hg(asymmetry_parameter: ArrayLike,
 
 # TODO: unit tests
 # TODO: add a Raises section
-# TODO: one example has >>> the other doesn't and it looks wonky
+# TODO: bug: if the coeff never go to 0, this zeroes everything
 def set_negative_coefficients_to_0(coefficients: ArrayLike) \
         -> np.ndarray:
     """Set an array of Legendre coefficients to 0 after the first coefficient
@@ -611,34 +611,6 @@ def set_negative_coefficients_to_0(coefficients: ArrayLike) \
     array([1.00000000e+00, 1.77784574e-01, 5.09440222e-01, 3.52030055e-02,
            1.62704765e-03, 6.26912942e-05, 8.40628501e-06, 0.00000000e+00,
            0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00])
-
-    Sometimes having all the coefficients does not produce a better fit.
-
-    .. plot::
-       :include-source:
-
-       from pathlib import Path
-       import matplotlib.pyplot as plt
-       import numpy as np
-       import pyrt
-
-       dust_dir = Path('/home/kyle/repos/pyRT_DISORT/anc/mars_dust')
-       phsfn = np.load(dust_dir / 'phase_function.npy')[:, 23, 0]
-       ang = np.load(dust_dir / 'scattering_angles.npy')
-
-       coeff = pyrt.decompose(phsfn, ang, 129)
-       trimmed_coeff = pyrt.set_negative_coefficients_to_0(coeff)
-
-       reconst_pf = pyrt.reconstruct(coeff, ang)
-       trim_reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)
-
-       plt.semilogy(ang, phsfn, label='Original phase function')
-       plt.semilogy(ang, reconst_pf, label='Reconstructed phase function')
-       plt.semilogy(ang, trim_reconst_pf, label='Trimmed phase function')
-       plt.xlim(0, 180)
-       plt.legend()
-
-       plt.show()
 
     """
     coeff = np.copy(_FiniteNumericArray(coefficients))
@@ -696,39 +668,3 @@ def reconstruct(coefficients: ArrayLike,
     sa = _ScatteringAngles(scattering_angles)
     pfs = np.moveaxis(np.polynomial.legendre.legval(np.cos(np.radians(sa)), coeff), -1, 0)
     return np.array(pfs)
-
-
-if __name__ == '__main__':
-    g = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/asymmetry_parameter.npy')
-    #cext = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/extinction_cross_section.npy')
-    #csca = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_cross_section.npy')
-    reff = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/particle_sizes.npy')
-    wavs = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/wavelengths.npy')
-    #pmom = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/legendre_coefficients.npy')
-    phsfn = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function.npy')
-    #phsfnrexp = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy')
-    sa = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
-
-    from pathlib import Path
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import pyrt
-
-    dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
-    phsfn = np.load(dust_dir / 'phase_function.npy')[:, 23, 0]
-    ang = np.load(dust_dir / 'scattering_angles.npy')
-
-    coeff = pyrt.decompose(phsfn, ang, 129)
-    trimmed_coeff = set_negative_coefficients_to_0(coeff)
-
-    reconst_pf = pyrt.reconstruct(coeff, ang)
-    trim_reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)
-
-    print(ang)
-
-    plt.semilogy(ang, phsfn, label='Original phase function')
-    plt.semilogy(ang, reconst_pf, label='Reconstructed phase function')
-    plt.semilogy(ang, trim_reconst_pf, label='Trimmed phase function')
-    plt.xlim(0, 180)
-    plt.legend()
-    plt.savefig('/home/kyle/pftrim.png')

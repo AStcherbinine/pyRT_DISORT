@@ -207,7 +207,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="to_wavenumber"><a class="viewcode-back" href="../../rst/api/spectral/to-wavenumber.html#pyrt.to_wavenumber">[docs]</a><span class="k">def</span> <span class="nf">to_wavenumber</span><span class="p">(</span><span class="n">wavelength</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="wavenumber"><a class="viewcode-back" href="../../rst/generated/pyrt.wavenumber.html#pyrt.wavenumber">[docs]</a><span class="k">def</span> <span class="nf">wavenumber</span><span class="p">(</span><span class="n">wavelength</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Convert wavelengths [microns] to wavenumber [1 / cm].</span>
 
 <span class="sd">    Parameters</span>
@@ -233,7 +233,7 @@
 
 <span class="sd">    &gt;&gt;&gt; import pyrt</span>
 <span class="sd">    &gt;&gt;&gt; wavs = [1, 2, 3]</span>
-<span class="sd">    &gt;&gt;&gt; pyrt.to_wavenumber(wavs)</span>
+<span class="sd">    &gt;&gt;&gt; pyrt.wavenumber(wavs)</span>
 <span class="sd">    array([10000.        ,  5000.        ,  3333.33333333])</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
