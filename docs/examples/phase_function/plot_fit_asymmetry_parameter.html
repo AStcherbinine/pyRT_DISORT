@@ -220,13 +220,13 @@ phase function.</p>
 </pre></div>
 </div>
 <p>Let’s grab a strongly forward scattering phase function and the angles over
-which it’s defined.</p>
+which it is defined.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dust_dir</span> <span class="o">=</span> <span class="s1">&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/&#39;</span>
 <span class="n">phase_function</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">+</span> <span class="s1">&#39;phase_function.npy&#39;</span><span class="p">)[:,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 <span class="n">scattering_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">+</span> <span class="s1">&#39;scattering_angles.npy&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We can simply fit an asymmetry parameter to this phase function.</p>
+<p>Fit an asymmetry parameter to this phase function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">fit_asymmetry_parameter</span><span class="p">(</span><span class="n">phase_function</span><span class="p">,</span> <span class="n">scattering_angles</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
 </pre></div>
@@ -235,8 +235,8 @@ which it’s defined.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.920991966497843
 </pre></div>
 </div>
-<p>With this asymmetry parameter we can construct a Henyey-Greenstein phase
-function from this asymmetry. Let’s do this, multiply by 4*pi since the
+<p>We can construct a Henyey-Greenstein phase function from this asymmetry
+parameter. Let’s do this, multiply by 4*pi since the
 Henyey-Greenstein phase function is normalized to 1, and see how well it
 matches the original phase function.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hg_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">construct_hg</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">scattering_angles</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
@@ -275,7 +275,7 @@ matches the original phase function.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_fit_asymmetry_parameter_001.png" srcset="../../_images/sphx_glr_plot_fit_asymmetry_parameter_001.png" alt="plot fit asymmetry parameter" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.470 seconds)</p>
+<img src="../../_images/sphx_glr_plot_fit_asymmetry_parameter_001.png" srcset="../../_images/sphx_glr_plot_fit_asymmetry_parameter_001.png" alt="plot fit asymmetry parameter" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.318 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-phase-function-plot-fit-asymmetry-parameter-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/68833b8caa1a6bde7eeba47b5ccc6214/plot_fit_asymmetry_parameter.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_fit_asymmetry_parameter.py</span></code></a></p>

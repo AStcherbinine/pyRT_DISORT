@@ -10,9 +10,7 @@ v0.1.0
 ------
 This update provides significant improvements to the backbone of the code and
 further refinement of the documentation. Most of the "helper" classes have
-been removed in favor of a monolithic class that validates DISORT inputs. This
-provides more helpful information, as some parameters that are valid by
-themselves are not valid in conjunction with other parameters.
+been removed in favor of lighter functions.
 
 Files:
 
@@ -21,6 +19,9 @@ Files:
 
 Code:
 
+* Remove pyrt.aerosol.TabularLegendreCoefficients and
+  pyrt.aerosol.HenyeyGreenstein phase function classes. The functionality of
+  these objects are moved into functions below.
 * Make phase function utilities: resample, normalize, decompose,
   fit_asymmetry_parameter, construct_hg, decompose_hg,
   set_negative_coefficients_to_0, and reconstruct.

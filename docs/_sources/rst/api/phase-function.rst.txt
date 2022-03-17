@@ -1,27 +1,36 @@
 Phase Function
 ==============
 
-These routines help to deal with phase functions.
+.. currentmodule:: pyrt
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Empirical phase function routines:
+.. note::
+   I'm using the phrase "phase function" to denote an array that is dependent
+   only on scattering angle. You can reasonably argue a phase function is
+   dependent on particle size and wavelength. I simply refer to this case as
+   an "array of phase functions".
 
-   phase-function/resample
-   phase-function/normalize
-   phase-function/decompose
-   phase-function/fit_asymmetry_parameter
+Generic phase function
+----------------------
+.. autosummary::
+   :toctree: generated/
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Henyey-Greenstein phase function routines:
+   resample
+   normalize
+   decompose
+   fit_asymmetry_parameter
 
-   phase-function/construct_hg
-   phase-function/decompose_hg
+Henyey-Greenstein
+-----------------
+.. autosummary::
+   :toctree: generated/
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Legendre coefficient routines:
+   construct_hg
+   decompose_hg
 
-   phase-function/set_negative_coefficients_to_0
-   phase-function/reconstruct
+Legendre coefficients
+---------------------
+.. autosummary::
+   :toctree: generated/
+
+   set_negative_coefficients_to_0
+   reconstruct

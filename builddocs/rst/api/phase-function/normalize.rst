@@ -1,4 +1,0 @@
-normalize
-=========
-
-.. autofunction:: pyrt.normalize

@@ -1,4 +1,0 @@
-decompose
-=========
-
-.. autofunction:: pyrt.decompose

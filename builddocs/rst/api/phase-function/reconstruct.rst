@@ -1,4 +1,0 @@
-reconstruct
-===========
-
-.. autofunction:: pyrt.reconstruct

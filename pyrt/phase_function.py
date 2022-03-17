@@ -141,23 +141,24 @@ def _validate_scattering_angle_dimension(
         raise ValueError(message)
 
 
-# TODO: this one is the only one that makes assumptions
-#  (linear interpolation, sa is a uniform grid). Consider deletion.
 def resample(phase_function: ArrayLike,
              scattering_angles: ArrayLike,
              samples: int) \
         -> tuple[np.ndarray, np.ndarray]:
     """Resample a phase function to an input a number of points.
 
+    .. warning::
+       I'm debating removing this in the future as it's just a wrapper around
+       scipy's interp1d.
+
     Parameters
     ----------
     phase_function: ArrayLike
         N-dimensional array of phase functions. Axis 0 is assumed to be the
-        scattering angle axis and must have the same shape as
-        ``scattering_angles``.
+        scattering angle axis.
     scattering_angles: ArrayLike
-        1-dimensional array of the scattering angles [degrees] associated with
-        axis 0 of ``phase_function``.
+        1-dimensional array of the scattering angles [degrees]. This array must
+        have the same shape as axis 0 of ``phase_function``.
     samples: int
         The number of samples to regrid the phase function onto.
 
@@ -195,32 +196,44 @@ def resample(phase_function: ArrayLike,
     return f(angles), angles
 
 
+# TODO: unit tests
+# TODO: add a Raises section
 def normalize(phase_function: ArrayLike,
               scattering_angles: ArrayLike) \
         -> np.ndarray:
-    """Normalize a phase function such that :math:`\int p(\mu) d \mu = 2`,
-    where :math:`p` is the phase function and :math:`\mu` is the cosine of
-    the scattering angles.
+    r"""Normalize an array of phase functions.
 
     Parameters
     ----------
     phase_function: ArrayLike
         N-dimensional array of phase functions. Axis 0 is assumed to be the
-        scattering angle axis and must have the same shape as
-        ``scattering_angles``.
+        scattering angle axis.
     scattering_angles: ArrayLike
-        1-dimensional array of the scattering angles [degrees] associated with
-        axis 0 of ``phase_function``.
+        1-dimensional array of the scattering angles [degrees]. This array must
+        have the same shape as axis 0 of ``phase_function``.
 
     Returns
     -------
     np.ndarray
-        N-dimensional array of normalized phase functions. This array has a
-        shape of ``phase_function.shape``.
+        N-dimensional array of normalized phase functions with a shape of
+        ``phase_function.shape``.
 
     Notes
     -----
-    This algorithm uses Simpson's rule for the integration.
+    This function uses Simpson's rule for the integration.
+
+    This function assumes the "standard" convention that
+
+    .. math::
+       \frac{1}{4 \pi} \int_{4\pi} p(\Omega) = 1
+
+    or, when the phase function is independent of azimuthal angle,
+
+    .. math::
+       \int_{-1}^{1} p(\mu) d \mu = 2
+
+    where :math:`p` is the phase function, :math:`\mu` is the cosine of
+    the scattering angles, and :math:`\Omega` is the solid angle.
 
     Examples
     --------
@@ -251,22 +264,23 @@ def normalize(phase_function: ArrayLike,
     return np.array(2 * pf / norm)
 
 
+# TODO: unit tests
+# TODO: add a Raises section
 def decompose(phase_function: ArrayLike,
               scattering_angles: ArrayLike,
               n_moments: int) -> np.ndarray:
     """Decompose a phase function into Legendre coefficients.
 
     .. warning::
-       This is not vectorized and can only handle 1-dimensional arrays!
+       This is not vectorized and can only handle 1-dimensional arrays.
 
     Parameters
     ----------
     phase_function: ArrayLike
-        1-dimensional array of phase functions. Must have the same shape as
-        ``scattering_angles``.
+        1-dimensional array of phase functions.
     scattering_angles: ArrayLike
-        1-dimensional array of scattering angles associated with
-        ``phase_function``.
+        1-dimensional array of the scattering angles [degrees]. This array must
+        have the same shape as ``phase_function``.
     n_moments: int
         The number of moments to decompose the phase function into. This
         value must be smaller than the number of points in the phase
@@ -276,12 +290,12 @@ def decompose(phase_function: ArrayLike,
     -------
     np.ndarray
         1-dimensional array of Legendre coefficients of the decomposed phase
-        function. This array has a shape of ``(moments,)``.
+        function with a shape of ``(moments,)``.
 
     Notes
     -----
-    This method normalizes the phase function, as the moments only really
-    make sense if that's the case.
+    This method normalizes the phase function because the moments only really
+    make sense if that is the case.
 
     Examples
     --------
@@ -317,59 +331,6 @@ def decompose(phase_function: ArrayLike,
     return coeff
 
 
-def fit_asymmetry_parameter(phase_function: ArrayLike,
-                            scattering_angles: ArrayLike) \
-        -> np.ndarray:
-    """Fit asymmetry parameters to an array of phase functions.
-
-    .. warning::
-       This function assumes a uniformly spaced scattering angles.
-
-    Parameters
-    ----------
-    phase_function: ArrayLike
-        N-dimensional array of phase functions. Axis 0 is assumed to be the
-        scattering angle axis and must have the same shape has
-        ``scattering_angles``.
-    scattering_angles: ArrayLike
-        1-dimensional array of scattering angles [degrees] associated with axis
-        0 of ``phase_function``.
-
-    Returns
-    -------
-    N-dimensional array of asymmetry parameters. This array will have a shape
-    of ``phase_function.shape[1:]``.
-
-    Examples
-    --------
-    Fit asymmetry parameters to an array of phase functions.
-
-    >>> from pathlib import Path
-    >>> import numpy as np
-    >>> import pyrt
-    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
-    >>> phsfn = np.load(dust_dir / 'phase_function.npy')
-    >>> phsfn.shape
-    (181, 24, 317)
-    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
-    >>> g = pyrt.fit_asymmetry_parameter(phsfn, ang)
-    >>> g.shape
-    (24, 317)
-
-    """
-    pf = _PhaseFunctionND(phase_function)
-    sa = _ScatteringAngles(scattering_angles)
-    _validate_scattering_angle_dimension(pf, sa)
-    mean_pf = (pf[1:] + pf[:-1]) / 2
-    cos_sa = np.cos(np.radians(sa))
-    median_angle_difference = np.median(np.abs(np.diff(cos_sa)))
-    mean_sa = np.linspace(sa[0] + median_angle_difference, sa[-1] - median_angle_difference, num=len(sa)-1)
-    expectation_pf = mean_pf.T * np.cos(np.radians(mean_sa))
-    # Divide by 2 because g = 1/(4*pi) * integral but the azimuth angle
-    # integral = 2*pi so the factor becomes 1/2
-    return np.sum((expectation_pf * np.abs(np.diff(cos_sa))).T / 2, axis=0)
-
-
 def _make_legendre_polynomials(scattering_angles, n_moments) -> np.ndarray:
     """Make an array of Legendre polynomials at the scattering angles.
 
@@ -400,10 +361,83 @@ def _make_normal_vector(phase_function, lpoly: np.ndarray) -> np.ndarray:
     return np.sum(lpoly / phase_function, axis=-1)
 
 
+# TODO: unit tests
+# TODO: add a Raises section
+def fit_asymmetry_parameter(phase_function: ArrayLike,
+                            scattering_angles: ArrayLike) \
+        -> np.ndarray:
+    r"""Fit asymmetry parameters to an array of phase functions.
+
+    .. warning::
+
+       This function assumes a uniformly spaced scattering angles that span
+       0 to 180 degrees. I should add a check but for now it's a built-in
+       assumption.
+
+    Parameters
+    ----------
+    phase_function: ArrayLike
+        N-dimensional array of phase functions. Axis 0 is assumed to be the
+        scattering angle axis.
+    scattering_angles: ArrayLike
+        1-dimensional array of the scattering angles [degrees]. This array must
+        have the same shape as axis 0 of ``phase_function``.
+
+    Returns
+    -------
+    np.ndarray
+        N-dimensional array of asymmetry parameters with a shape of
+        ``phase_function.shape[1:]``.
+
+    Notes
+    -----
+    The asymmetry parameter is defined as
+
+    .. math::
+       g \equiv \frac{1}{4 \pi} \int_{4\pi} p(\theta)\cos(\theta) d\Omega
+
+    where :math:`g` is the asymmetry parameter, :math:`p` is the phase
+    function, :math:`\theta` is the scattering angle, and :math:`\Omega` is
+    the solid angle. This is essentially the expectation value of the phase
+    function.
+
+    Examples
+    --------
+    Fit asymmetry parameters to an array of phase functions.
+
+    >>> from pathlib import Path
+    >>> import numpy as np
+    >>> import pyrt
+    >>> dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    >>> phsfn = np.load(dust_dir / 'phase_function.npy')
+    >>> phsfn.shape
+    (181, 24, 317)
+    >>> ang = np.load(dust_dir / 'scattering_angles.npy')
+    >>> g = pyrt.fit_asymmetry_parameter(phsfn, ang)
+    >>> g.shape
+    (24, 317)
+
+    """
+    pf = _PhaseFunctionND(phase_function)
+    sa = _ScatteringAngles(scattering_angles)
+    _validate_scattering_angle_dimension(pf, sa)
+    mean_pf = (pf[1:] + pf[:-1]) / 2
+    cos_sa = np.cos(np.radians(sa))
+    median_angle_difference = np.median(np.abs(np.diff(cos_sa)))
+    mean_sa = np.linspace(sa[0] + median_angle_difference, sa[-1] -
+                          median_angle_difference, num=len(sa)-1)
+    expectation_pf = mean_pf.T * np.cos(np.radians(mean_sa))
+    # Divide by 2 because g = 1/(4*pi) * integral but the azimuth angle
+    # integral = 2*pi so the factor becomes 1/2
+    return np.sum((expectation_pf * np.abs(np.diff(cos_sa))).T / 2, axis=0)
+
+
+# TODO: unit tests
+# TODO: add a Raises section
 def construct_hg(asymmetry_parameter: ArrayLike,
                  scattering_angles: ArrayLike) \
         -> np.ndarray:
-    r"""Construct a Henyey-Greenstein phase function from asymmetry parameters.
+    r"""Construct Henyey-Greenstein phase functions from asymmetry parameters.
 
     Parameters
     ----------
@@ -416,12 +450,12 @@ def construct_hg(asymmetry_parameter: ArrayLike,
     Returns
     -------
     np.ndarray
-        N-dimensional arrray of phase functions. This array has a shape of
+        N-dimensional arrray of phase functions with a shape of
         ``scattering_angles.shape + asymmetry_parameter.shape``.
 
     Notes
     -----
-    The Henyey-Greenstein phase function is defined as
+    The Henyey-Greenstein phase function (per solid angle) is defined as
 
     .. math::
 
@@ -468,11 +502,12 @@ def construct_hg(asymmetry_parameter: ArrayLike,
     return 1 / (4 * np.pi) * (1 - g**2) / denominator
 
 
+# TODO: unit tests
+# TODO: add a Raises section
 def decompose_hg(asymmetry_parameter: ArrayLike,
                  n_moments: int) \
         -> np.ndarray:
-    r"""Decompose a Henyey-Greenstein phase function into Legendre
-    coefficients.
+    r"""Decompose Henyey-Greenstein phase functions into Legendre coefficients.
 
     Parameters
     ----------
@@ -532,6 +567,9 @@ def decompose_hg(asymmetry_parameter: ArrayLike,
     return np.array(np.moveaxis(coeff, -1, 0))
 
 
+# TODO: unit tests
+# TODO: add a Raises section
+# TODO: one example has >>> the other doesn't and it looks wonky
 def set_negative_coefficients_to_0(coefficients: ArrayLike) \
         -> np.ndarray:
     """Set an array of Legendre coefficients to 0 after the first coefficient
@@ -546,8 +584,8 @@ def set_negative_coefficients_to_0(coefficients: ArrayLike) \
     Returns
     -------
     np.ndarray
-        N-dimensional array of the zeroed coefficients. This array has a shape
-        of ``coefficients.shape``.
+        N-dimensional array of the zeroed coefficients with a shape of
+        ``coefficients.shape``.
 
     Examples
     --------
@@ -574,16 +612,33 @@ def set_negative_coefficients_to_0(coefficients: ArrayLike) \
            1.62704765e-03, 6.26912942e-05, 8.40628501e-06, 0.00000000e+00,
            0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00])
 
-    This function will usually (always?) result in a worse fit, but it
-    ensures you are not fitting physically meaningless aspects of the phase
-    function.
+    Sometimes having all the coefficients does not produce a better fit.
 
-    >>> reconst_pf = pyrt.reconstruct(pyrt.decompose(phsfn, ang, 129), ang)
-    >>> np.sum((phsfn - reconst_pf)**2)
-    1.5541640584143724e-08
-    >>> reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)
-    >>> np.sum((phsfn - reconst_pf)**2)
-    5.211496292356077e-08
+    .. plot::
+       :include-source:
+
+       from pathlib import Path
+       import matplotlib.pyplot as plt
+       import numpy as np
+       import pyrt
+
+       dust_dir = Path('/home/kyle/repos/pyRT_DISORT/anc/mars_dust')
+       phsfn = np.load(dust_dir / 'phase_function.npy')[:, 23, 0]
+       ang = np.load(dust_dir / 'scattering_angles.npy')
+
+       coeff = pyrt.decompose(phsfn, ang, 129)
+       trimmed_coeff = pyrt.set_negative_coefficients_to_0(coeff)
+
+       reconst_pf = pyrt.reconstruct(coeff, ang)
+       trim_reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)
+
+       plt.semilogy(ang, phsfn, label='Original phase function')
+       plt.semilogy(ang, reconst_pf, label='Reconstructed phase function')
+       plt.semilogy(ang, trim_reconst_pf, label='Trimmed phase function')
+       plt.xlim(0, 180)
+       plt.legend()
+
+       plt.show()
 
     """
     coeff = np.copy(_FiniteNumericArray(coefficients))
@@ -594,10 +649,12 @@ def set_negative_coefficients_to_0(coefficients: ArrayLike) \
     return np.array(coeff)
 
 
+# TODO: unit tests
+# TODO: add a Raises section
 def reconstruct(coefficients: ArrayLike,
                 scattering_angles: ArrayLike) \
         -> np.ndarray:
-    """Reconstruct a phase function from an array of Legendre coefficients.
+    """Reconstruct phase functions from an array of Legendre coefficients.
 
     Parameters
     ----------
@@ -611,9 +668,7 @@ def reconstruct(coefficients: ArrayLike,
     Returns
     -------
     np.ndarray
-        N-dimensional array of reconstructed phase functions. If
-        ``coefficients`` is 1-dimensional this array will have a shape of
-        ``scattering_angles.shape``, otherwise this array will have a shape of
+        N-dimensional array of reconstructed phase functions with a shape of
         ``scattering_angles.shape + coefficients.shape[1:]``.
 
     Examples
@@ -654,4 +709,26 @@ if __name__ == '__main__':
     #phsfnrexp = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy')
     sa = np.load('/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy')
 
-    print(np.where(g == np.amax(g)))
+    from pathlib import Path
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pyrt
+
+    dust_dir = Path(__file__).parent.parent / 'anc' / 'mars_dust'
+    phsfn = np.load(dust_dir / 'phase_function.npy')[:, 23, 0]
+    ang = np.load(dust_dir / 'scattering_angles.npy')
+
+    coeff = pyrt.decompose(phsfn, ang, 129)
+    trimmed_coeff = set_negative_coefficients_to_0(coeff)
+
+    reconst_pf = pyrt.reconstruct(coeff, ang)
+    trim_reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)
+
+    print(ang)
+
+    plt.semilogy(ang, phsfn, label='Original phase function')
+    plt.semilogy(ang, reconst_pf, label='Reconstructed phase function')
+    plt.semilogy(ang, trim_reconst_pf, label='Trimmed phase function')
+    plt.xlim(0, 180)
+    plt.legend()
+    plt.savefig('/home/kyle/pftrim.png')

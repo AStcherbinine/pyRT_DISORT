@@ -46,7 +46,7 @@ First import everything needed for this example.
 .. GENERATED FROM PYTHON SOURCE LINES 17-19
 
 Let's grab a strongly forward scattering phase function and the angles over
-which it's defined.
+which it is defined.
 
 .. GENERATED FROM PYTHON SOURCE LINES 19-23
 
@@ -65,7 +65,7 @@ which it's defined.
 
 .. GENERATED FROM PYTHON SOURCE LINES 24-25
 
-We can simply fit an asymmetry parameter to this phase function.
+Fit an asymmetry parameter to this phase function.
 
 .. GENERATED FROM PYTHON SOURCE LINES 25-28
 
@@ -91,8 +91,8 @@ We can simply fit an asymmetry parameter to this phase function.
 
 .. GENERATED FROM PYTHON SOURCE LINES 29-33
 
-With this asymmetry parameter we can construct a Henyey-Greenstein phase
-function from this asymmetry. Let's do this, multiply by 4*pi since the
+We can construct a Henyey-Greenstein phase function from this asymmetry
+parameter. Let's do this, multiply by 4*pi since the
 Henyey-Greenstein phase function is normalized to 1, and see how well it
 matches the original phase function.
 
@@ -149,7 +149,7 @@ matches the original phase function.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.470 seconds)
+   **Total running time of the script:** ( 0 minutes  0.318 seconds)
 
 
 .. _sphx_glr_download_examples_phase_function_plot_fit_asymmetry_parameter.py:

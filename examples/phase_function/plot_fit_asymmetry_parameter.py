@@ -15,19 +15,19 @@ import pyrt
 
 # %%
 # Let's grab a strongly forward scattering phase function and the angles over
-# which it's defined.
+# which it is defined.
 dust_dir = '/home/kyle/repos/pyRT_DISORT/anc/mars_dust/'
 phase_function = np.load(dust_dir + 'phase_function.npy')[:, 23, 0]
 scattering_angles = np.load(dust_dir + 'scattering_angles.npy')
 
 # %%
-# We can simply fit an asymmetry parameter to this phase function.
+# Fit an asymmetry parameter to this phase function.
 g = pyrt.fit_asymmetry_parameter(phase_function, scattering_angles)
 print(g)
 
 # %%
-# With this asymmetry parameter we can construct a Henyey-Greenstein phase
-# function from this asymmetry. Let's do this, multiply by 4*pi since the
+# We can construct a Henyey-Greenstein phase function from this asymmetry
+# parameter. Let's do this, multiply by 4*pi since the
 # Henyey-Greenstein phase function is normalized to 1, and see how well it
 # matches the original phase function.
 hg_pf = pyrt.construct_hg(g, scattering_angles) * 4 * np.pi

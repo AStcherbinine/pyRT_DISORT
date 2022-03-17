@@ -1,13 +1,4 @@
 """
-phase_function.py
-resample()
-normalize()
-decompose()
-fit_hg()
-construct_hg()
-decompose_hg()
-set_negative_coefficients_to_0()
-reconstruct()
 
 grid.py
 nn_regrid()

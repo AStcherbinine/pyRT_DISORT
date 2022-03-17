@@ -310,23 +310,24 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
 
-<span class="c1"># TODO: this one is the only one that makes assumptions</span>
-<span class="c1">#  (linear interpolation, sa is a uniform grid). Consider deletion.</span>
-<div class="viewcode-block" id="resample"><a class="viewcode-back" href="../../rst/api/phase-function/resample.html#pyrt.resample">[docs]</a><span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<div class="viewcode-block" id="resample"><a class="viewcode-back" href="../../rst/api/generated/pyrt.resample.html#pyrt.resample">[docs]</a><span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
              <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
              <span class="n">samples</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Resample a phase function to an input a number of points.</span>
 
+<span class="sd">    .. warning::</span>
+<span class="sd">       I&#39;m debating removing this in the future as it&#39;s just a wrapper around</span>
+<span class="sd">       scipy&#39;s interp1d.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    phase_function: ArrayLike</span>
 <span class="sd">        N-dimensional array of phase functions. Axis 0 is assumed to be the</span>
-<span class="sd">        scattering angle axis and must have the same shape as</span>
-<span class="sd">        ``scattering_angles``.</span>
+<span class="sd">        scattering angle axis.</span>
 <span class="sd">    scattering_angles: ArrayLike</span>
-<span class="sd">        1-dimensional array of the scattering angles [degrees] associated with</span>
-<span class="sd">        axis 0 of ``phase_function``.</span>
+<span class="sd">        1-dimensional array of the scattering angles [degrees]. This array must</span>
+<span class="sd">        have the same shape as axis 0 of ``phase_function``.</span>
 <span class="sd">    samples: int</span>
 <span class="sd">        The number of samples to regrid the phase function onto.</span>
 
@@ -364,32 +365,44 @@
     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span> <span class="n">angles</span></div>
 
 
-<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../rst/api/phase-function/normalize.html#pyrt.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<div class="viewcode-block" id="normalize"><a class="viewcode-back" href="../../rst/api/generated/pyrt.normalize.html#pyrt.normalize">[docs]</a><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
               <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Normalize a phase function such that :math:`\int p(\mu) d \mu = 2`,</span>
-<span class="sd">    where :math:`p` is the phase function and :math:`\mu` is the cosine of</span>
-<span class="sd">    the scattering angles.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Normalize an array of phase functions.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    phase_function: ArrayLike</span>
 <span class="sd">        N-dimensional array of phase functions. Axis 0 is assumed to be the</span>
-<span class="sd">        scattering angle axis and must have the same shape as</span>
-<span class="sd">        ``scattering_angles``.</span>
+<span class="sd">        scattering angle axis.</span>
 <span class="sd">    scattering_angles: ArrayLike</span>
-<span class="sd">        1-dimensional array of the scattering angles [degrees] associated with</span>
-<span class="sd">        axis 0 of ``phase_function``.</span>
+<span class="sd">        1-dimensional array of the scattering angles [degrees]. This array must</span>
+<span class="sd">        have the same shape as axis 0 of ``phase_function``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    np.ndarray</span>
-<span class="sd">        N-dimensional array of normalized phase functions. This array has a</span>
-<span class="sd">        shape of ``phase_function.shape``.</span>
+<span class="sd">        N-dimensional array of normalized phase functions with a shape of</span>
+<span class="sd">        ``phase_function.shape``.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    This algorithm uses Simpson&#39;s rule for the integration.</span>
+<span class="sd">    This function uses Simpson&#39;s rule for the integration.</span>
+
+<span class="sd">    This function assumes the &quot;standard&quot; convention that</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       \frac{1}{4 \pi} \int_{4\pi} p(\Omega) = 1</span>
+
+<span class="sd">    or, when the phase function is independent of azimuthal angle,</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       \int_{-1}^{1} p(\mu) d \mu = 2</span>
+
+<span class="sd">    where :math:`p` is the phase function, :math:`\mu` is the cosine of</span>
+<span class="sd">    the scattering angles, and :math:`\Omega` is the solid angle.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -420,22 +433,23 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pf</span> <span class="o">/</span> <span class="n">norm</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="decompose"><a class="viewcode-back" href="../../rst/api/phase-function/decompose.html#pyrt.decompose">[docs]</a><span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<div class="viewcode-block" id="decompose"><a class="viewcode-back" href="../../rst/api/generated/pyrt.decompose.html#pyrt.decompose">[docs]</a><span class="k">def</span> <span class="nf">decompose</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
               <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
               <span class="n">n_moments</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Decompose a phase function into Legendre coefficients.</span>
 
 <span class="sd">    .. warning::</span>
-<span class="sd">       This is not vectorized and can only handle 1-dimensional arrays!</span>
+<span class="sd">       This is not vectorized and can only handle 1-dimensional arrays.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    phase_function: ArrayLike</span>
-<span class="sd">        1-dimensional array of phase functions. Must have the same shape as</span>
-<span class="sd">        ``scattering_angles``.</span>
+<span class="sd">        1-dimensional array of phase functions.</span>
 <span class="sd">    scattering_angles: ArrayLike</span>
-<span class="sd">        1-dimensional array of scattering angles associated with</span>
-<span class="sd">        ``phase_function``.</span>
+<span class="sd">        1-dimensional array of the scattering angles [degrees]. This array must</span>
+<span class="sd">        have the same shape as ``phase_function``.</span>
 <span class="sd">    n_moments: int</span>
 <span class="sd">        The number of moments to decompose the phase function into. This</span>
 <span class="sd">        value must be smaller than the number of points in the phase</span>
@@ -445,12 +459,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    np.ndarray</span>
 <span class="sd">        1-dimensional array of Legendre coefficients of the decomposed phase</span>
-<span class="sd">        function. This array has a shape of ``(moments,)``.</span>
+<span class="sd">        function with a shape of ``(moments,)``.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    This method normalizes the phase function, as the moments only really</span>
-<span class="sd">    make sense if that&#39;s the case.</span>
+<span class="sd">    This method normalizes the phase function because the moments only really</span>
+<span class="sd">    make sense if that is the case.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -486,59 +500,6 @@
     <span class="k">return</span> <span class="n">coeff</span></div>
 
 
-<div class="viewcode-block" id="fit_asymmetry_parameter"><a class="viewcode-back" href="../../rst/api/phase-function/fit_asymmetry_parameter.html#pyrt.fit_asymmetry_parameter">[docs]</a><span class="k">def</span> <span class="nf">fit_asymmetry_parameter</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
-                            <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
-        <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Fit asymmetry parameters to an array of phase functions.</span>
-
-<span class="sd">    .. warning::</span>
-<span class="sd">       This function assumes a uniformly spaced scattering angles.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    phase_function: ArrayLike</span>
-<span class="sd">        N-dimensional array of phase functions. Axis 0 is assumed to be the</span>
-<span class="sd">        scattering angle axis and must have the same shape has</span>
-<span class="sd">        ``scattering_angles``.</span>
-<span class="sd">    scattering_angles: ArrayLike</span>
-<span class="sd">        1-dimensional array of scattering angles [degrees] associated with axis</span>
-<span class="sd">        0 of ``phase_function``.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    N-dimensional array of asymmetry parameters. This array will have a shape</span>
-<span class="sd">    of ``phase_function.shape[1:]``.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Fit asymmetry parameters to an array of phase functions.</span>
-
-<span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
-<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; import pyrt</span>
-<span class="sd">    &gt;&gt;&gt; dust_dir = Path(__file__).parent.parent / &#39;anc&#39; / &#39;mars_dust&#39;</span>
-<span class="sd">    &gt;&gt;&gt; phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; phsfn.shape</span>
-<span class="sd">    (181, 24, 317)</span>
-<span class="sd">    &gt;&gt;&gt; ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; g = pyrt.fit_asymmetry_parameter(phsfn, ang)</span>
-<span class="sd">    &gt;&gt;&gt; g.shape</span>
-<span class="sd">    (24, 317)</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pf</span> <span class="o">=</span> <span class="n">_PhaseFunctionND</span><span class="p">(</span><span class="n">phase_function</span><span class="p">)</span>
-    <span class="n">sa</span> <span class="o">=</span> <span class="n">_ScatteringAngles</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">)</span>
-    <span class="n">_validate_scattering_angle_dimension</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span> <span class="n">sa</span><span class="p">)</span>
-    <span class="n">mean_pf</span> <span class="o">=</span> <span class="p">(</span><span class="n">pf</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">pf</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="n">cos_sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">sa</span><span class="p">))</span>
-    <span class="n">median_angle_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cos_sa</span><span class="p">)))</span>
-    <span class="n">mean_sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">sa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">median_angle_difference</span><span class="p">,</span> <span class="n">sa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">median_angle_difference</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">expectation_pf</span> <span class="o">=</span> <span class="n">mean_pf</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">mean_sa</span><span class="p">))</span>
-    <span class="c1"># Divide by 2 because g = 1/(4*pi) * integral but the azimuth angle</span>
-    <span class="c1"># integral = 2*pi so the factor becomes 1/2</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">expectation_pf</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cos_sa</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
-
-
 <span class="k">def</span> <span class="nf">_make_legendre_polynomials</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">,</span> <span class="n">n_moments</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Make an array of Legendre polynomials at the scattering angles.</span>
 
@@ -569,10 +530,83 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">lpoly</span> <span class="o">/</span> <span class="n">phase_function</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="construct_hg"><a class="viewcode-back" href="../../rst/api/phase-function/construct_hg.html#pyrt.construct_hg">[docs]</a><span class="k">def</span> <span class="nf">construct_hg</span><span class="p">(</span><span class="n">asymmetry_parameter</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<div class="viewcode-block" id="fit_asymmetry_parameter"><a class="viewcode-back" href="../../rst/api/generated/pyrt.fit_asymmetry_parameter.html#pyrt.fit_asymmetry_parameter">[docs]</a><span class="k">def</span> <span class="nf">fit_asymmetry_parameter</span><span class="p">(</span><span class="n">phase_function</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                            <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Fit asymmetry parameters to an array of phase functions.</span>
+
+<span class="sd">    .. warning::</span>
+
+<span class="sd">       This function assumes a uniformly spaced scattering angles that span</span>
+<span class="sd">       0 to 180 degrees. I should add a check but for now it&#39;s a built-in</span>
+<span class="sd">       assumption.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    phase_function: ArrayLike</span>
+<span class="sd">        N-dimensional array of phase functions. Axis 0 is assumed to be the</span>
+<span class="sd">        scattering angle axis.</span>
+<span class="sd">    scattering_angles: ArrayLike</span>
+<span class="sd">        1-dimensional array of the scattering angles [degrees]. This array must</span>
+<span class="sd">        have the same shape as axis 0 of ``phase_function``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        N-dimensional array of asymmetry parameters with a shape of</span>
+<span class="sd">        ``phase_function.shape[1:]``.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The asymmetry parameter is defined as</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">       g \equiv \frac{1}{4 \pi} \int_{4\pi} p(\theta)\cos(\theta) d\Omega</span>
+
+<span class="sd">    where :math:`g` is the asymmetry parameter, :math:`p` is the phase</span>
+<span class="sd">    function, :math:`\theta` is the scattering angle, and :math:`\Omega` is</span>
+<span class="sd">    the solid angle. This is essentially the expectation value of the phase</span>
+<span class="sd">    function.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Fit asymmetry parameters to an array of phase functions.</span>
+
+<span class="sd">    &gt;&gt;&gt; from pathlib import Path</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pyrt</span>
+<span class="sd">    &gt;&gt;&gt; dust_dir = Path(__file__).parent.parent / &#39;anc&#39; / &#39;mars_dust&#39;</span>
+<span class="sd">    &gt;&gt;&gt; phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; phsfn.shape</span>
+<span class="sd">    (181, 24, 317)</span>
+<span class="sd">    &gt;&gt;&gt; ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; g = pyrt.fit_asymmetry_parameter(phsfn, ang)</span>
+<span class="sd">    &gt;&gt;&gt; g.shape</span>
+<span class="sd">    (24, 317)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pf</span> <span class="o">=</span> <span class="n">_PhaseFunctionND</span><span class="p">(</span><span class="n">phase_function</span><span class="p">)</span>
+    <span class="n">sa</span> <span class="o">=</span> <span class="n">_ScatteringAngles</span><span class="p">(</span><span class="n">scattering_angles</span><span class="p">)</span>
+    <span class="n">_validate_scattering_angle_dimension</span><span class="p">(</span><span class="n">pf</span><span class="p">,</span> <span class="n">sa</span><span class="p">)</span>
+    <span class="n">mean_pf</span> <span class="o">=</span> <span class="p">(</span><span class="n">pf</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">pf</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">cos_sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">sa</span><span class="p">))</span>
+    <span class="n">median_angle_difference</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cos_sa</span><span class="p">)))</span>
+    <span class="n">mean_sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">sa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">median_angle_difference</span><span class="p">,</span> <span class="n">sa</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span>
+                          <span class="n">median_angle_difference</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">sa</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">expectation_pf</span> <span class="o">=</span> <span class="n">mean_pf</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">mean_sa</span><span class="p">))</span>
+    <span class="c1"># Divide by 2 because g = 1/(4*pi) * integral but the azimuth angle</span>
+    <span class="c1"># integral = 2*pi so the factor becomes 1/2</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">expectation_pf</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">cos_sa</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<div class="viewcode-block" id="construct_hg"><a class="viewcode-back" href="../../rst/api/generated/pyrt.construct_hg.html#pyrt.construct_hg">[docs]</a><span class="k">def</span> <span class="nf">construct_hg</span><span class="p">(</span><span class="n">asymmetry_parameter</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
                  <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Construct a Henyey-Greenstein phase function from asymmetry parameters.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Construct Henyey-Greenstein phase functions from asymmetry parameters.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -585,12 +619,12 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    np.ndarray</span>
-<span class="sd">        N-dimensional arrray of phase functions. This array has a shape of</span>
+<span class="sd">        N-dimensional arrray of phase functions with a shape of</span>
 <span class="sd">        ``scattering_angles.shape + asymmetry_parameter.shape``.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    The Henyey-Greenstein phase function is defined as</span>
+<span class="sd">    The Henyey-Greenstein phase function (per solid angle) is defined as</span>
 
 <span class="sd">    .. math::</span>
 
@@ -637,11 +671,12 @@
     <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">g</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span></div>
 
 
-<div class="viewcode-block" id="decompose_hg"><a class="viewcode-back" href="../../rst/api/phase-function/decompose_hg.html#pyrt.decompose_hg">[docs]</a><span class="k">def</span> <span class="nf">decompose_hg</span><span class="p">(</span><span class="n">asymmetry_parameter</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<div class="viewcode-block" id="decompose_hg"><a class="viewcode-back" href="../../rst/api/generated/pyrt.decompose_hg.html#pyrt.decompose_hg">[docs]</a><span class="k">def</span> <span class="nf">decompose_hg</span><span class="p">(</span><span class="n">asymmetry_parameter</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
                  <span class="n">n_moments</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decompose a Henyey-Greenstein phase function into Legendre</span>
-<span class="sd">    coefficients.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Decompose Henyey-Greenstein phase functions into Legendre coefficients.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -701,7 +736,10 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="set_negative_coefficients_to_0"><a class="viewcode-back" href="../../rst/api/phase-function/set_negative_coefficients_to_0.html#pyrt.set_negative_coefficients_to_0">[docs]</a><span class="k">def</span> <span class="nf">set_negative_coefficients_to_0</span><span class="p">(</span><span class="n">coefficients</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<span class="c1"># TODO: one example has &gt;&gt;&gt; the other doesn&#39;t and it looks wonky</span>
+<div class="viewcode-block" id="set_negative_coefficients_to_0"><a class="viewcode-back" href="../../rst/api/generated/pyrt.set_negative_coefficients_to_0.html#pyrt.set_negative_coefficients_to_0">[docs]</a><span class="k">def</span> <span class="nf">set_negative_coefficients_to_0</span><span class="p">(</span><span class="n">coefficients</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Set an array of Legendre coefficients to 0 after the first coefficient</span>
 <span class="sd">    is negative.</span>
@@ -715,8 +753,8 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    np.ndarray</span>
-<span class="sd">        N-dimensional array of the zeroed coefficients. This array has a shape</span>
-<span class="sd">        of ``coefficients.shape``.</span>
+<span class="sd">        N-dimensional array of the zeroed coefficients with a shape of</span>
+<span class="sd">        ``coefficients.shape``.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -743,16 +781,33 @@
 <span class="sd">           1.62704765e-03, 6.26912942e-05, 8.40628501e-06, 0.00000000e+00,</span>
 <span class="sd">           0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 0.00000000e+00])</span>
 
-<span class="sd">    This function will usually (always?) result in a worse fit, but it</span>
-<span class="sd">    ensures you are not fitting physically meaningless aspects of the phase</span>
-<span class="sd">    function.</span>
+<span class="sd">    Sometimes having all the coefficients does not produce a better fit.</span>
 
-<span class="sd">    &gt;&gt;&gt; reconst_pf = pyrt.reconstruct(pyrt.decompose(phsfn, ang, 129), ang)</span>
-<span class="sd">    &gt;&gt;&gt; np.sum((phsfn - reconst_pf)**2)</span>
-<span class="sd">    1.5541640584143724e-08</span>
-<span class="sd">    &gt;&gt;&gt; reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)</span>
-<span class="sd">    &gt;&gt;&gt; np.sum((phsfn - reconst_pf)**2)</span>
-<span class="sd">    5.211496292356077e-08</span>
+<span class="sd">    .. plot::</span>
+<span class="sd">       :include-source:</span>
+
+<span class="sd">       from pathlib import Path</span>
+<span class="sd">       import matplotlib.pyplot as plt</span>
+<span class="sd">       import numpy as np</span>
+<span class="sd">       import pyrt</span>
+
+<span class="sd">       dust_dir = Path(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust&#39;)</span>
+<span class="sd">       phsfn = np.load(dust_dir / &#39;phase_function.npy&#39;)[:, 23, 0]</span>
+<span class="sd">       ang = np.load(dust_dir / &#39;scattering_angles.npy&#39;)</span>
+
+<span class="sd">       coeff = pyrt.decompose(phsfn, ang, 129)</span>
+<span class="sd">       trimmed_coeff = pyrt.set_negative_coefficients_to_0(coeff)</span>
+
+<span class="sd">       reconst_pf = pyrt.reconstruct(coeff, ang)</span>
+<span class="sd">       trim_reconst_pf = pyrt.reconstruct(trimmed_coeff, ang)</span>
+
+<span class="sd">       plt.semilogy(ang, phsfn, label=&#39;Original phase function&#39;)</span>
+<span class="sd">       plt.semilogy(ang, reconst_pf, label=&#39;Reconstructed phase function&#39;)</span>
+<span class="sd">       plt.semilogy(ang, trim_reconst_pf, label=&#39;Trimmed phase function&#39;)</span>
+<span class="sd">       plt.xlim(0, 180)</span>
+<span class="sd">       plt.legend()</span>
+
+<span class="sd">       plt.show()</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">coeff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">_FiniteNumericArray</span><span class="p">(</span><span class="n">coefficients</span><span class="p">))</span>
@@ -763,10 +818,12 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="reconstruct"><a class="viewcode-back" href="../../rst/api/phase-function/reconstruct.html#pyrt.reconstruct">[docs]</a><span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="n">coefficients</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+<span class="c1"># TODO: unit tests</span>
+<span class="c1"># TODO: add a Raises section</span>
+<div class="viewcode-block" id="reconstruct"><a class="viewcode-back" href="../../rst/api/generated/pyrt.reconstruct.html#pyrt.reconstruct">[docs]</a><span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="n">coefficients</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
                 <span class="n">scattering_angles</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
         <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Reconstruct a phase function from an array of Legendre coefficients.</span>
+    <span class="sd">&quot;&quot;&quot;Reconstruct phase functions from an array of Legendre coefficients.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -780,9 +837,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    np.ndarray</span>
-<span class="sd">        N-dimensional array of reconstructed phase functions. If</span>
-<span class="sd">        ``coefficients`` is 1-dimensional this array will have a shape of</span>
-<span class="sd">        ``scattering_angles.shape``, otherwise this array will have a shape of</span>
+<span class="sd">        N-dimensional array of reconstructed phase functions with a shape of</span>
 <span class="sd">        ``scattering_angles.shape + coefficients.shape[1:]``.</span>
 
 <span class="sd">    Examples</span>
@@ -823,7 +878,29 @@
     <span class="c1">#phsfnrexp = np.load(&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/phase_function_reexpanded.npy&#39;)</span>
     <span class="n">sa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;/home/kyle/repos/pyRT_DISORT/anc/mars_dust/scattering_angles.npy&#39;</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">g</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">g</span><span class="p">)))</span>
+    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">pyrt</span>
+
+    <span class="n">dust_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;anc&#39;</span> <span class="o">/</span> <span class="s1">&#39;mars_dust&#39;</span>
+    <span class="n">phsfn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">/</span> <span class="s1">&#39;phase_function.npy&#39;</span><span class="p">)[:,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dust_dir</span> <span class="o">/</span> <span class="s1">&#39;scattering_angles.npy&#39;</span><span class="p">)</span>
+
+    <span class="n">coeff</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">decompose</span><span class="p">(</span><span class="n">phsfn</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="mi">129</span><span class="p">)</span>
+    <span class="n">trimmed_coeff</span> <span class="o">=</span> <span class="n">set_negative_coefficients_to_0</span><span class="p">(</span><span class="n">coeff</span><span class="p">)</span>
+
+    <span class="n">reconst_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span> <span class="n">ang</span><span class="p">)</span>
+    <span class="n">trim_reconst_pf</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">reconstruct</span><span class="p">(</span><span class="n">trimmed_coeff</span><span class="p">,</span> <span class="n">ang</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">ang</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ang</span><span class="p">,</span> <span class="n">phsfn</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original phase function&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ang</span><span class="p">,</span> <span class="n">reconst_pf</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Reconstructed phase function&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">ang</span><span class="p">,</span> <span class="n">trim_reconst_pf</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Trimmed phase function&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;/home/kyle/pftrim.png&#39;</span><span class="p">)</span>
 </pre></div>
 
               </div>
