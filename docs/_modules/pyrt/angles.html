@@ -173,7 +173,7 @@
 
 
 <span class="k">class</span> <span class="nc">_Angles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;An abstract base class for designating that an input represents angles.</span>
+    <span class="sd">&quot;&quot;&quot;A base class for designating that an input represents angles.</span>
 
 <span class="sd">    This object otherwise acts like an ndarray.</span>
 
@@ -198,205 +198,85 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">low</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">high</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_make_array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="n">low</span>
         <span class="n">obj</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">high</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__add_dimension_if_array_is_shapeless</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">__raise_value_error_if_array_is_not_in_input_range</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obj</span>
-
-    <span class="k">def</span> <span class="nf">__array_finalize__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;high&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__add_dimension_if_array_is_shapeless</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
-            <span class="n">obj</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__raise_value_error_if_array_is_not_in_input_range</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(((</span><span class="n">obj</span><span class="o">.</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">obj</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">obj</span> <span class="o">&lt;=</span> <span class="n">obj</span><span class="o">.</span><span class="n">high</span><span class="p">))):</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;All values in </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be between &#39;</span> \
-                      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">low</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">high</span><span class="si">}</span><span class="s1"> degrees.&#39;</span>
+    <span class="k">def</span> <span class="nf">_make_array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">te</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be ArrayLike.&#39;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">te</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be numeric.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ve</span>
+        <span class="k">return</span> <span class="n">array</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(((</span><span class="n">array</span><span class="o">.</span><span class="n">low</span> <span class="o">&lt;=</span> <span class="n">array</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">array</span> <span class="o">&lt;=</span> <span class="n">array</span><span class="o">.</span><span class="n">high</span><span class="p">))):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;All values in </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be between &#39;</span> \
+                      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">low</span><span class="si">}</span><span class="s1"> and </span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">high</span><span class="si">}</span><span class="s1"> degrees.&#39;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="IncidenceAngles"><a class="viewcode-back" href="../../rst/api/angles/IncidenceAngles.html#pyrt.IncidenceAngles">[docs]</a><span class="k">class</span> <span class="nc">IncidenceAngles</span><span class="p">(</span><span class="n">_Angles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Designate that an array represents incidence (solar zenith) angles.</span>
-
-<span class="sd">    This object otherwise acts like an ndarray.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    array</span>
-<span class="sd">        Any array of incidence angles [degrees]. Must be between 0 and 90.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        Raised if any values in the input array are nonnumerical.</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        Raised if any values in the input array are not between 0 and 90.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Designate an array-like object as representing incidence angles.</span>
-
-<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; import pyrt</span>
-<span class="sd">    &gt;&gt;&gt; pyrt.IncidenceAngles([0, 10, 20])</span>
-<span class="sd">    IncidenceAngles([ 0, 10, 20])</span>
-
-<span class="sd">    This array can have any shape.</span>
-
-<span class="sd">    &gt;&gt;&gt; inc = pyrt.IncidenceAngles(np.ones((2, 3)) * np.array([30, 60, 90]))</span>
-<span class="sd">    &gt;&gt;&gt; inc.shape</span>
-<span class="sd">    (2, 3)</span>
-
-<span class="sd">    Compute MU0 for a slice of this array.</span>
-
-<span class="sd">    &gt;&gt;&gt; np.cos(np.radians(inc[0]))</span>
-<span class="sd">    IncidenceAngles([8.66025404e-01, 5.00000000e-01, 6.12323400e-17])</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="s1">&#39;IncidenceAngles&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obj</span></div>
-
-
-<div class="viewcode-block" id="EmissionAngles"><a class="viewcode-back" href="../../rst/api/angles/EmissionAngles.html#pyrt.EmissionAngles">[docs]</a><span class="k">class</span> <span class="nc">EmissionAngles</span><span class="p">(</span><span class="n">_Angles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Designate that an array represents emission (emergence) angles.</span>
-
-<span class="sd">    This object otherwise acts like an ndarray.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    array</span>
-<span class="sd">        Any array of emission angles [degrees]. Must be between 0 and 180.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        Raised if any values in the input array are nonnumerical.</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        Raised if any values in the input array are not between 0 and 180.</span>
-
-<span class="sd">    Examples</span>
-<span class="sd">    --------</span>
-<span class="sd">    Designate an array-like object as representing emission angles.</span>
-
-<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; import pyrt</span>
-<span class="sd">    &gt;&gt;&gt; pyrt.EmissionAngles([0, 10, 20])</span>
-<span class="sd">    EmissionAngles([ 0, 10, 20])</span>
-
-<span class="sd">    This array can have any shape.</span>
-
-<span class="sd">    &gt;&gt;&gt; inc = pyrt.EmissionAngles(np.ones((2, 3)) * np.array([30, 60, 90]))</span>
-<span class="sd">    &gt;&gt;&gt; inc.shape</span>
-<span class="sd">    (2, 3)</span>
-
-<span class="sd">    Compute MU for a slice of this array.</span>
-
-<span class="sd">    &gt;&gt;&gt; np.cos(np.radians(inc[0]))</span>
-<span class="sd">    EmissionAngles([8.66025404e-01, 5.00000000e-01, 6.12323400e-17])</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="s1">&#39;EmissionAngles&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obj</span></div>
-
-
-<div class="viewcode-block" id="PhaseAngles"><a class="viewcode-back" href="../../rst/api/angles/PhaseAngles.html#pyrt.PhaseAngles">[docs]</a><span class="k">class</span> <span class="nc">PhaseAngles</span><span class="p">(</span><span class="n">_Angles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Designate that an array represents phase angles.</span>
-
-<span class="sd">    This object otherwise acts like an ndarray.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    array</span>
-<span class="sd">        Any array of phase angles [degrees]. Must be between 0 and 180.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        Raised if any values in the input array are nonnumerical.</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        Raised if any values in the input array are not between 0 and 180.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="s1">&#39;PhaseAngles&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obj</span></div>
-
-
-<div class="viewcode-block" id="AzimuthAngles"><a class="viewcode-back" href="../../rst/api/angles/AzimuthAngles.html#pyrt.AzimuthAngles">[docs]</a><span class="k">class</span> <span class="nc">AzimuthAngles</span><span class="p">(</span><span class="n">_Angles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Designate that an array represents azimuth angles.</span>
-
-<span class="sd">    This object otherwise acts like an ndarray.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    array</span>
-<span class="sd">        Any array of phase angles [degrees]. Must be between 0 and 360.</span>
-
-<span class="sd">    Raises</span>
-<span class="sd">    ------</span>
-<span class="sd">    TypeError</span>
-<span class="sd">        Raised if any values in the input array are nonnumerical.</span>
-<span class="sd">    ValueError</span>
-<span class="sd">        Raised if any values in the input array are not between 0 and 360.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
-        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="s1">&#39;AzimuthAngles&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">obj</span></div>
-
-
-<div class="viewcode-block" id="azimuth"><a class="viewcode-back" href="../../rst/api/angles/azimuth.html#pyrt.azimuth">[docs]</a><span class="k">def</span> <span class="nf">azimuth</span><span class="p">(</span><span class="n">incidence</span><span class="p">:</span> <span class="n">IncidenceAngles</span><span class="p">,</span> <span class="n">emission</span><span class="p">:</span> <span class="n">EmissionAngles</span><span class="p">,</span>
-            <span class="n">phase</span><span class="p">:</span> <span class="n">PhaseAngles</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AzimuthAngles</span><span class="p">:</span>
+<span class="c1"># TODO:</span>
+<div class="viewcode-block" id="azimuth"><a class="viewcode-back" href="../../rst/generated/pyrt.azimuth.html#pyrt.azimuth">[docs]</a><span class="k">def</span> <span class="nf">azimuth</span><span class="p">(</span><span class="n">incidence</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+            <span class="n">emission</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+            <span class="n">phase</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> \
+        <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Construct azimuth angles from a set of incidence, emission, and phase</span>
 <span class="sd">    angles.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    incidence: IncidenceAngles</span>
-<span class="sd">        Incidence (solar zenith) angles [degrees].</span>
-<span class="sd">    emission: EmissionAngles</span>
-<span class="sd">        Emission (emergence) angles [degrees].</span>
-<span class="sd">    phase: PhaseAngles</span>
-<span class="sd">        Phase angles [degrees].</span>
+<span class="sd">    incidence: ArrayLike</span>
+<span class="sd">        N-dimensional array of incidence (solar zenith) angles [degrees]. All</span>
+<span class="sd">        values must be between 0 and 90.</span>
+<span class="sd">    emission: ArrayLike</span>
+<span class="sd">        N-dimensional array of emission (emergence) angles [degrees]. All</span>
+<span class="sd">        values must be between 0 and 90.</span>
+<span class="sd">    phase: ArrayLike</span>
+<span class="sd">        N-dimensional array of phase angles [degrees]. All values must be</span>
+<span class="sd">        between 0 and 180.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Raised if any of the inputs cannot be cast into an ndarray.</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        Raised if the input arrays do not have compatible shapes.</span>
+<span class="sd">        Raised if any of the values in the inputs are not within their</span>
+<span class="sd">        mathematically valid range or if the inputs do not have compatible</span>
+<span class="sd">        shapes.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    The inputs can be ndarrays but then there&#39;s no angle validation.</span>
-<span class="sd">    Consequently, the results may not accurate in this scenario. I recommend</span>
-<span class="sd">    using the correctly typed inputs.</span>
+<span class="sd">    While emission angles can mathematically be up to 180 degrees, I cannot</span>
+<span class="sd">    envision a situation where this function would be useful for emission</span>
+<span class="sd">    angles above 90 degrees---hence the cutoffs.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    Create the azimuth angles from an assortment of angles.</span>
+<span class="sd">    Create the azimuth angles from an array of angles, where (for simplicity)</span>
+<span class="sd">    the incidence, emission, and phase angles are all equal.</span>
 
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; import pyrt</span>
-<span class="sd">    &gt;&gt;&gt; incidence_angles = pyrt.IncidenceAngles(np.array([20, 30, 40]))</span>
-<span class="sd">    &gt;&gt;&gt; emission_angles = pyrt.EmissionAngles(np.array([30, 40, 50]))</span>
-<span class="sd">    &gt;&gt;&gt; phase_angles = pyrt.PhaseAngles(np.array([25, 30, 35]))</span>
-<span class="sd">    &gt;&gt;&gt; pyrt.azimuth(incidence_angles, emission_angles, phase_angles)</span>
-<span class="sd">    AzimuthAngles([122.74921226, 129.08074256, 131.57329276])</span>
+<span class="sd">    &gt;&gt;&gt; angles = np.array([[10, 20, 30], [15, 25, 35]])</span>
+<span class="sd">    &gt;&gt;&gt; pyrt.azimuth(angles, angles, angles)</span>
+<span class="sd">    array([[119.74712028, 118.97673223, 117.65209561],</span>
+<span class="sd">           [119.42828679, 118.38707342, 116.7625057 ]])</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">incidence</span> <span class="o">=</span> <span class="n">_Angles</span><span class="p">(</span><span class="n">incidence</span><span class="p">,</span> <span class="s1">&#39;incidence&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+    <span class="n">emission</span> <span class="o">=</span> <span class="n">_Angles</span><span class="p">(</span><span class="n">emission</span><span class="p">,</span> <span class="s1">&#39;emission&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+    <span class="n">phase</span> <span class="o">=</span> <span class="n">_Angles</span><span class="p">(</span><span class="n">phase</span><span class="p">,</span> <span class="s1">&#39;phase&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">180</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">np</span><span class="o">.</span><span class="n">errstate</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">):</span>
             <span class="n">tmp_arg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">true_divide</span><span class="p">(</span>
@@ -405,7 +285,7 @@
                 <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">emission</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">incidence</span><span class="p">)))</span>
             <span class="n">tmp_arg</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">tmp_arg</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
             <span class="n">d_phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">tmp_arg</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">AzimuthAngles</span><span class="p">(</span><span class="mi">180</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">d_phi</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">180</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">d_phi</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
         <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The input arrays must have compatible shapes. They are&#39;</span> \
                   <span class="sa">f</span><span class="s1">&#39;incidence: </span><span class="si">{</span><span class="n">incidence</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">, &#39;</span> \

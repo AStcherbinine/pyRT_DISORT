@@ -4,7 +4,7 @@ from numpy.typing import ArrayLike
 
 
 class _Angles(np.ndarray):
-    """An abstract base class for designating that an input represents angles.
+    """A base class for designating that an input represents angles.
 
     This object otherwise acts like an ndarray.
 
@@ -29,205 +29,85 @@ class _Angles(np.ndarray):
     """
 
     def __new__(cls, array: ArrayLike, name: str, low: float, high: float):
-        obj = np.asarray(array).view(cls)
+        obj = cls._make_array(array, name).view(cls)
         obj.name = name
         obj.low = low
         obj.high = high
-        obj = cls.__add_dimension_if_array_is_shapeless(obj)
-        cls.__raise_value_error_if_array_is_not_in_input_range(obj)
-        return obj
-
-    def __array_finalize__(self, obj: np.ndarray):
-        if obj is None:
-            return
-        self.name = getattr(obj, 'name', None)
-        self.low = getattr(obj, 'low', None)
-        self.high = getattr(obj, 'high', None)
-
-    @staticmethod
-    def __add_dimension_if_array_is_shapeless(obj):
-        if obj.shape == ():
-            obj = obj[None]
+        cls._validate(obj)
         return obj
 
     @staticmethod
-    def __raise_value_error_if_array_is_not_in_input_range(obj) -> None:
-        if not np.all(((obj.low <= obj) & (obj <= obj.high))):
-            message = f'All values in {obj.name} must be between ' \
-                      f'{obj.low} and {obj.high} degrees.'
+    def _make_array(value, name: str):
+        try:
+            array = np.asarray(value)
+            array.astype(float)
+        except TypeError as te:
+            message = f'{name} must be ArrayLike.'
+            raise TypeError(message) from te
+        except ValueError as ve:
+            message = f'{name} must be numeric.'
+            raise ValueError(message) from ve
+        return array
+
+    @staticmethod
+    def _validate(array):
+        if not np.all(((array.low <= array) & (array <= array.high))):
+            message = f'All values in {array.name} must be between ' \
+                      f'{array.low} and {array.high} degrees.'
             raise ValueError(message)
 
 
-class IncidenceAngles(_Angles):
-    """Designate that an array represents incidence (solar zenith) angles.
-
-    This object otherwise acts like an ndarray.
-
-    Parameters
-    ----------
-    array
-        Any array of incidence angles [degrees]. Must be between 0 and 90.
-
-    Raises
-    ------
-    TypeError
-        Raised if any values in the input array are nonnumerical.
-    ValueError
-        Raised if any values in the input array are not between 0 and 90.
-
-    Examples
-    --------
-    Designate an array-like object as representing incidence angles.
-
-    >>> import numpy as np
-    >>> import pyrt
-    >>> pyrt.IncidenceAngles([0, 10, 20])
-    IncidenceAngles([ 0, 10, 20])
-
-    This array can have any shape.
-
-    >>> inc = pyrt.IncidenceAngles(np.ones((2, 3)) * np.array([30, 60, 90]))
-    >>> inc.shape
-    (2, 3)
-
-    Compute MU0 for a slice of this array.
-
-    >>> np.cos(np.radians(inc[0]))
-    IncidenceAngles([8.66025404e-01, 5.00000000e-01, 6.12323400e-17])
-
-    """
-    def __new__(cls, array: ArrayLike):
-        obj = super().__new__(cls, array, 'IncidenceAngles', 0, 90)
-        return obj
-
-
-class EmissionAngles(_Angles):
-    """Designate that an array represents emission (emergence) angles.
-
-    This object otherwise acts like an ndarray.
-
-    Parameters
-    ----------
-    array
-        Any array of emission angles [degrees]. Must be between 0 and 180.
-
-    Raises
-    ------
-    TypeError
-        Raised if any values in the input array are nonnumerical.
-    ValueError
-        Raised if any values in the input array are not between 0 and 180.
-
-    Examples
-    --------
-    Designate an array-like object as representing emission angles.
-
-    >>> import numpy as np
-    >>> import pyrt
-    >>> pyrt.EmissionAngles([0, 10, 20])
-    EmissionAngles([ 0, 10, 20])
-
-    This array can have any shape.
-
-    >>> inc = pyrt.EmissionAngles(np.ones((2, 3)) * np.array([30, 60, 90]))
-    >>> inc.shape
-    (2, 3)
-
-    Compute MU for a slice of this array.
-
-    >>> np.cos(np.radians(inc[0]))
-    EmissionAngles([8.66025404e-01, 5.00000000e-01, 6.12323400e-17])
-
-    """
-    def __new__(cls, array: ArrayLike):
-        obj = super().__new__(cls, array, 'EmissionAngles', 0, 180)
-        return obj
-
-
-class PhaseAngles(_Angles):
-    """Designate that an array represents phase angles.
-
-    This object otherwise acts like an ndarray.
-
-    Parameters
-    ----------
-    array
-        Any array of phase angles [degrees]. Must be between 0 and 180.
-
-    Raises
-    ------
-    TypeError
-        Raised if any values in the input array are nonnumerical.
-    ValueError
-        Raised if any values in the input array are not between 0 and 180.
-
-    """
-    def __new__(cls, array: ArrayLike):
-        obj = super().__new__(cls, array, 'PhaseAngles', 0, 180)
-        return obj
-
-
-class AzimuthAngles(_Angles):
-    """Designate that an array represents azimuth angles.
-
-    This object otherwise acts like an ndarray.
-
-    Parameters
-    ----------
-    array
-        Any array of phase angles [degrees]. Must be between 0 and 360.
-
-    Raises
-    ------
-    TypeError
-        Raised if any values in the input array are nonnumerical.
-    ValueError
-        Raised if any values in the input array are not between 0 and 360.
-
-    """
-    def __new__(cls, array: ArrayLike):
-        obj = super().__new__(cls, array, 'AzimuthAngles', 0, 360)
-        return obj
-
-
-def azimuth(incidence: IncidenceAngles, emission: EmissionAngles,
-            phase: PhaseAngles) -> AzimuthAngles:
+# TODO:
+def azimuth(incidence: ArrayLike,
+            emission: ArrayLike,
+            phase: ArrayLike) \
+        -> np.ndarray:
     r"""Construct azimuth angles from a set of incidence, emission, and phase
     angles.
 
     Parameters
     ----------
-    incidence: IncidenceAngles
-        Incidence (solar zenith) angles [degrees].
-    emission: EmissionAngles
-        Emission (emergence) angles [degrees].
-    phase: PhaseAngles
-        Phase angles [degrees].
+    incidence: ArrayLike
+        N-dimensional array of incidence (solar zenith) angles [degrees]. All
+        values must be between 0 and 90.
+    emission: ArrayLike
+        N-dimensional array of emission (emergence) angles [degrees]. All
+        values must be between 0 and 90.
+    phase: ArrayLike
+        N-dimensional array of phase angles [degrees]. All values must be
+        between 0 and 180.
 
     Raises
     ------
+    TypeError
+        Raised if any of the inputs cannot be cast into an ndarray.
     ValueError
-        Raised if the input arrays do not have compatible shapes.
+        Raised if any of the values in the inputs are not within their
+        mathematically valid range or if the inputs do not have compatible
+        shapes.
 
     Notes
     -----
-    The inputs can be ndarrays but then there's no angle validation.
-    Consequently, the results may not accurate in this scenario. I recommend
-    using the correctly typed inputs.
+    While emission angles can mathematically be up to 180 degrees, I cannot
+    envision a situation where this function would be useful for emission
+    angles above 90 degrees---hence the cutoffs.
 
     Examples
     --------
-    Create the azimuth angles from an assortment of angles.
+    Create the azimuth angles from an array of angles, where (for simplicity)
+    the incidence, emission, and phase angles are all equal.
 
     >>> import numpy as np
     >>> import pyrt
-    >>> incidence_angles = pyrt.IncidenceAngles(np.array([20, 30, 40]))
-    >>> emission_angles = pyrt.EmissionAngles(np.array([30, 40, 50]))
-    >>> phase_angles = pyrt.PhaseAngles(np.array([25, 30, 35]))
-    >>> pyrt.azimuth(incidence_angles, emission_angles, phase_angles)
-    AzimuthAngles([122.74921226, 129.08074256, 131.57329276])
+    >>> angles = np.array([[10, 20, 30], [15, 25, 35]])
+    >>> pyrt.azimuth(angles, angles, angles)
+    array([[119.74712028, 118.97673223, 117.65209561],
+           [119.42828679, 118.38707342, 116.7625057 ]])
 
     """
+    incidence = _Angles(incidence, 'incidence', 0, 90)
+    emission = _Angles(emission, 'emission', 0, 90)
+    phase = _Angles(phase, 'phase', 0, 180)
     try:
         with np.errstate(divide='ignore', invalid='ignore'):
             tmp_arg = np.true_divide(
@@ -236,7 +116,7 @@ def azimuth(incidence: IncidenceAngles, emission: EmissionAngles,
                 np.sin(np.radians(emission)) * np.sin(np.radians(incidence)))
             tmp_arg[~np.isfinite(tmp_arg)] = -1
             d_phi = np.arccos(np.clip(tmp_arg, -1, 1))
-        return AzimuthAngles(180 - np.degrees(d_phi))
+        return np.array(180 - np.degrees(d_phi))
     except ValueError as ve:
         message = f'The input arrays must have compatible shapes. They are' \
                   f'incidence: {incidence.shape}, ' \

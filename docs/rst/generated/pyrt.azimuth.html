@@ -313,37 +313,45 @@
 <h1>pyrt.azimuth<a class="headerlink" href="#pyrt-azimuth" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyrt.azimuth">
-<span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">azimuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrt.angles.IncidenceAngles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrt.angles.EmissionAngles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrt.angles.PhaseAngles</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrt.angles.AzimuthAngles</span></span></span><a class="reference internal" href="../../_modules/pyrt/angles.html#azimuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.azimuth" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyrt.</span></span><span class="sig-name descname"><span class="pre">azimuth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incidence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emission</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ArrayLike</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../_modules/pyrt/angles.html#azimuth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyrt.azimuth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct azimuth angles from a set of incidence, emission, and phase
 angles.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>incidence</strong> (<em>IncidenceAngles</em>) – Incidence (solar zenith) angles [degrees].</p></li>
-<li><p><strong>emission</strong> (<em>EmissionAngles</em>) – Emission (emergence) angles [degrees].</p></li>
-<li><p><strong>phase</strong> (<em>PhaseAngles</em>) – Phase angles [degrees].</p></li>
+<li><p><strong>incidence</strong> (<em>ArrayLike</em>) – N-dimensional array of incidence (solar zenith) angles [degrees]. All
+values must be between 0 and 90.</p></li>
+<li><p><strong>emission</strong> (<em>ArrayLike</em>) – N-dimensional array of emission (emergence) angles [degrees]. All
+values must be between 0 and 90.</p></li>
+<li><p><strong>phase</strong> (<em>ArrayLike</em>) – N-dimensional array of phase angles [degrees]. All values must be
+between 0 and 180.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – Raised if the input arrays do not have compatible shapes.</p>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>TypeError</strong> – Raised if any of the inputs cannot be cast into an ndarray.</p></li>
+<li><p><strong>ValueError</strong> – Raised if any of the values in the inputs are not within their
+    mathematically valid range or if the inputs do not have compatible
+    shapes.</p></li>
+</ul>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>pyrt.angles.AzimuthAngles</p>
+<dd class="field-odd"><p>numpy.ndarray</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>The inputs can be ndarrays but then there’s no angle validation.
-Consequently, the results may not accurate in this scenario. I recommend
-using the correctly typed inputs.</p>
+<p>While emission angles can mathematically be up to 180 degrees, I cannot
+envision a situation where this function would be useful for emission
+angles above 90 degrees—hence the cutoffs.</p>
 <p class="rubric">Examples</p>
-<p>Create the azimuth angles from an assortment of angles.</p>
+<p>Create the azimuth angles from an array of angles, where (for simplicity)
+the incidence, emission, and phase angles are all equal.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyrt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">incidence_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">IncidenceAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">emission_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">EmissionAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">phase_angles</span> <span class="o">=</span> <span class="n">pyrt</span><span class="o">.</span><span class="n">PhaseAngles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">35</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">incidence_angles</span><span class="p">,</span> <span class="n">emission_angles</span><span class="p">,</span> <span class="n">phase_angles</span><span class="p">)</span>
-<span class="go">AzimuthAngles([122.74921226, 129.08074256, 131.57329276])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pyrt</span><span class="o">.</span><span class="n">azimuth</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">angles</span><span class="p">,</span> <span class="n">angles</span><span class="p">)</span>
+<span class="go">array([[119.74712028, 118.97673223, 117.65209561],</span>
+<span class="go">       [119.42828679, 118.38707342, 116.7625057 ]])</span>
 </pre></div>
 </div>
 </dd></dl>
