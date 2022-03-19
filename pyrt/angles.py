@@ -57,7 +57,6 @@ class _Angles(np.ndarray):
             raise ValueError(message)
 
 
-# TODO:
 def azimuth(incidence: ArrayLike,
             emission: ArrayLike,
             phase: ArrayLike) \
@@ -76,6 +75,11 @@ def azimuth(incidence: ArrayLike,
     phase: ArrayLike
         N-dimensional array of phase angles [degrees]. All values must be
         between 0 and 180.
+
+    Returns
+    -------
+    np.ndarray
+        N-dimensional array of azimuth angles.
 
     Raises
     ------

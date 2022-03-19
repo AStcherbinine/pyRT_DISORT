@@ -170,10 +170,11 @@
 <span></span><span class="sd">&quot;&quot;&quot;The :code:`eos` module contains data structures to compute and hold equation</span>
 <span class="sd">of state variables used throughout pyRT_DISORT.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">Boltzmann</span>
 <span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">quadrature</span> <span class="k">as</span> <span class="n">quad</span>
-<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 
 <span class="c1"># TODO: Fix the Raises docstring formatting</span>
@@ -532,6 +533,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__altitude</span>
 
 
+
+
 <span class="k">class</span> <span class="nc">_EoSVar</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Perform checks that a given equation of state variable is plausible.</span>
 
@@ -642,6 +645,109 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__var</span>
 
 
+<span class="k">class</span> <span class="nc">_Altitudes</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A base class for designating that an input represents altitudes.</span>
+
+<span class="sd">    This object otherwise acts like an ndarray.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    array</span>
+<span class="sd">        Any array of altitudes.</span>
+<span class="sd">    name</span>
+<span class="sd">        The name of the altitude array.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Raised if any values in the input array are nonnumerical.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the input array is not 1-dimensional or if the values are</span>
+<span class="sd">        not monotonically decreasing.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_make_array</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_make_array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">array</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">te</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be ArrayLike.&#39;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">te</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be numeric.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ve</span>
+        <span class="k">return</span> <span class="n">array</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">array</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be 1-dimensional.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">array</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> must be monotonically decreasing.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_validate_profile_value</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">te</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;value could not be converted to a float.&#39;</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">te</span>
+    <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;value must be positive.&#39;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">val</span>
+
+
+<div class="viewcode-block" id="constant_profile"><a class="viewcode-back" href="../../rst/generated/pyrt.constant_profile.html#pyrt.constant_profile">[docs]</a><span class="k">def</span> <span class="nf">constant_profile</span><span class="p">(</span><span class="n">altitude</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Make a constant profile.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    altitude: ArrayLike</span>
+<span class="sd">        The altitudes at which to make the vertical profile. Must be</span>
+<span class="sd">        1-dimensional and monotonically decreasing.</span>
+<span class="sd">    value: float</span>
+<span class="sd">        The value of the profile. Must be positive.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    np.ndarray</span>
+<span class="sd">        1-dimensional array of a constant value with shape ``altitude.shape``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Raised if either of the inputs cannot be cast to the correct type.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if either of the inputs does not have the aforementioned</span>
+<span class="sd">        desired properties.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Make a constant temperature profile of 150 K.</span>
+
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pyrt</span>
+<span class="sd">    &gt;&gt;&gt; z = np.linspace(100, 0, num=15)</span>
+<span class="sd">    &gt;&gt;&gt; pyrt.constant_profile(z, 150)</span>
+<span class="sd">    array([150., 150., 150., 150., 150., 150., 150., 150., 150., 150., 150.,</span>
+<span class="sd">           150., 150., 150., 150.])</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">alt</span> <span class="o">=</span> <span class="n">_Altitudes</span><span class="p">(</span><span class="n">altitude</span><span class="p">,</span> <span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">_validate_profile_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alt</span><span class="p">))</span> <span class="o">+</span> <span class="n">val</span></div>
+
+
 <div class="viewcode-block" id="exponential_profile"><a class="viewcode-back" href="../../rst/generated/pyrt.exponential_profile.html#pyrt.exponential_profile">[docs]</a><span class="k">def</span> <span class="nf">exponential_profile</span><span class="p">(</span><span class="n">altitude</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale_height</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Make an exponential profile.</span>
 
@@ -658,19 +764,7 @@
     <span class="k">return</span> <span class="n">surface</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">altitude</span> <span class="o">/</span> <span class="n">scale_height</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="constant_profile"><a class="viewcode-back" href="../../rst/generated/pyrt.constant_profile.html#pyrt.constant_profile">[docs]</a><span class="k">def</span> <span class="nf">constant_profile</span><span class="p">(</span><span class="n">altitude</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Make a constant profile.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    altitude</span>
-<span class="sd">    value</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">altitude</span><span class="p">))</span> <span class="o">+</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="linear_profile"><a class="viewcode-back" href="../../rst/generated/pyrt.linear_profile.html#pyrt.linear_profile">[docs]</a><span class="k">def</span> <span class="nf">linear_profile</span><span class="p">(</span><span class="n">altitude</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span> <span class="n">top</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">bottom</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>

@@ -1,72 +1,102 @@
+from __future__ import annotations
 import numpy as np
 from numpy.typing import ArrayLike
 
 
-class _Wavelength(np.ndarray):
-    """Designate that an input array represents wavelengths.
+class _Wavelengths(np.ndarray):
+    """A base class for designating that an input represents wavelengths.
+
+    This object otherwise acts like an ndarray.
 
     Parameters
     ----------
-    array
-        Array of wavelengths. Must be between 0.1 and 50 microns.
-    name
-        Name of the wavelength.
+    array: ArrayLike
+        Any array of wavelengths.
+    name: str
+        The name of the array.
+    low: float
+        The lowest value any value in the array is allowed to be.
+    high: float
+        The highest value any value in the array is allowed to be.
 
     Raises
     ------
+    TypeError
+        Raised if any values in the input array are nonnumerical.
     ValueError
-        Raised if any values in :code`array` are not between 0.1 and 50
-        microns (I assume this is the valid range to do retrievals).
+        Raised if any values in the input array are outside the input range.
 
     """
-    def __new__(cls, array: ArrayLike, name: str):
-        obj = np.asarray(array).view(cls)
+
+    def __new__(cls, array: ArrayLike, name: str, low: float = 0.1,
+                high: float = 50):
+        obj = cls._make_array(array, name).view(cls)
         obj.name = name
-        cls.__raise_value_error_if_array_is_not_in_range(obj)
+        obj.low = low
+        obj.high = high
+        cls._validate(obj)
         return obj
 
-    def __array_finalize__(self, obj: np.ndarray):
-        if obj is None:
-            return
-        self.name = getattr(obj, 'name', None)
+    @staticmethod
+    def _make_array(value, name: str):
+        try:
+            array = np.asarray(value)
+            array.astype(float)
+        except TypeError as te:
+            message = f'{name} must be ArrayLike.'
+            raise TypeError(message) from te
+        except ValueError as ve:
+            message = f'{name} must be numeric.'
+            raise ValueError(message) from ve
+        return array
 
     @staticmethod
-    def __raise_value_error_if_array_is_not_in_range(obj) -> None:
-        if not np.all((0.1 <= obj) & (obj <= 50)):
-            message = f'All values in {obj.name} must be between 0.1 and 50 ' \
-                      'microns.'
+    def _validate(array):
+        if not np.all((array.low <= array) & (array <= array.high)):
+            message = f'All values in {array.name} must be between ' \
+                      f'{array.low} and {array.high} microns.'
             raise ValueError(message)
 
 
 def wavenumber(wavelength: ArrayLike) -> np.ndarray:
-    """Convert wavelengths [microns] to wavenumber [1 / cm].
+    r"""Convert wavelengths [microns] to wavenumber
+    [:math:`\frac{1}{\text{cm}}`].
 
     Parameters
     ----------
     wavelength: ArrayLike
-        Wavelengths.
+        N-dimensional array of wavelengths. All values must be between 0.1
+        and 50 microns (I assume this is the valid range to do radiative
+        transfer).
 
     Returns
     -------
     np.ndarray
-        The wavenumbers of each wavelength.
+        N-dimensional array of wavenumbers with shape ``wavelength.shape``.
 
     Raises
     ------
+    TypeError
+        Raised if the input cannot be cast into an ndarray.
     ValueError
-        Raised if any values of the input wavelengths are not between 0.1 and
-        50 (I assume this is the range of wavelengths where you can do
-        radiative transfer).
+        Raised if the input contains values outside the valid range.
 
     Examples
     --------
     Convert wavelengths to wavenumbers.
 
+    >>> import numpy as np
     >>> import pyrt
     >>> wavs = [1, 2, 3]
     >>> pyrt.wavenumber(wavs)
     array([10000.        ,  5000.        ,  3333.33333333])
 
+    This function can handle arrays of any shape.
+
+    >>> wavs = np.ones((10, 20, 30))
+    >>> pyrt.wavenumber(wavs).shape
+    (10, 20, 30)
+
     """
-    wavelength = _Wavelength(wavelength, 'wavelength')
+    wavelength = _Wavelengths(wavelength, 'wavelength')
     return np.array(10 ** 4 / wavelength)

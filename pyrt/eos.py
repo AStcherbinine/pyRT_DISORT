@@ -1,10 +1,11 @@
 """The :code:`eos` module contains data structures to compute and hold equation
 of state variables used throughout pyRT_DISORT.
 """
+from __future__ import annotations
 import numpy as np
+from numpy.typing import ArrayLike
 from scipy.constants import Boltzmann
 from scipy.integrate import quadrature as quad
-from numpy.typing import ArrayLike
 
 
 # TODO: Fix the Raises docstring formatting
@@ -363,6 +364,8 @@ class _Altitude:
         return self.__altitude
 
 
+
+
 class _EoSVar:
     """Perform checks that a given equation of state variable is plausible.
 
@@ -473,6 +476,109 @@ class _ScaleHeightVar:
         return self.__var
 
 
+class _Altitudes(np.ndarray):
+    """A base class for designating that an input represents altitudes.
+
+    This object otherwise acts like an ndarray.
+
+    Parameters
+    ----------
+    array
+        Any array of altitudes.
+    name
+        The name of the altitude array.
+
+    Raises
+    ------
+    TypeError
+        Raised if any values in the input array are nonnumerical.
+    ValueError
+        Raised if the input array is not 1-dimensional or if the values are
+        not monotonically decreasing.
+
+    """
+
+    def __new__(cls, array: ArrayLike, name: str):
+        obj = cls._make_array(array, name).view(cls)
+        obj.name = name
+        cls._validate(obj)
+        return obj
+
+    @staticmethod
+    def _make_array(value, name: str):
+        try:
+            array = np.asarray(value)
+            array.astype(float)
+        except TypeError as te:
+            message = f'{name} must be ArrayLike.'
+            raise TypeError(message) from te
+        except ValueError as ve:
+            message = f'{name} must be numeric.'
+            raise ValueError(message) from ve
+        return array
+
+    @staticmethod
+    def _validate(array):
+        if array.ndim != 1:
+            message = f'{array.name} must be 1-dimensional.'
+            raise ValueError(message)
+        if not np.all(np.diff(array) < 0):
+            message = f'{array.name} must be monotonically decreasing.'
+            raise ValueError(message)
+
+
+def _validate_profile_value(value: float):
+    try:
+        val = float(value)
+    except TypeError as te:
+        message = 'value could not be converted to a float.'
+        raise TypeError(message) from te
+    if val <= 0:
+        message = 'value must be positive.'
+        raise ValueError(message)
+    return val
+
+
+def constant_profile(altitude: ArrayLike, value: float) -> np.ndarray:
+    """Make a constant profile.
+
+    Parameters
+    ----------
+    altitude: ArrayLike
+        The altitudes at which to make the vertical profile. Must be
+        1-dimensional and monotonically decreasing.
+    value: float
+        The value of the profile. Must be positive.
+
+    Returns
+    -------
+    np.ndarray
+        1-dimensional array of a constant value with shape ``altitude.shape``.
+
+    Raises
+    ------
+    TypeError
+        Raised if either of the inputs cannot be cast to the correct type.
+    ValueError
+        Raised if either of the inputs does not have the aforementioned
+        desired properties.
+
+    Examples
+    --------
+    Make a constant temperature profile of 150 K.
+
+    >>> import numpy as np
+    >>> import pyrt
+    >>> z = np.linspace(100, 0, num=15)
+    >>> pyrt.constant_profile(z, 150)
+    array([150., 150., 150., 150., 150., 150., 150., 150., 150., 150., 150.,
+           150., 150., 150., 150.])
+    """
+    alt = _Altitudes(altitude, 'altitude')
+    val = _validate_profile_value(value)
+    return np.zeros(len(alt)) + val
+
+
 def exponential_profile(altitude: ArrayLike, surface: float, scale_height: ArrayLike):
     """Make an exponential profile.
 
@@ -489,19 +595,7 @@ def exponential_profile(altitude: ArrayLike, surface: float, scale_height: Array
     return surface * np.exp(-altitude / scale_height)
 
 
-def constant_profile(altitude: ArrayLike, value: float):
-    """Make a constant profile.
 
-    Parameters
-    ----------
-    altitude
-    value
-
-    Returns
-    -------
-
-    """
-    return np.zeros(len(altitude)) + value
 
 
 def linear_profile(altitude: ArrayLike, top: float, bottom: float):
