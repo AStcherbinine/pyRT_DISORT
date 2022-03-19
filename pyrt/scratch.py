@@ -1,47 +1,7 @@
 """
-angles.py
-azimuth()
-
-spectral.py
-wavenumber()
-
-# These need work
-eos.py
-make_column_density()
-scale_height()
-exp_profile()
-
-rayleigh.py
-def rayleigh_ssa(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
-def rayleigh_pmom(nlyr, nwavs) -> np.ndarray(nlyr, nwavs)
-def rayleigh_co2(colden, wavs) -> Column
-
-vertical_profile.py
-def conrath()
-def uniform()
-
-fsp.py
-def make_extinction()
-def make_optical_depth()
-
-phase_function.py
-~~~generic phase function
-resample()
-normalize()
-decompose()
-fit_asymmetry_parameter()
-~~~H-G
-construct_hg()
-decompose_hg()
-~~~Legendre coeff
-set_negative_coefficients_to_0()
-reconstruct()
 
 column.py
 class Column
-
-grid.py
-nn_regrid()
 
 
 

@@ -474,22 +474,115 @@ class _ScaleHeightVar:
 
 
 def exponential_profile(altitude: ArrayLike, surface: float, scale_height: ArrayLike):
+    """Make an exponential profile.
+
+    Parameters
+    ----------
+    altitude
+    surface
+    scale_height
+
+    Returns
+    -------
+
+    """
     return surface * np.exp(-altitude / scale_height)
 
 
 def constant_profile(altitude: ArrayLike, value: float):
+    """Make a constant profile.
+
+    Parameters
+    ----------
+    altitude
+    value
+
+    Returns
+    -------
+
+    """
     return np.zeros(len(altitude)) + value
 
 
 def linear_profile(altitude: ArrayLike, top: float, bottom: float):
+    """Make a linear profile.
+
+    Parameters
+    ----------
+    altitude
+    top
+    bottom
+
+    Returns
+    -------
+
+    """
     return np.linspace(top, bottom, num=len(altitude))
 
 
+def linear_grid_profile(altitude: ArrayLike, altitude_grid: ArrayLike, profile_grid: ArrayLike):
+    """Make a profile with linear interpolation between grid points.
+
+    Parameters
+    ----------
+    altitude
+    altitude_grid
+    profile_grid
+
+    Returns
+    -------
+
+    """
+    return np.interp(altitude, altitude_grid, profile_grid)
+
+
+def log_grid_profile(altitude: ArrayLike, altitude_grid: ArrayLike, profile_grid: ArrayLike):
+    """Make a profile with linear interpolation between grid points in log space.
+
+    Parameters
+    ----------
+    altitude
+    altitude_grid
+    profile_grid
+
+    Returns
+    -------
+
+    """
+    return np.exp(np.interp(np.log(altitude), np.log(altitude_grid), profile_grid))
+
+
 def scale_height(mass: float, gravity: float, temperature: ArrayLike) -> np.ndarray:
+    """Compute the scale height.
+
+    Parameters
+    ----------
+    mass
+    gravity
+    temperature
+
+    Returns
+    -------
+
+    """
     return Boltzmann * temperature / mass / gravity
 
 
 def column_density(pressure_profile, temperature_profile, altitude: ArrayLike, profargs, tempargs):
+    """Make the column density.
+
+    Parameters
+    ----------
+    pressure_profile
+    temperature_profile
+    altitude
+    profargs
+    tempargs
+
+    Returns
+    -------
+
+    """
     def hydrostatic_profile(alts):
         return pressure_profile(alts, *profargs) / temperature_profile(alts, *tempargs) / Boltzmann
 

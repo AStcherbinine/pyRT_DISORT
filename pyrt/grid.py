@@ -5,6 +5,40 @@ from scipy.integrate import simps
 from scipy.interpolate import interp1d
 
 
+def regrid(array, particle_size_grid, wavelength_grid,
+        particle_sizes: ArrayLike,
+           wavelengths: ArrayLike) \
+        -> np.ndarray:
+    """Regrid the input array onto a new particle size and wavelength grid
+    using nearest neighbor 'interpolation'.
+
+    Parameters
+    ----------
+    particle_sizes: ArrayLike
+        The particle sizes to regrid the array on to.
+    wavelengths: ArrayLike
+        The wavelengths to regrid the array on to.
+
+    Returns
+    -------
+    np.ndarray
+        Regridded array of shape (..., particle_sizes, wavelengths)
+
+    """
+    psizes = _ParticleSizes(particle_sizes, 'particle_sizes')
+    wavs = _Wavelengths(wavelengths, 'wavelengths')
+    reff_indices = _get_nearest_indices(particle_size_grid, psizes)
+    wav_indices = _get_nearest_indices(wavelength_grid, wavs)
+    return np.take(np.take(array, reff_indices, axis=-2),
+                   wav_indices, axis=-1)
+
+
+def _get_nearest_indices(grid: np.ndarray, values: np.ndarray) \
+        -> np.ndarray:
+    # grid should be 1D; values can be ND
+    return np.abs(np.subtract.outer(grid, values)).argmin(0)
+
+
 class _ParticleSizes(np.ndarray):
     def __new__(cls, array: ArrayLike, name: str):
         obj = cls._make_array(array).view(cls)

@@ -69,6 +69,38 @@ Phase function
 
 
 
+.. _sphx_glr_examples_unsorted:
+
+Unsorted
+========
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Plot Rayleigh scattering optical depths">
+
+.. only:: html
+
+ .. figure:: /examples/unsorted/images/thumb/sphx_glr_plot_rayleigh_scattering_thumb.png
+     :alt: Rayleigh scattering
+
+     :ref:`sphx_glr_examples_unsorted_plot_rayleigh_scattering.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/unsorted/plot_rayleigh_scattering
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
 .. _sphx_glr_examples_retrieval:
 
 Retreival

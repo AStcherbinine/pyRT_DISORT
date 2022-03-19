@@ -161,6 +161,72 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.constant_profile.html">
+   pyrt.constant_profile
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.linear_profile.html">
+   pyrt.linear_profile
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.exponential_profile.html">
+   pyrt.exponential_profile
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.linear_grid_profile.html">
+   pyrt.linear_grid_profile
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.log_grid_profile.html">
+   pyrt.log_grid_profile
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.column_density.html">
+   pyrt.column_density
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.scale_height.html">
+   pyrt.scale_height
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.rayleigh_single_scattering_albedo.html">
+   pyrt.rayleigh_single_scattering_albedo
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.rayleigh_legendre.html">
+   pyrt.rayleigh_legendre
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.rayleigh_co2_optical_depth.html">
+   pyrt.rayleigh_co2_optical_depth
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.uniform.html">
+   pyrt.uniform
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/pyrt.conrath.html">
+   pyrt.conrath
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
   <a class="reference internal" href="generated/pyrt.resample.html">
    pyrt.resample
   </a>
@@ -238,13 +304,28 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#equation-of-state">
+   Equation of state
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#rayleigh-scattering">
+   Rayleigh scattering
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#aerosol-vertical-profiles">
+   Aerosol vertical profiles
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#generic-phase-function">
    Generic phase function
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#henyey-greenstein">
-   Henyey-Greenstein
+  <a class="reference internal nav-link" href="#henyey-greenstein-phase-function">
+   Henyey-Greenstein phase function
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -303,6 +384,75 @@
 </tbody>
 </table>
 </section>
+<section id="equation-of-state">
+<h2>Equation of state<a class="headerlink" href="#equation-of-state" title="Permalink to this headline">¶</a></h2>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.constant_profile.html#pyrt.constant_profile" title="pyrt.constant_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">constant_profile</span></code></a>(altitude, value)</p></td>
+<td><p>Make a constant profile.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrt.linear_profile.html#pyrt.linear_profile" title="pyrt.linear_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_profile</span></code></a>(altitude, top, bottom)</p></td>
+<td><p>Make a linear profile.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.exponential_profile.html#pyrt.exponential_profile" title="pyrt.exponential_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exponential_profile</span></code></a>(altitude, surface, ...)</p></td>
+<td><p>Make an exponential profile.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrt.linear_grid_profile.html#pyrt.linear_grid_profile" title="pyrt.linear_grid_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_grid_profile</span></code></a>(altitude, altitude_grid, ...)</p></td>
+<td><p>Make a profile with linear interpolation between grid points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.log_grid_profile.html#pyrt.log_grid_profile" title="pyrt.log_grid_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_grid_profile</span></code></a>(altitude, altitude_grid, ...)</p></td>
+<td><p>Make a profile with linear interpolation between grid points in log space.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrt.column_density.html#pyrt.column_density" title="pyrt.column_density"><code class="xref py py-obj docutils literal notranslate"><span class="pre">column_density</span></code></a>(pressure_profile, ...)</p></td>
+<td><p>Make the column density.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.scale_height.html#pyrt.scale_height" title="pyrt.scale_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scale_height</span></code></a>(mass, gravity, temperature)</p></td>
+<td><p>Compute the scale height.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="rayleigh-scattering">
+<h2>Rayleigh scattering<a class="headerlink" href="#rayleigh-scattering" title="Permalink to this headline">¶</a></h2>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.rayleigh_single_scattering_albedo.html#pyrt.rayleigh_single_scattering_albedo" title="pyrt.rayleigh_single_scattering_albedo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rayleigh_single_scattering_albedo</span></code></a>(n_layers, ...)</p></td>
+<td><p>Make a generic Rayleigh single scattering albedo.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrt.rayleigh_legendre.html#pyrt.rayleigh_legendre" title="pyrt.rayleigh_legendre"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rayleigh_legendre</span></code></a>(n_layers, n_wavelengths)</p></td>
+<td><p>Make the generic Rayleigh Legendre decomposition.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.rayleigh_co2_optical_depth.html#pyrt.rayleigh_co2_optical_depth" title="pyrt.rayleigh_co2_optical_depth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rayleigh_co2_optical_depth</span></code></a>(column_density, ...)</p></td>
+<td><p>Compute the Rayleigh CO2 scattering optical depth.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="aerosol-vertical-profiles">
+<h2>Aerosol vertical profiles<a class="headerlink" href="#aerosol-vertical-profiles" title="Permalink to this headline">¶</a></h2>
+<table class="longtable table autosummary">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyrt.uniform.html#pyrt.uniform" title="pyrt.uniform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">uniform</span></code></a>(altitude, top, bottom)</p></td>
+<td><p>Make a uniform profile.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyrt.conrath.html#pyrt.conrath" title="pyrt.conrath"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conrath</span></code></a>(altitude, q0, scale_height, nu)</p></td>
+<td><p>Make a Conrath profile</p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="generic-phase-function">
 <h2>Generic phase function<a class="headerlink" href="#generic-phase-function" title="Permalink to this headline">¶</a></h2>
 <table class="longtable table autosummary">
@@ -326,8 +476,8 @@
 </tbody>
 </table>
 </section>
-<section id="henyey-greenstein">
-<h2>Henyey-Greenstein<a class="headerlink" href="#henyey-greenstein" title="Permalink to this headline">¶</a></h2>
+<section id="henyey-greenstein-phase-function">
+<h2>Henyey-Greenstein phase function<a class="headerlink" href="#henyey-greenstein-phase-function" title="Permalink to this headline">¶</a></h2>
 <table class="longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />

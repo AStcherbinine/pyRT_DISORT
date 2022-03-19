@@ -80,5 +80,6 @@ sphinx_gallery_conf = {
     'gallery_dirs': '../builddocs/examples',  # path to where to save gallery generated output
     # What follows will make multiple galleries on the same page in the order specified
     'subsection_order': ExplicitOrder(['../examples/phase_function',
+                                       '../examples/unsorted',
                                        '../examples/retrieval'])
 }
